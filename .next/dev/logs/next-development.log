@@ -260,3 +260,6 @@ https://react.dev/link/hydration-mismatch
                     ...
           ...
 
+[01:32:58.976] Browser WARN    Please ensure that the container has a non-static position, like 'relative', 'fixed', or 'absolute' to ensure scroll offset is calculated correctly.
+[01:35:16.429] Browser WARN    Detected `scroll-behavior: smooth` on the `<html>` element. To disable smooth scrolling during route transitions, add `data-scroll-behavior="smooth"` to your <html> element. Learn more: https://nextjs.org/docs/messages/missing-data-scroll-behavior
+[01:35:41.682] Browser ERROR   uncaughtError: TypeError: Cannot read properties of undefined (reading 'title')
