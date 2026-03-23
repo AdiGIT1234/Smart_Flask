@@ -1,5 +1,23 @@
-[00:00:00.500] Server  LOG     ✓ Ready in 361ms
-[00:00:02.288] Browser ERROR   A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
+[00:00:00.742] Server  LOG     ✓ Ready in 574ms
+[00:00:26.302] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:00:26.321] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:00:27.627] Browser WARN    Please ensure that the container has a non-static position, like 'relative', 'fixed', or 'absolute' to ensure scroll offset is calculated correctly.
+[00:01:18.290] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:01:24.205] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:01:47.574] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:01:48.524] Browser WARN    Please ensure that the container has a non-static position, like 'relative', 'fixed', or 'absolute' to ensure scroll offset is calculated correctly.
+[00:02:13.466] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:02:17.955] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:02:18.926] Browser WARN    Please ensure that the container has a non-static position, like 'relative', 'fixed', or 'absolute' to ensure scroll offset is calculated correctly.
+[00:02:53.834] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:04:04.823] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:04:05.624] Browser WARN    Please ensure that the container has a non-static position, like 'relative', 'fixed', or 'absolute' to ensure scroll offset is calculated correctly.
+[00:47:50.500] Server  LOG     ✓ Compiled in 50ms
+[00:48:41.432] Server  LOG     ✓ Compiled in 38ms
+[00:50:44.575] Server  LOG     ✓ Compiled in 87ms
+[00:50:44.781] Server  LOG     ✓ Compiled in 1ms
+[00:51:41.324] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:51:41.440] Browser ERROR   A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
 
 - A server/client branch `if (typeof window !== 'undefined')`.
 - Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
@@ -17,7 +35,7 @@ It can also happen if the client has a browser extension installed which messes 
         <ReplaySsrOnlyErrors>
         <DevRootHTTPAccessFallbackBoundary>
           <HTTPAccessFallbackBoundary notFound={<NotAllowedRootHTTPFallbackError>}>
-            <HTTPAccessFallbackErrorBoundary pathname="/" notFound={<NotAllowedRootHTTPFallbackError>} ...>
+            <HTTPAccessFallbackErrorBoundary pathname="/reaction/..." notFound={<NotAllowedRootHTTPFallbackError>} ...>
               <RedirectBoundary>
                 <RedirectErrorBoundary router={{...}}>
                   <Head>
@@ -26,16 +44,35 @@ It can also happen if the client has a browser extension installed which messes 
                       <SegmentTrieNode>
                       <link>
                       <script>
+                      <script>
+                      <script>
                       <RootLayout>
                         <html lang="en">
                           <body
-                            className="inter_7b064e0d-module__MOT0tq__variable antialiased"
--                           cz-shortcut-listen="true"
++                           className="inter_5972bc34-module__OU16Qa__className bg-[#050505] antialiased"
+-                           className="inter_5972bc34-module__OU16Qa__className bg-[#050505] antialiased antigravity-s..."
                           >
                   ...
 
-[00:00:04.286] Browser ERROR   uncaughtError: ReferenceError: Cannot access 'renderFrame' before initialization
-[00:01:10.211] Browser ERROR   A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
+[00:53:12.747] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:55:30.902] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:58:18.478] Server  LOG     ✓ Compiled in 44ms
+[01:00:26.334] Server  LOG     ✓ Compiled in 83ms
+[01:01:02.947] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[01:01:03.760] Browser WARN    Please ensure that the container has a non-static position, like 'relative', 'fixed', or 'absolute' to ensure scroll offset is calculated correctly.
+[01:01:48.360] Browser WARN    Detected `scroll-behavior: smooth` on the `<html>` element. To disable smooth scrolling during route transitions, add `data-scroll-behavior="smooth"` to your <html> element. Learn more: https://nextjs.org/docs/messages/missing-data-scroll-behavior
+[01:09:38.098] Server  LOG     ✓ Compiled in 107ms
+[01:10:28.759] Server  LOG     ✓ Compiled in 17ms
+[01:11:00.634] Server  LOG     ✓ Compiled in 30ms
+[01:11:17.821] Server  LOG     ✓ Compiled in 16ms
+[01:11:38.098] Server  LOG     ✓ Compiled in 33ms
+[01:11:50.618] Server  LOG     ✓ Compiled in 22ms
+[01:12:29.849] Server  LOG     ✓ Compiled in 47ms
+[01:12:30.240] Server  LOG     ✓ Compiled in 3ms
+[01:13:17.962] Server  LOG     ✓ Compiled in 2ms
+[01:14:11.293] Server  LOG     ✓ Compiled in 3ms
+[01:14:53.992] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[01:14:54.119] Browser ERROR   uncaughtError: Error: Hydration failed because the server rendered HTML didn't match the client. As a result this tree will be regenerated on the client. This can happen if a SSR-ed Client Component used:
 
 - A server/client branch `if (typeof window !== 'undefined')`.
 - Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
@@ -45,34 +82,49 @@ It can also happen if the client has a browser extension installed which messes 
 
 It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
 
-%s%s https://react.dev/link/hydration-mismatch 
+https://react.dev/link/hydration-mismatch
 
   ...
-    <HotReload globalError={[...]} webSocket={WebSocket} staticIndicatorState={{pathname:null, ...}}>
-      <AppDevOverlayErrorBoundary globalError={[...]}>
-        <ReplaySsrOnlyErrors>
-        <DevRootHTTPAccessFallbackBoundary>
-          <HTTPAccessFallbackBoundary notFound={<NotAllowedRootHTTPFallbackError>}>
-            <HTTPAccessFallbackErrorBoundary pathname="/" notFound={<NotAllowedRootHTTPFallbackError>} ...>
-              <RedirectBoundary>
-                <RedirectErrorBoundary router={{...}}>
-                  <Head>
-                  <__next_root_layout_boundary__>
-                    <SegmentViewNode type="layout" pagePath="/Desktop/f...">
-                      <SegmentTrieNode>
-                      <link>
-                      <script>
-                      <RootLayout>
-                        <html lang="en">
-                          <body
-                            className="inter_7b064e0d-module__MOT0tq__variable antialiased"
--                           cz-shortcut-listen="true"
-                          >
-                  ...
+    <RenderFromTemplateContext>
+      <ScrollAndFocusHandler segmentPath={[...]}>
+        <InnerScrollAndFocusHandler segmentPath={[...]} focusAndScrollRef={{apply:false, ...}}>
+          <ErrorBoundary errorComponent={undefined} errorStyles={undefined} errorScripts={undefined}>
+            <LoadingBoundary name="account/" loading={null}>
+              <HTTPAccessFallbackBoundary notFound={undefined} forbidden={undefined} unauthorized={undefined}>
+                <RedirectBoundary>
+                  <RedirectErrorBoundary router={{...}}>
+                    <InnerLayoutRouter url="/account" tree={[...]} params={{}} cacheNode={{rsc:<Fragment>, ...}} ...>
+                      <SegmentViewNode type="page" pagePath="/Desktop/f...">
+                        <SegmentTrieNode>
+                        <ClientPageRoot Component={function AccountPage} serverProvidedParams={{...}}>
+                          <AccountPage params={Promise} searchParams={Promise}>
+                            <main
++                             className="bg-[#050505] min-h-screen text-white pt-24 pb-24 selection:bg-violet-500/30"
+-                             className="bg-[#050505] min-h-screen text-white flex items-center justify-center selecti..."
+                            >
+                              <div className="fixed inse...">
+                                <div
++                                 className="absolute top-1/4 right-1/3 w-[500px] h-[500px] bg-amber-600/5 blur-[150px..."
+-                                 className="absolute top-1/3 left-1/3 w-[500px] h-[500px] bg-amber-600/5 blur-[150px]..."
+                                >
++                               <div
++                                 className="absolute bottom-1/4 left-1/4 w-[400px] h-[400px] bg-violet-600/5 blur-[12..."
++                               >
+                              ...
+                      ...
+                    ...
+          ...
 
-[00:01:10.212] Browser WARN    Please ensure that the container has a non-static position, like 'relative', 'fixed', or 'absolute' to ensure scroll offset is calculated correctly.
-[00:01:10.852] Browser ERROR   uncaughtError: ReferenceError: Cannot access 'renderFrame' before initialization
-[02:07:26.846] Browser ERROR   A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
+[01:15:04.191] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[01:15:20.840] Server  ERROR   ⨯ ReferenceError: FlaskConical is not defined
+[01:15:20.899] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[01:15:21.029] Browser ERROR   uncaughtError: ReferenceError: FlaskConical is not defined
+[01:16:24.784] Server  WARN    ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+[01:16:24.868] Server  LOG     ✓ Compiled in 18ms
+[01:16:25.000] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[01:16:33.623] Server  LOG     ✓ Compiled in 14ms
+[01:16:58.324] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[01:16:58.441] Browser ERROR   uncaughtError: Error: Hydration failed because the server rendered HTML didn't match the client. As a result this tree will be regenerated on the client. This can happen if a SSR-ed Client Component used:
 
 - A server/client branch `if (typeof window !== 'undefined')`.
 - Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
@@ -82,39 +134,44 @@ It can also happen if the client has a browser extension installed which messes 
 
 It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
 
-%s%s https://react.dev/link/hydration-mismatch 
+https://react.dev/link/hydration-mismatch
 
   ...
-    <HotReload globalError={[...]} webSocket={WebSocket} staticIndicatorState={{pathname:null, ...}}>
-      <AppDevOverlayErrorBoundary globalError={[...]}>
-        <ReplaySsrOnlyErrors>
-        <DevRootHTTPAccessFallbackBoundary>
-          <HTTPAccessFallbackBoundary notFound={<NotAllowedRootHTTPFallbackError>}>
-            <HTTPAccessFallbackErrorBoundary pathname="/" notFound={<NotAllowedRootHTTPFallbackError>} ...>
-              <RedirectBoundary>
-                <RedirectErrorBoundary router={{...}}>
-                  <Head>
-                  <__next_root_layout_boundary__>
-                    <SegmentViewNode type="layout" pagePath="/Desktop/f...">
-                      <SegmentTrieNode>
-                      <link>
-                      <script>
-                      <RootLayout>
-                        <html lang="en">
-                          <body
-                            className="inter_7b064e0d-module__MOT0tq__variable antialiased"
--                           cz-shortcut-listen="true"
-                          >
-                  ...
+    <RenderFromTemplateContext>
+      <ScrollAndFocusHandler segmentPath={[...]}>
+        <InnerScrollAndFocusHandler segmentPath={[...]} focusAndScrollRef={{apply:false, ...}}>
+          <ErrorBoundary errorComponent={undefined} errorStyles={undefined} errorScripts={undefined}>
+            <LoadingBoundary name="account/" loading={null}>
+              <HTTPAccessFallbackBoundary notFound={undefined} forbidden={undefined} unauthorized={undefined}>
+                <RedirectBoundary>
+                  <RedirectErrorBoundary router={{...}}>
+                    <InnerLayoutRouter url="/account" tree={[...]} params={{}} cacheNode={{rsc:<Fragment>, ...}} ...>
+                      <SegmentViewNode type="page" pagePath="/Desktop/f...">
+                        <SegmentTrieNode>
+                        <ClientPageRoot Component={function AccountPage} serverProvidedParams={{...}}>
+                          <AccountPage params={Promise} searchParams={Promise}>
+                            <main
++                             className="bg-[#050505] min-h-screen text-white pt-24 pb-24 selection:bg-violet-500/30"
+-                             className="bg-[#050505] min-h-screen text-white flex items-center justify-center selecti..."
+                            >
+                              <div className="fixed inse...">
+                                <div
++                                 className="absolute top-1/4 right-1/3 w-[500px] h-[500px] bg-amber-600/5 blur-[150px..."
+-                                 className="absolute top-1/3 left-1/3 w-[500px] h-[500px] bg-amber-600/5 blur-[150px]..."
+                                >
++                               <div
++                                 className="absolute bottom-1/4 left-1/4 w-[400px] h-[400px] bg-violet-600/5 blur-[12..."
++                               >
+                              ...
+                      ...
+                    ...
+          ...
 
-[02:07:26.846] Browser WARN    Please ensure that the container has a non-static position, like 'relative', 'fixed', or 'absolute' to ensure scroll offset is calculated correctly.
-[02:07:27.471] Browser ERROR   uncaughtError: ReferenceError: Cannot access 'renderFrame' before initialization
-[02:15:20.822] Browser WARN    Please ensure that the container has a non-static position, like 'relative', 'fixed', or 'absolute' to ensure scroll offset is calculated correctly.
-[02:15:21.469] Browser ERROR   uncaughtError: ReferenceError: Cannot access 'renderFrame' before initialization
-[02:29:35.797] Browser ERROR   uncaughtError: ReferenceError: Cannot access 'renderFrame' before initialization
-[02:30:53.693] Server  WARN    ⚠ Fast Refresh had to perform a full reload due to a runtime error.
-[02:30:53.781] Server  LOG     ✓ Compiled in 16ms
-[02:30:54.117] Browser ERROR   A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
+[01:17:05.239] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[01:17:12.605] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[01:21:02.029] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[01:21:03.067] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[01:21:03.186] Browser ERROR   uncaughtError: Error: Hydration failed because the server rendered HTML didn't match the client. As a result this tree will be regenerated on the client. This can happen if a SSR-ed Client Component used:
 
 - A server/client branch `if (typeof window !== 'undefined')`.
 - Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
@@ -124,33 +181,43 @@ It can also happen if the client has a browser extension installed which messes 
 
 It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
 
-%s%s https://react.dev/link/hydration-mismatch 
+https://react.dev/link/hydration-mismatch
 
   ...
-    <HotReload globalError={[...]} webSocket={WebSocket} staticIndicatorState={{pathname:null, ...}}>
-      <AppDevOverlayErrorBoundary globalError={[...]}>
-        <ReplaySsrOnlyErrors>
-        <DevRootHTTPAccessFallbackBoundary>
-          <HTTPAccessFallbackBoundary notFound={<NotAllowedRootHTTPFallbackError>}>
-            <HTTPAccessFallbackErrorBoundary pathname="/" notFound={<NotAllowedRootHTTPFallbackError>} ...>
-              <RedirectBoundary>
-                <RedirectErrorBoundary router={{...}}>
-                  <Head>
-                  <__next_root_layout_boundary__>
-                    <SegmentViewNode type="layout" pagePath="/Desktop/f...">
-                      <SegmentTrieNode>
-                      <link>
-                      <script>
-                      <RootLayout>
-                        <html lang="en">
-                          <body
-                            className="inter_7b064e0d-module__MOT0tq__variable antialiased"
--                           cz-shortcut-listen="true"
-                          >
-                  ...
+    <RenderFromTemplateContext>
+      <ScrollAndFocusHandler segmentPath={[...]}>
+        <InnerScrollAndFocusHandler segmentPath={[...]} focusAndScrollRef={{apply:false, ...}}>
+          <ErrorBoundary errorComponent={undefined} errorStyles={undefined} errorScripts={undefined}>
+            <LoadingBoundary name="account/" loading={null}>
+              <HTTPAccessFallbackBoundary notFound={undefined} forbidden={undefined} unauthorized={undefined}>
+                <RedirectBoundary>
+                  <RedirectErrorBoundary router={{...}}>
+                    <InnerLayoutRouter url="/account" tree={[...]} params={{}} cacheNode={{rsc:<Fragment>, ...}} ...>
+                      <SegmentViewNode type="page" pagePath="/Desktop/f...">
+                        <SegmentTrieNode>
+                        <ClientPageRoot Component={function AccountPage} serverProvidedParams={{...}}>
+                          <AccountPage params={Promise} searchParams={Promise}>
+                            <main
++                             className="bg-[#050505] min-h-screen text-white pt-24 pb-24 selection:bg-violet-500/30"
+-                             className="bg-[#050505] min-h-screen text-white flex items-center justify-center selecti..."
+                            >
+                              <div className="fixed inse...">
+                                <div
++                                 className="absolute top-1/4 right-1/3 w-[500px] h-[500px] bg-amber-600/5 blur-[150px..."
+-                                 className="absolute top-1/3 left-1/3 w-[500px] h-[500px] bg-amber-600/5 blur-[150px]..."
+                                >
++                               <div
++                                 className="absolute bottom-1/4 left-1/4 w-[400px] h-[400px] bg-violet-600/5 blur-[12..."
++                               >
+                              ...
+                      ...
+                    ...
+          ...
 
-[02:31:01.035] Browser WARN    Please ensure that the container has a non-static position, like 'relative', 'fixed', or 'absolute' to ensure scroll offset is calculated correctly.
-[02:40:39.119] Browser ERROR   A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
+[01:21:06.188] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[01:21:07.508] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[01:24:52.709] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[01:24:52.829] Browser ERROR   uncaughtError: Error: Hydration failed because the server rendered HTML didn't match the client. As a result this tree will be regenerated on the client. This can happen if a SSR-ed Client Component used:
 
 - A server/client branch `if (typeof window !== 'undefined')`.
 - Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
@@ -160,116 +227,36 @@ It can also happen if the client has a browser extension installed which messes 
 
 It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
 
-%s%s https://react.dev/link/hydration-mismatch 
+https://react.dev/link/hydration-mismatch
 
   ...
-    <HotReload globalError={[...]} webSocket={WebSocket} staticIndicatorState={{pathname:null, ...}}>
-      <AppDevOverlayErrorBoundary globalError={[...]}>
-        <ReplaySsrOnlyErrors>
-        <DevRootHTTPAccessFallbackBoundary>
-          <HTTPAccessFallbackBoundary notFound={<NotAllowedRootHTTPFallbackError>}>
-            <HTTPAccessFallbackErrorBoundary pathname="/" notFound={<NotAllowedRootHTTPFallbackError>} ...>
-              <RedirectBoundary>
-                <RedirectErrorBoundary router={{...}}>
-                  <Head>
-                  <__next_root_layout_boundary__>
-                    <SegmentViewNode type="layout" pagePath="/Desktop/f...">
-                      <SegmentTrieNode>
-                      <link>
-                      <script>
-                      <RootLayout>
-                        <html lang="en">
-                          <body
-                            className="inter_5972bc34-module__OU16Qa__className bg-[#050505] antialiased"
--                           cz-shortcut-listen="true"
-                          >
-                  ...
+    <RenderFromTemplateContext>
+      <ScrollAndFocusHandler segmentPath={[...]}>
+        <InnerScrollAndFocusHandler segmentPath={[...]} focusAndScrollRef={{apply:false, ...}}>
+          <ErrorBoundary errorComponent={undefined} errorStyles={undefined} errorScripts={undefined}>
+            <LoadingBoundary name="account/" loading={null}>
+              <HTTPAccessFallbackBoundary notFound={undefined} forbidden={undefined} unauthorized={undefined}>
+                <RedirectBoundary>
+                  <RedirectErrorBoundary router={{...}}>
+                    <InnerLayoutRouter url="/account" tree={[...]} params={{}} cacheNode={{rsc:<Fragment>, ...}} ...>
+                      <SegmentViewNode type="page" pagePath="/Desktop/f...">
+                        <SegmentTrieNode>
+                        <ClientPageRoot Component={function AccountPage} serverProvidedParams={{...}}>
+                          <AccountPage params={Promise} searchParams={Promise}>
+                            <main
++                             className="bg-[#050505] min-h-screen text-white pt-24 pb-24 selection:bg-violet-500/30"
+-                             className="bg-[#050505] min-h-screen text-white flex items-center justify-center selecti..."
+                            >
+                              <div className="fixed inse...">
+                                <div
++                                 className="absolute top-1/4 right-1/3 w-[500px] h-[500px] bg-amber-600/5 blur-[150px..."
+-                                 className="absolute top-1/3 left-1/3 w-[500px] h-[500px] bg-amber-600/5 blur-[150px]..."
+                                >
++                               <div
++                                 className="absolute bottom-1/4 left-1/4 w-[400px] h-[400px] bg-violet-600/5 blur-[12..."
++                               >
+                              ...
+                      ...
+                    ...
+          ...
 
-[02:41:05.036] Server  LOG     ✓ Compiled in 33ms
-[02:42:03.595] Browser WARN    Please ensure that the container has a non-static position, like 'relative', 'fixed', or 'absolute' to ensure scroll offset is calculated correctly.
-[02:43:17.007] Server  LOG     ✓ Compiled in 25ms
-[02:43:44.216] Server  LOG     ✓ Compiled in 20ms
-[02:44:47.992] Browser ERROR   A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
-
-- A server/client branch `if (typeof window !== 'undefined')`.
-- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
-- Date formatting in a user's locale which doesn't match the server.
-- External changing data without sending a snapshot of it along with the HTML.
-- Invalid HTML tag nesting.
-
-It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
-
-%s%s https://react.dev/link/hydration-mismatch 
-
-  ...
-    <HotReload globalError={[...]} webSocket={WebSocket} staticIndicatorState={{pathname:null, ...}}>
-      <AppDevOverlayErrorBoundary globalError={[...]}>
-        <ReplaySsrOnlyErrors>
-        <DevRootHTTPAccessFallbackBoundary>
-          <HTTPAccessFallbackBoundary notFound={<NotAllowedRootHTTPFallbackError>}>
-            <HTTPAccessFallbackErrorBoundary pathname="/" notFound={<NotAllowedRootHTTPFallbackError>} ...>
-              <RedirectBoundary>
-                <RedirectErrorBoundary router={{...}}>
-                  <Head>
-                  <__next_root_layout_boundary__>
-                    <SegmentViewNode type="layout" pagePath="/Desktop/f...">
-                      <SegmentTrieNode>
-                      <link>
-                      <script>
-                      <RootLayout>
-                        <html lang="en">
-                          <body
-                            className="inter_5972bc34-module__OU16Qa__className bg-[#050505] antialiased"
--                           cz-shortcut-listen="true"
-                          >
-                  ...
-
-[02:44:48.644] Browser WARN    Please ensure that the container has a non-static position, like 'relative', 'fixed', or 'absolute' to ensure scroll offset is calculated correctly.
-[03:01:33.731] Server  LOG     ✓ Compiled in 27ms
-[03:02:27.437] Server  LOG     ✓ Compiled in 31ms
-[03:02:48.861] Server  LOG     ✓ Compiled in 68ms
-[03:10:21.616] Server  LOG     ✓ Compiled in 37ms
-[03:10:57.323] Server  LOG     ✓ Compiled in 3ms
-[03:10:58.119] Browser ERROR   A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
-
-- A server/client branch `if (typeof window !== 'undefined')`.
-- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
-- Date formatting in a user's locale which doesn't match the server.
-- External changing data without sending a snapshot of it along with the HTML.
-- Invalid HTML tag nesting.
-
-It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
-
-%s%s https://react.dev/link/hydration-mismatch 
-
-  ...
-    <HotReload globalError={[...]} webSocket={WebSocket} staticIndicatorState={{pathname:null, ...}}>
-      <AppDevOverlayErrorBoundary globalError={[...]}>
-        <ReplaySsrOnlyErrors>
-        <DevRootHTTPAccessFallbackBoundary>
-          <HTTPAccessFallbackBoundary notFound={<NotAllowedRootHTTPFallbackError>}>
-            <HTTPAccessFallbackErrorBoundary pathname="/" notFound={<NotAllowedRootHTTPFallbackError>} ...>
-              <RedirectBoundary>
-                <RedirectErrorBoundary router={{...}}>
-                  <Head>
-                  <__next_root_layout_boundary__>
-                    <SegmentViewNode type="layout" pagePath="/Desktop/f...">
-                      <SegmentTrieNode>
-                      <link>
-                      <script>
-                      <script>
-                      <script>
-                      <RootLayout>
-                        <html lang="en">
-                          <body
-                            className="inter_5972bc34-module__OU16Qa__className bg-[#050505] antialiased"
--                           cz-shortcut-listen="true"
-                          >
-                  ...
-
-[03:12:29.577] Server  LOG     ✓ Compiled in 64ms
-[03:13:09.243] Browser WARN    Please ensure that the container has a non-static position, like 'relative', 'fixed', or 'absolute' to ensure scroll offset is calculated correctly.
-[03:15:06.476] Server  LOG     ✓ Compiled in 26ms
-[03:16:19.701] Server  LOG     ✓ Compiled in 18ms
-[03:28:27.564] Browser WARN    Detected `scroll-behavior: smooth` on the `<html>` element. To disable smooth scrolling during route transitions, add `data-scroll-behavior="smooth"` to your <html> element. Learn more: https://nextjs.org/docs/messages/missing-data-scroll-behavior
-[03:38:55.475] Server  LOG     ✓ Compiled in 24ms

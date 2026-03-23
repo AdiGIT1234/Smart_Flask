@@ -1,4 +1,9 @@
 {
+  "/_not-found/page": "app/_not-found/page.js",
+  "/account/page": "app/account/page.js",
+  "/community/page": "app/community/page.js",
   "/dashboard/page": "app/dashboard/page.js",
-  "/page": "app/page.js"
+  "/intelligence/page": "app/intelligence/page.js",
+  "/page": "app/page.js",
+  "/reaction/[id]/page": "app/reaction/[id]/page.js"
 }

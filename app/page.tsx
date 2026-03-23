@@ -1,5 +1,6 @@
 import FlaskScrollCanvas from "@/components/FlaskScrollCanvas";
 import ProblemStatementSection from "@/components/ProblemStatementSection";
+import StoredReactionsSection from "@/components/StoredReactionsSection";
 
 export default function Home() {
   return (
@@ -16,6 +17,12 @@ export default function Home() {
         A beautiful section explaining the purpose of the Smart Reaction Flask
       */}
       <ProblemStatementSection />
+
+      {/* 
+        Section 3: Stored Reactions / Experiments
+        Cards for 6 pre-configured reactions + custom experiment CTA
+      */}
+      <StoredReactionsSection />
 
     </main>
   );

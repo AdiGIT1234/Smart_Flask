@@ -123,26 +123,26 @@ export default function GlobalNav() {
               </h2>
 
               <nav className="flex flex-col gap-6 text-xl tracking-tight text-white/70">
-                <Link href="/" className="hover:text-white hover:translate-x-2 transition-all group flex items-center gap-4">
+                <Link href="/" onClick={() => setSidebarOpen(false)} className="hover:text-white hover:translate-x-2 transition-all group flex items-center gap-4">
                    <div className="w-1.5 h-1.5 rounded-full bg-blue-500 opacity-0 group-hover:opacity-100 transition-all" />
                    Home
                 </Link>
-                <Link href="/dashboard" className="hover:text-white hover:translate-x-2 transition-all group flex items-center gap-4">
+                <Link href="/dashboard" onClick={() => setSidebarOpen(false)} className="hover:text-white hover:translate-x-2 transition-all group flex items-center gap-4">
                    <div className="w-1.5 h-1.5 rounded-full bg-violet-500 opacity-0 group-hover:opacity-100 transition-all" />
                    Dashboard (Live)
                 </Link>
-                <a href="#" className="hover:text-white hover:translate-x-2 transition-all group flex items-center gap-4">
+                <Link href="/account" onClick={() => setSidebarOpen(false)} className="hover:text-white hover:translate-x-2 transition-all group flex items-center gap-4">
                    <div className="w-1.5 h-1.5 rounded-full bg-amber-500 opacity-0 group-hover:opacity-100 transition-all" />
                    Account Info
-                </a>
-                <a href="#" className="hover:text-white hover:translate-x-2 transition-all group flex items-center gap-4">
-                   <div className="w-1.5 h-1.5 rounded-full bg-white opacity-0 group-hover:opacity-100 transition-all" />
+                </Link>
+                <Link href="/community" onClick={() => setSidebarOpen(false)} className="hover:text-white hover:translate-x-2 transition-all group flex items-center gap-4">
+                   <div className="w-1.5 h-1.5 rounded-full bg-green-500 opacity-0 group-hover:opacity-100 transition-all" />
                    Community Analysis
-                </a>
-                <a href="#" className="hover:text-white hover:translate-x-2 transition-all group flex items-center gap-4">
-                   <div className="w-1.5 h-1.5 rounded-full bg-white opacity-0 group-hover:opacity-100 transition-all" />
+                </Link>
+                <Link href="/intelligence" onClick={() => setSidebarOpen(false)} className="hover:text-white hover:translate-x-2 transition-all group flex items-center gap-4">
+                   <div className="w-1.5 h-1.5 rounded-full bg-rose-500 opacity-0 group-hover:opacity-100 transition-all" />
                    Global Intelligence
-                </a>
+                </Link>
               </nav>
             </motion.aside>
           </div>

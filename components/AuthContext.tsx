@@ -20,14 +20,22 @@ const AuthContext = createContext<AuthContextType>({
 });
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<User | null>(() => {
+    if (typeof window !== "undefined") {
+      const storedUser = localStorage.getItem("flask_user_session");
+      if (storedUser) {
+        try {
+          return JSON.parse(storedUser);
+        } catch (e) {
+          console.error("Failed to parse stored user session", e);
+        }
+      }
+    }
+    return null;
+  });
 
   useEffect(() => {
-    // Check localStorage on mount for persistent session
-    const storedUser = localStorage.getItem("flask_user_session");
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
-    }
+    // Initial check handled by state initializer
   }, []);
 
   const login = (name: string, email: string) => {
