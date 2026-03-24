@@ -4,17 +4,24 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "./AuthContext";
 import { Menu, X } from "lucide-react";
+import { usePathname } from "next/navigation";
 import Link from "next/link";
 
 export default function GlobalNav() {
   const { user, logout, login } = useAuth();
-  const [showNav, setShowNav] = useState(false);
+  const pathname = usePathname();
+  const isHomePage = pathname === '/';
+  const [showNav, setShowNav] = useState(!isHomePage);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [authModalOpen, setAuthModalOpen] = useState(false);
   const [isLoginView, setIsLoginView] = useState(true);
 
   // Track scroll to show nav ONLY after the scroll animation is heavily complete
   useEffect(() => {
+    if (!isHomePage) {
+      setShowNav(true);
+      return;
+    }
     const handleScroll = () => {
       // Show when scrolled past 500vh (approaching the end of the 600vh canvas)
       if (window.scrollY > window.innerHeight * 4.5) {
@@ -24,9 +31,11 @@ export default function GlobalNav() {
         setSidebarOpen(false); // Auto close sidebar if scrolled back up
       }
     };
+    // Initialize state
+    handleScroll();
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  }, [isHomePage]);
 
   const handleAuthSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -64,8 +73,15 @@ export default function GlobalNav() {
             <div>
               {user ? (
                 <div className="flex flex-col items-center group relative cursor-pointer">
-                  <div className="w-10 h-10 rounded-full bg-linear-to-tr from-blue-500 to-violet-500 flex items-center justify-center text-white font-medium shadow-[0_0_15px_rgba(59,130,246,0.3)]">
-                    {user.name.charAt(0).toUpperCase()}
+                  <div className="flex items-center gap-3">
+                    {user.email === 'aditya26047@gmail.com' && (
+                      <div className="px-2 py-1 bg-red-600 border border-red-500 rounded text-[10px] font-bold tracking-widest text-white shadow-[0_0_10px_rgba(220,38,38,0.5)]">
+                        ADMIN
+                      </div>
+                    )}
+                    <div className="w-10 h-10 rounded-full bg-linear-to-tr from-blue-500 to-violet-500 flex items-center justify-center text-white font-medium shadow-[0_0_15px_rgba(59,130,246,0.3)]">
+                      {user.name.charAt(0).toUpperCase()}
+                    </div>
                   </div>
                   {/* Dropdown for quick access */}
                   <div className="absolute top-12 right-0 w-48 bg-[#0a0a0a] border border-white/10 rounded-xl overflow-hidden opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-all duration-300 translate-y-2 group-hover:translate-y-0">
