@@ -1,9 +1,9 @@
 "use client";
 
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { STORED_REACTIONS } from "@/lib/reactions";
 import Link from "next/link";
-import { Beaker, Clock, Zap, Edit2, X, Save } from "lucide-react";
+import { Beaker, Clock, Zap, Edit2, Save } from "lucide-react";
 import { useAuth } from "./AuthContext";
 import { useState } from "react";
 

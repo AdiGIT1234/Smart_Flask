@@ -1,3 +1,46 @@
-[00:00:00.836] Server  LOG     ✓ Ready in 661ms
-[00:00:06.726] Browser WARN    Please ensure that the container has a non-static position, like 'relative', 'fixed', or 'absolute' to ensure scroll offset is calculated correctly.
-[00:00:32.934] Browser WARN    Detected `scroll-behavior: smooth` on the `<html>` element. To disable smooth scrolling during route transitions, add `data-scroll-behavior="smooth"` to your <html> element. Learn more: https://nextjs.org/docs/messages/missing-data-scroll-behavior
+[00:00:00.752] Server  LOG     ✓ Ready in 581ms
+[00:00:08.235] Browser WARN    Please ensure that the container has a non-static position, like 'relative', 'fixed', or 'absolute' to ensure scroll offset is calculated correctly.
+[00:00:26.074] Browser WARN    Detected `scroll-behavior: smooth` on the `<html>` element. To disable smooth scrolling during route transitions, add `data-scroll-behavior="smooth"` to your <html> element. Learn more: https://nextjs.org/docs/messages/missing-data-scroll-behavior
+[00:00:59.991] Browser ERROR   uncaughtError: TypeError: Cannot read properties of undefined (reading 'title')
+[00:04:59.819] Server  LOG       Reload env: .env.local
+[00:05:00.170] Browser ERROR   uncaughtError: Error: Hydration failed because the server rendered HTML didn't match the client. As a result this tree will be regenerated on the client. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+https://react.dev/link/hydration-mismatch
+
+  ...
+    <link>
+    <script>
+    <script>
+    <script>
+    <RootLayout>
+      <html lang="en">
+        <body className="inter_5972...">
+          <AuthProvider>
+            <GlobalNav>
+              <AnimatePresence>
+                <PresenceChild isPresent={true} initial={undefined} custom={undefined} presenceAffectsLayout={true} ...>
+                  <PopChild pop={false} isPresent={true} anchorX="left" anchorY="top" root={undefined}>
+                    <PopChildMeasure isPresent={true} childRef={{current:null}} sizeRef={{...}} pop={false}>
+                      <motion.nav initial={{y:-100,opacity:0}} animate={{y:0,opacity:1}} exit={{y:-100,opacity:0}} ...>
+                        <nav className="fixed top-..." style={{opacity:0, ...}} ref={function useMotionRef.useCallback}>
+                          <button>
+                          <div>
++                           <div className="flex flex-col items-center group relative cursor-pointer">
+-                           <button
+-                             className="px-6 py-2.5 bg-white text-black font-semibold tracking-tight rounded-full hov..."
+-                           >
+              ...
+            ...
+
+[00:05:52.788] Server  LOG       Reload env: .env.local
+[00:08:28.771] Browser ERROR   uncaughtError: TypeError: Cannot read properties of undefined (reading 'title')
+[00:10:49.542] Browser WARN    Please ensure that the container has a non-static position, like 'relative', 'fixed', or 'absolute' to ensure scroll offset is calculated correctly.
+[00:10:58.145] Browser WARN    Detected `scroll-behavior: smooth` on the `<html>` element. To disable smooth scrolling during route transitions, add `data-scroll-behavior="smooth"` to your <html> element. Learn more: https://nextjs.org/docs/messages/missing-data-scroll-behavior
