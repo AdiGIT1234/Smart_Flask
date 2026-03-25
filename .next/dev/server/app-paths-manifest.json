@@ -3,6 +3,7 @@
   "/community/page": "app/community/page.js",
   "/dashboard/page": "app/dashboard/page.js",
   "/intelligence/page": "app/intelligence/page.js",
+  "/live-monitor/page": "app/live-monitor/page.js",
   "/page": "app/page.js",
   "/reaction/[id]/page": "app/reaction/[id]/page.js"
 }

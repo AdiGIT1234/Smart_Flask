@@ -1774,6 +1774,11 @@ function StoredReactionsSection() {
     const { user } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$components$2f$AuthContext$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useAuth"])();
     const [isEditing, setIsEditing] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(false);
     const [localReactions, setLocalReactions] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(__TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$lib$2f$reactions$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["STORED_REACTIONS"]);
+    const [mounted, setMounted] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(false);
+    (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useEffect"])(()=>{
+        // eslint-disable-next-line react-hooks/set-state-in-effect
+        setMounted(true);
+    }, []);
     const handleSaveToSupabase = async ()=>{
         // This will connect to the real Supabase implementation once configured
         alert("Reactions saved! In production, this pushes directly to your Supabase instance.");
@@ -1789,20 +1794,20 @@ function StoredReactionsSection() {
                         className: "absolute top-1/4 left-1/4 w-[600px] h-[600px] bg-violet-600/5 blur-[150px] rounded-full"
                     }, void 0, false, {
                         fileName: "[project]/Desktop/flask/components/StoredReactionsSection.tsx",
-                        lineNumber: 30,
+                        lineNumber: 36,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                         className: "absolute bottom-1/4 right-1/4 w-[400px] h-[400px] bg-blue-600/5 blur-[120px] rounded-full"
                     }, void 0, false, {
                         fileName: "[project]/Desktop/flask/components/StoredReactionsSection.tsx",
-                        lineNumber: 31,
+                        lineNumber: 37,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/Desktop/flask/components/StoredReactionsSection.tsx",
-                lineNumber: 29,
+                lineNumber: 35,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1832,7 +1837,7 @@ function StoredReactionsSection() {
                                 children: "Experiments"
                             }, void 0, false, {
                                 fileName: "[project]/Desktop/flask/components/StoredReactionsSection.tsx",
-                                lineNumber: 43,
+                                lineNumber: 49,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
@@ -1844,14 +1849,14 @@ function StoredReactionsSection() {
                                         children: "Reaction"
                                     }, void 0, false, {
                                         fileName: "[project]/Desktop/flask/components/StoredReactionsSection.tsx",
-                                        lineNumber: 47,
+                                        lineNumber: 53,
                                         columnNumber: 21
                                     }, this),
                                     "."
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/Desktop/flask/components/StoredReactionsSection.tsx",
-                                lineNumber: 46,
+                                lineNumber: 52,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1859,10 +1864,10 @@ function StoredReactionsSection() {
                                 children: "Choose from our library of pre-configured experiments with real-time monitoring, or create your own custom setup."
                             }, void 0, false, {
                                 fileName: "[project]/Desktop/flask/components/StoredReactionsSection.tsx",
-                                lineNumber: 49,
+                                lineNumber: 55,
                                 columnNumber: 11
                             }, this),
-                            user?.email === "aditya26047@gmail.com" && !isEditing && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                            mounted && user?.email === "aditya26047@gmail.com" && !isEditing && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                 className: "mt-8 flex justify-center",
                                 children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                                     onClick: ()=>setIsEditing(true),
@@ -1872,25 +1877,25 @@ function StoredReactionsSection() {
                                             size: 16
                                         }, void 0, false, {
                                             fileName: "[project]/Desktop/flask/components/StoredReactionsSection.tsx",
-                                            lineNumber: 59,
+                                            lineNumber: 65,
                                             columnNumber: 17
                                         }, this),
                                         " Admin: Edit Reactions"
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/Desktop/flask/components/StoredReactionsSection.tsx",
-                                    lineNumber: 55,
+                                    lineNumber: 61,
                                     columnNumber: 15
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/Desktop/flask/components/StoredReactionsSection.tsx",
-                                lineNumber: 54,
+                                lineNumber: 60,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/Desktop/flask/components/StoredReactionsSection.tsx",
-                        lineNumber: 36,
+                        lineNumber: 42,
                         columnNumber: 9
                     }, this),
                     isEditing ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1906,14 +1911,14 @@ function StoredReactionsSection() {
                                                 className: "w-3 h-3 rounded-full bg-red-500 animate-pulse shadow-[0_0_10px_rgba(220,38,38,0.8)]"
                                             }, void 0, false, {
                                                 fileName: "[project]/Desktop/flask/components/StoredReactionsSection.tsx",
-                                                lineNumber: 70,
+                                                lineNumber: 76,
                                                 columnNumber: 17
                                             }, this),
                                             "Live Database Editor"
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/Desktop/flask/components/StoredReactionsSection.tsx",
-                                        lineNumber: 69,
+                                        lineNumber: 75,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1925,7 +1930,7 @@ function StoredReactionsSection() {
                                                 children: "Cancel"
                                             }, void 0, false, {
                                                 fileName: "[project]/Desktop/flask/components/StoredReactionsSection.tsx",
-                                                lineNumber: 74,
+                                                lineNumber: 80,
                                                 columnNumber: 18
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1936,26 +1941,26 @@ function StoredReactionsSection() {
                                                         size: 16
                                                     }, void 0, false, {
                                                         fileName: "[project]/Desktop/flask/components/StoredReactionsSection.tsx",
-                                                        lineNumber: 76,
+                                                        lineNumber: 82,
                                                         columnNumber: 20
                                                     }, this),
                                                     " Save to Supabase"
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/Desktop/flask/components/StoredReactionsSection.tsx",
-                                                lineNumber: 75,
+                                                lineNumber: 81,
                                                 columnNumber: 18
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/Desktop/flask/components/StoredReactionsSection.tsx",
-                                        lineNumber: 73,
+                                        lineNumber: 79,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/Desktop/flask/components/StoredReactionsSection.tsx",
-                                lineNumber: 68,
+                                lineNumber: 74,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1971,7 +1976,7 @@ function StoredReactionsSection() {
                                                         children: "Reaction Name"
                                                     }, void 0, false, {
                                                         fileName: "[project]/Desktop/flask/components/StoredReactionsSection.tsx",
-                                                        lineNumber: 85,
+                                                        lineNumber: 91,
                                                         columnNumber: 22
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -1986,13 +1991,13 @@ function StoredReactionsSection() {
                                                         className: "w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:border-blue-500 outline-none"
                                                     }, void 0, false, {
                                                         fileName: "[project]/Desktop/flask/components/StoredReactionsSection.tsx",
-                                                        lineNumber: 86,
+                                                        lineNumber: 92,
                                                         columnNumber: 22
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/Desktop/flask/components/StoredReactionsSection.tsx",
-                                                lineNumber: 84,
+                                                lineNumber: 90,
                                                 columnNumber: 20
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2003,7 +2008,7 @@ function StoredReactionsSection() {
                                                         children: "Chemical Formula"
                                                     }, void 0, false, {
                                                         fileName: "[project]/Desktop/flask/components/StoredReactionsSection.tsx",
-                                                        lineNumber: 97,
+                                                        lineNumber: 103,
                                                         columnNumber: 22
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -2018,13 +2023,13 @@ function StoredReactionsSection() {
                                                         className: "w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm text-white font-mono focus:border-blue-500 outline-none"
                                                     }, void 0, false, {
                                                         fileName: "[project]/Desktop/flask/components/StoredReactionsSection.tsx",
-                                                        lineNumber: 98,
+                                                        lineNumber: 104,
                                                         columnNumber: 22
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/Desktop/flask/components/StoredReactionsSection.tsx",
-                                                lineNumber: 96,
+                                                lineNumber: 102,
                                                 columnNumber: 20
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2035,7 +2040,7 @@ function StoredReactionsSection() {
                                                         children: "Category"
                                                     }, void 0, false, {
                                                         fileName: "[project]/Desktop/flask/components/StoredReactionsSection.tsx",
-                                                        lineNumber: 109,
+                                                        lineNumber: 115,
                                                         columnNumber: 22
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -2050,30 +2055,30 @@ function StoredReactionsSection() {
                                                         className: "w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:border-blue-500 outline-none"
                                                     }, void 0, false, {
                                                         fileName: "[project]/Desktop/flask/components/StoredReactionsSection.tsx",
-                                                        lineNumber: 110,
+                                                        lineNumber: 116,
                                                         columnNumber: 22
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/Desktop/flask/components/StoredReactionsSection.tsx",
-                                                lineNumber: 108,
+                                                lineNumber: 114,
                                                 columnNumber: 20
                                             }, this)
                                         ]
                                     }, rxn.id, true, {
                                         fileName: "[project]/Desktop/flask/components/StoredReactionsSection.tsx",
-                                        lineNumber: 83,
+                                        lineNumber: 89,
                                         columnNumber: 17
                                     }, this))
                             }, void 0, false, {
                                 fileName: "[project]/Desktop/flask/components/StoredReactionsSection.tsx",
-                                lineNumber: 81,
+                                lineNumber: 87,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/Desktop/flask/components/StoredReactionsSection.tsx",
-                        lineNumber: 67,
+                        lineNumber: 73,
                         columnNumber: 11
                     }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                         className: "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6",
@@ -2104,14 +2109,14 @@ function StoredReactionsSection() {
                                                 className: `h-1 w-full bg-linear-to-r ${reaction.thumbnail_color}`
                                             }, void 0, false, {
                                                 fileName: "[project]/Desktop/flask/components/StoredReactionsSection.tsx",
-                                                lineNumber: 141,
+                                                lineNumber: 147,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                 className: `absolute top-0 right-0 w-40 h-40 bg-linear-to-br ${reaction.thumbnail_color} opacity-0 group-hover:opacity-10 blur-[60px] rounded-full transition-opacity duration-700 pointer-events-none`
                                             }, void 0, false, {
                                                 fileName: "[project]/Desktop/flask/components/StoredReactionsSection.tsx",
-                                                lineNumber: 146,
+                                                lineNumber: 152,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2125,7 +2130,7 @@ function StoredReactionsSection() {
                                                                 children: reaction.category
                                                             }, void 0, false, {
                                                                 fileName: "[project]/Desktop/flask/components/StoredReactionsSection.tsx",
-                                                                lineNumber: 153,
+                                                                lineNumber: 159,
                                                                 columnNumber: 23
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -2133,13 +2138,13 @@ function StoredReactionsSection() {
                                                                 children: reaction.difficulty
                                                             }, void 0, false, {
                                                                 fileName: "[project]/Desktop/flask/components/StoredReactionsSection.tsx",
-                                                                lineNumber: 156,
+                                                                lineNumber: 162,
                                                                 columnNumber: 23
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/Desktop/flask/components/StoredReactionsSection.tsx",
-                                                        lineNumber: 152,
+                                                        lineNumber: 158,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
@@ -2147,7 +2152,7 @@ function StoredReactionsSection() {
                                                         children: reaction.name
                                                     }, void 0, false, {
                                                         fileName: "[project]/Desktop/flask/components/StoredReactionsSection.tsx",
-                                                        lineNumber: 166,
+                                                        lineNumber: 172,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -2155,14 +2160,14 @@ function StoredReactionsSection() {
                                                         children: reaction.formula
                                                     }, void 0, false, {
                                                         fileName: "[project]/Desktop/flask/components/StoredReactionsSection.tsx",
-                                                        lineNumber: 171,
+                                                        lineNumber: 177,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                         className: "flex-1"
                                                     }, void 0, false, {
                                                         fileName: "[project]/Desktop/flask/components/StoredReactionsSection.tsx",
-                                                        lineNumber: 176,
+                                                        lineNumber: 182,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2175,7 +2180,7 @@ function StoredReactionsSection() {
                                                                         size: 12
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/Desktop/flask/components/StoredReactionsSection.tsx",
-                                                                        lineNumber: 181,
+                                                                        lineNumber: 187,
                                                                         columnNumber: 25
                                                                     }, this),
                                                                     reaction.duration_minutes,
@@ -2183,7 +2188,7 @@ function StoredReactionsSection() {
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/Desktop/flask/components/StoredReactionsSection.tsx",
-                                                                lineNumber: 180,
+                                                                lineNumber: 186,
                                                                 columnNumber: 23
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -2193,7 +2198,7 @@ function StoredReactionsSection() {
                                                                         size: 12
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/Desktop/flask/components/StoredReactionsSection.tsx",
-                                                                        lineNumber: 185,
+                                                                        lineNumber: 191,
                                                                         columnNumber: 25
                                                                     }, this),
                                                                     reaction.chemicals.length,
@@ -2201,7 +2206,7 @@ function StoredReactionsSection() {
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/Desktop/flask/components/StoredReactionsSection.tsx",
-                                                                lineNumber: 184,
+                                                                lineNumber: 190,
                                                                 columnNumber: 23
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -2211,7 +2216,7 @@ function StoredReactionsSection() {
                                                                         size: 12
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/Desktop/flask/components/StoredReactionsSection.tsx",
-                                                                        lineNumber: 189,
+                                                                        lineNumber: 195,
                                                                         columnNumber: 25
                                                                     }, this),
                                                                     reaction.steps.length,
@@ -2219,40 +2224,40 @@ function StoredReactionsSection() {
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/Desktop/flask/components/StoredReactionsSection.tsx",
-                                                                lineNumber: 188,
+                                                                lineNumber: 194,
                                                                 columnNumber: 23
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/Desktop/flask/components/StoredReactionsSection.tsx",
-                                                        lineNumber: 179,
+                                                        lineNumber: 185,
                                                         columnNumber: 21
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/Desktop/flask/components/StoredReactionsSection.tsx",
-                                                lineNumber: 150,
+                                                lineNumber: 156,
                                                 columnNumber: 19
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/Desktop/flask/components/StoredReactionsSection.tsx",
-                                        lineNumber: 139,
+                                        lineNumber: 145,
                                         columnNumber: 17
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/Desktop/flask/components/StoredReactionsSection.tsx",
-                                    lineNumber: 138,
+                                    lineNumber: 144,
                                     columnNumber: 15
                                 }, this)
                             }, reaction.id, false, {
                                 fileName: "[project]/Desktop/flask/components/StoredReactionsSection.tsx",
-                                lineNumber: 127,
+                                lineNumber: 133,
                                 columnNumber: 13
                             }, this))
                     }, void 0, false, {
                         fileName: "[project]/Desktop/flask/components/StoredReactionsSection.tsx",
-                        lineNumber: 125,
+                        lineNumber: 131,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["motion"].div, {
@@ -2286,12 +2291,12 @@ function StoredReactionsSection() {
                                             children: "+"
                                         }, void 0, false, {
                                             fileName: "[project]/Desktop/flask/components/StoredReactionsSection.tsx",
-                                            lineNumber: 212,
+                                            lineNumber: 218,
                                             columnNumber: 17
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/Desktop/flask/components/StoredReactionsSection.tsx",
-                                        lineNumber: 211,
+                                        lineNumber: 217,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2302,7 +2307,7 @@ function StoredReactionsSection() {
                                                 children: "Custom Experiment"
                                             }, void 0, false, {
                                                 fileName: "[project]/Desktop/flask/components/StoredReactionsSection.tsx",
-                                                lineNumber: 215,
+                                                lineNumber: 221,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -2310,41 +2315,41 @@ function StoredReactionsSection() {
                                                 children: "Set up your own reaction parameters"
                                             }, void 0, false, {
                                                 fileName: "[project]/Desktop/flask/components/StoredReactionsSection.tsx",
-                                                lineNumber: 218,
+                                                lineNumber: 224,
                                                 columnNumber: 17
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/Desktop/flask/components/StoredReactionsSection.tsx",
-                                        lineNumber: 214,
+                                        lineNumber: 220,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/Desktop/flask/components/StoredReactionsSection.tsx",
-                                lineNumber: 210,
+                                lineNumber: 216,
                                 columnNumber: 13
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/Desktop/flask/components/StoredReactionsSection.tsx",
-                            lineNumber: 209,
+                            lineNumber: 215,
                             columnNumber: 11
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/Desktop/flask/components/StoredReactionsSection.tsx",
-                        lineNumber: 202,
+                        lineNumber: 208,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/Desktop/flask/components/StoredReactionsSection.tsx",
-                lineNumber: 34,
+                lineNumber: 40,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/Desktop/flask/components/StoredReactionsSection.tsx",
-        lineNumber: 27,
+        lineNumber: 33,
         columnNumber: 5
     }, this);
 }

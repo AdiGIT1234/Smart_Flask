@@ -5,7 +5,7 @@ import { STORED_REACTIONS } from "@/lib/reactions";
 import Link from "next/link";
 import { Beaker, Clock, Zap, Edit2, Save } from "lucide-react";
 import { useAuth } from "./AuthContext";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const difficultyColor = {
   Beginner: "text-green-400 border-green-500/30 bg-green-500/10",
@@ -17,6 +17,12 @@ export default function StoredReactionsSection() {
   const { user } = useAuth();
   const [isEditing, setIsEditing] = useState(false);
   const [localReactions, setLocalReactions] = useState(STORED_REACTIONS);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setMounted(true);
+  }, []);
 
   const handleSaveToSupabase = async () => {
     // This will connect to the real Supabase implementation once configured
@@ -50,7 +56,7 @@ export default function StoredReactionsSection() {
             Choose from our library of pre-configured experiments with real-time monitoring, or create your own custom setup.
           </p>
           
-          {user?.email === "aditya26047@gmail.com" && !isEditing && (
+          {mounted && user?.email === "aditya26047@gmail.com" && !isEditing && (
             <div className="mt-8 flex justify-center">
               <button 
                 onClick={() => setIsEditing(true)} 

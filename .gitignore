@@ -32,3 +32,13 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Python & ML Pipeline
+ml_pipeline/venv/
+ml_pipeline/__pycache__/
+*.pyc
+.DS_Store
+
+# Ignore the models and dataset if they get too large (optional)
+# ml_pipeline/synthetic_sensor_data.csv
+# ml_pipeline/anomaly_model.pkl

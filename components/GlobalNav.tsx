@@ -15,6 +15,11 @@ export default function GlobalNav() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [authModalOpen, setAuthModalOpen] = useState(false);
   const [isLoginView, setIsLoginView] = useState(true);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   // Track scroll to show nav ONLY after the scroll animation is heavily complete
   useEffect(() => {
@@ -71,7 +76,9 @@ export default function GlobalNav() {
 
             {/* Auth / Profile (Right) */}
             <div>
-              {user ? (
+              {!mounted ? (
+                <div className="w-[140px] h-10" />
+              ) : user ? (
                 <div className="flex flex-col items-center group relative cursor-pointer">
                   <div className="flex items-center gap-3">
                     {user.email === 'aditya26047@gmail.com' && (
@@ -146,6 +153,10 @@ export default function GlobalNav() {
                 <Link href="/dashboard" onClick={() => setSidebarOpen(false)} className="hover:text-white hover:translate-x-2 transition-all group flex items-center gap-4">
                    <div className="w-1.5 h-1.5 rounded-full bg-violet-500 opacity-0 group-hover:opacity-100 transition-all" />
                    Dashboard (Live)
+                </Link>
+                <Link href="/live-monitor" onClick={() => setSidebarOpen(false)} className="hover:text-white hover:translate-x-2 transition-all group flex items-center gap-4">
+                   <div className="w-1.5 h-1.5 rounded-full bg-cyan-500 opacity-0 group-hover:opacity-100 transition-all shadow-[0_0_10px_rgba(6,182,212,0.8)]" />
+                   ESP32 Hardware Monitor
                 </Link>
                 <Link href="/account" onClick={() => setSidebarOpen(false)} className="hover:text-white hover:translate-x-2 transition-all group flex items-center gap-4">
                    <div className="w-1.5 h-1.5 rounded-full bg-amber-500 opacity-0 group-hover:opacity-100 transition-all" />
