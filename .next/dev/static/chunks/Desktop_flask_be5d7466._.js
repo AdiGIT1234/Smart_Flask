@@ -1400,7 +1400,7 @@ function ReactionPage() {
         // In production, save to Supabase here
         setTimeout(()=>setSaved(true), 800);
     };
-    const currentStepData = reaction.steps[currentStep];
+    const currentStepData = reaction.steps[Math.min(currentStep, reaction.steps.length - 1)];
     // Get the most recent anomaly
     const latestAnomaly = simulatedData.filter((d)=>d.anomaly).slice(-1)[0];
     const hasRecentAnomaly = latestAnomaly && simulatedData.length > 0 && simulatedData.indexOf(latestAnomaly) > simulatedData.length - 4;

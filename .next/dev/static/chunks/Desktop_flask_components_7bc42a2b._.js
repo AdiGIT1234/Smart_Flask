@@ -116,15 +116,24 @@ function GlobalNav() {
     const [mounted, setMounted] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
         "GlobalNav.useEffect": ()=>{
-            setMounted(true);
+            const timer = setTimeout({
+                "GlobalNav.useEffect.timer": ()=>setMounted(true)
+            }["GlobalNav.useEffect.timer"], 0);
+            return ({
+                "GlobalNav.useEffect": ()=>clearTimeout(timer)
+            })["GlobalNav.useEffect"];
         }
     }["GlobalNav.useEffect"], []);
-    // Track scroll to show nav ONLY after the scroll animation is heavily complete
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
         "GlobalNav.useEffect": ()=>{
+            let timer;
             if (!isHomePage) {
-                setShowNav(true);
-                return;
+                timer = setTimeout({
+                    "GlobalNav.useEffect": ()=>setShowNav(true)
+                }["GlobalNav.useEffect"], 0);
+                return ({
+                    "GlobalNav.useEffect": ()=>clearTimeout(timer)
+                })["GlobalNav.useEffect"];
             }
             const handleScroll = {
                 "GlobalNav.useEffect.handleScroll": ()=>{

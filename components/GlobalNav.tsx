@@ -16,16 +16,16 @@ export default function GlobalNav() {
   const [authModalOpen, setAuthModalOpen] = useState(false);
   const [isLoginView, setIsLoginView] = useState(true);
   const [mounted, setMounted] = useState(false);
-
   useEffect(() => {
-    setMounted(true);
+    const timer = setTimeout(() => setMounted(true), 0);
+    return () => clearTimeout(timer);
   }, []);
 
-  // Track scroll to show nav ONLY after the scroll animation is heavily complete
   useEffect(() => {
+    let timer: NodeJS.Timeout;
     if (!isHomePage) {
-      setShowNav(true);
-      return;
+      timer = setTimeout(() => setShowNav(true), 0);
+      return () => clearTimeout(timer);
     }
     const handleScroll = () => {
       // Show when scrolled past 500vh (approaching the end of the 600vh canvas)

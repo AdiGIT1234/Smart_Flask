@@ -1,0 +1,31 @@
+
+> temp-init@0.1.0 dev
+> next dev
+
+⚠ Warning: Next.js inferred your workspace root, but it may not be correct.
+ We detected multiple lockfiles and selected the directory of /Users/adityasdrive/package-lock.json as the root directory.
+ To silence this warning, set `turbopack.root` in your Next.js config, or consider removing one of the lockfiles if it's not needed.
+   See https://nextjs.org/docs/app/api-reference/config/next-config-js/turbopack#root-directory for more information.
+ Detected additional lockfiles: 
+   * /Users/adityasdrive/Desktop/flask/package-lock.json
+
+▲ Next.js 16.1.7 (Turbopack)
+- Local:         http://localhost:3000
+- Network:       http://10.149.207.149:3000
+- Environments: .env.local
+
+✓ Starting...
+✓ Ready in 346ms
+ GET / 200 in 655ms (compile: 532ms, render: 123ms)
+ GET /reaction/rxn-charcoal-combustion 200 in 193ms (compile: 180ms, render: 13ms)
+ GET / 200 in 49ms (compile: 6ms, render: 43ms)
+ GET /reaction/rxn-charcoal-combustion 200 in 32ms (compile: 11ms, render: 21ms)
+ GET / 200 in 61ms (compile: 11ms, render: 50ms)
+ GET /reaction/rxn-charcoal-combustion 200 in 22ms (compile: 7ms, render: 15ms)
+⚠ Fast Refresh had to perform a full reload due to a runtime error.
+✓ Compiled in 49ms
+ GET /reaction/rxn-charcoal-combustion 200 in 330ms (compile: 55ms, render: 275ms)
+ GET /dashboard 200 in 55ms (compile: 38ms, render: 17ms)
+ GET /intelligence 200 in 48ms (compile: 34ms, render: 14ms)
+ GET / 200 in 27ms (compile: 6ms, render: 20ms)
+✓ Compiled in 19ms

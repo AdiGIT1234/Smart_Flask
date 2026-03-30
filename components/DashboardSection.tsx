@@ -1,8 +1,26 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 
 export default function DashboardSection() {
+  const [espData, setEspData] = useState<{
+    mq6: string | number;
+    temp: string | number;
+    mlConfidence: string;
+    totalAnalyzed: string;
+  }>({
+    mq6: "--",
+    temp: "--",
+    mlConfidence: "--",
+    totalAnalyzed: "--"
+  });
+
+  // Placeholder effect for when ESP32 WebSocket/API is integrated
+  useEffect(() => {
+    // e.g. socket.on('data', (data) => setEspData({ ... }))
+  }, []);
+
   return (
     <section className="min-h-screen bg-[#050505] text-white pt-24 pb-48 px-6 md:px-12 lg:px-24">
       <div className="max-w-7xl mx-auto">
@@ -25,8 +43,8 @@ export default function DashboardSection() {
 
           {/* Left Column - Live Cards */}
           <div className="flex flex-col gap-8">
-            <Card title="Live Gas Level" value="482" unit="ppm" accent="glow-blue" change="+12%" />
-            <Card title="Core Temp" value="124" unit="°C" accent="glow-amber" change="-3°C" />
+            <Card title="Live Gas Level" value={espData.mq6.toString()} unit="ppm" accent="glow-blue" change="--" />
+            <Card title="Core Temp" value={espData.temp.toString()} unit="°C" accent="glow-amber" change="--" />
             
             {/* ML Output */}
             <div className={`glass-card p-6 flex flex-col gap-4 relative overflow-hidden group`}>
@@ -47,7 +65,7 @@ export default function DashboardSection() {
                   <div className="flex-1 h-1.5 bg-white/10 rounded-full overflow-hidden">
                     <div className="h-full bg-green-400 w-[96%]" />
                   </div>
-                  <span className="text-sm text-white/70 font-mono">96% Conf.</span>
+                  <span className="text-sm text-white/70 font-mono">{espData.mlConfidence} Conf.</span>
                 </div>
               </div>
             </div>
@@ -165,7 +183,7 @@ export default function DashboardSection() {
                 </div>
                 <div className="text-right">
                    <div className="text-3xl font-light text-white/90">
-                     12.4<span className="text-lg text-white/40 ml-1">k</span>
+                     {espData.totalAnalyzed}
                    </div>
                    <div className="text-xs text-green-400 mt-1">Reactions Analyzed Today</div>
                 </div>

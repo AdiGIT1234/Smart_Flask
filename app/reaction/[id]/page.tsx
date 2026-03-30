@@ -198,7 +198,7 @@ export default function ReactionPage() {
     setTimeout(() => setSaved(true), 800);
   };
 
-  const currentStepData = reaction.steps[currentStep];
+  const currentStepData = reaction.steps[Math.min(currentStep, reaction.steps.length - 1)];
 
   // Get the most recent anomaly
   const latestAnomaly = simulatedData
