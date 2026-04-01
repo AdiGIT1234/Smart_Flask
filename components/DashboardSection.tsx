@@ -1,25 +1,77 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
+import { AlertTriangle } from "lucide-react";
+
+type SensorData = {
+  mq6_gas: number;
+  mq7_gas: number;
+  temperature: number;
+  humidity: number;
+};
+
+type PredictionResult = {
+  is_anomaly: boolean;
+  status_label: string;
+  anomaly_score: number;
+  sensor_data: SensorData;
+  error?: string;
+};
 
 export default function DashboardSection() {
-  const [espData, setEspData] = useState<{
-    mq6: string | number;
-    temp: string | number;
-    mlConfidence: string;
-    totalAnalyzed: string;
-  }>({
-    mq6: "--",
-    temp: "--",
-    mlConfidence: "--",
-    totalAnalyzed: "--"
-  });
+  const [data, setData] = useState<PredictionResult | null>(null);
+  const [isSimulatingLeak, setIsSimulatingLeak] = useState(false);
+  const [history, setHistory] = useState<PredictionResult[]>([]);
 
-  // Placeholder effect for when ESP32 WebSocket/API is integrated
+  // Simulation logic: fetch data every 2 seconds
   useEffect(() => {
-    // e.g. socket.on('data', (data) => setEspData({ ... }))
-  }, []);
+    const interval = setInterval(async () => {
+      // 1. Generate realistic synthetic sensor data matching the Safe dataset
+      let mq6 = Math.random() * 90 + 260; // 260-350 ppm
+      let mq7 = Math.random() < 0.9 ? 1 : 0; // mostly 1 (based on dataset)
+      let temp = Math.random() * 1.5 + 28.2; // 28.2-29.7 C
+      let hum = Math.random() * 7 + 56;   // 56-63 %
+      
+      // Inject Danger/Spikes if user clicks "Simulate Leak"
+      if (isSimulatingLeak) {
+        mq6 = Math.random() * 150 + 450; // 450-600 ppm (Danger)
+        mq7 = 0; // predominantly 0 in the Danger range of dataset
+        temp = Math.random() * 3 + 31.0; // 31.0-34.0 C (Danger)
+        hum = Math.random() * 13 + 33; // 33-46 % (Danger)
+      }
+
+      // 2. Post to our new Flask ML API
+      try {
+        const res = await fetch("http://localhost:5001/predict", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            mq6_gas: mq6,
+            mq7_gas: mq7,
+            temperature: temp,
+            humidity: hum
+          })
+        });
+        const result: PredictionResult = await res.json();
+        
+        setData(result);
+        
+        // Keep last 20 logs for the dashboard chart and feed
+        setHistory(prev => {
+          const updated = [result, ...prev];
+          if (updated.length > 20) return updated.slice(0, 20);
+          return updated;
+        });
+
+      } catch (err) {
+        console.error("ML Backend disconnected:", err);
+      }
+    }, 2000);
+
+    return () => clearInterval(interval);
+  }, [isSimulatingLeak]);
+
 
   return (
     <section className="min-h-screen bg-[#050505] text-white pt-24 pb-48 px-6 md:px-12 lg:px-24">
@@ -32,40 +84,70 @@ export default function DashboardSection() {
           className="grid grid-cols-1 lg:grid-cols-3 gap-8"
         >
           {/* Header Column */}
-          <div className="lg:col-span-3 mb-12 flex flex-col items-center md:items-start text-center md:text-left">
-            <h3 className="text-3xl md:text-5xl font-medium tracking-tight text-white/90 mb-4">
-              Intelligence in Action
-            </h3>
-            <p className="text-lg text-white/50 max-w-2xl">
-              Live data from the latest synthesis run. Anomalies are detected and resolved automatically by the Smart Reaction Engine.
-            </p>
+          <div className="lg:col-span-3 mb-10 flex flex-col md:flex-row justify-between items-center md:items-start text-center md:text-left gap-6">
+            <div>
+              <h3 className="text-3xl md:text-5xl font-medium tracking-tight text-white/90 mb-4">
+                Intelligence in Action
+              </h3>
+              <p className="text-lg text-white/50 max-w-2xl">
+                Live streaming Random Forest Classification mapped directly to our ESP32 ML API. Anomalies are detected instantly.
+              </p>
+            </div>
+            <button 
+               onClick={() => setIsSimulatingLeak(!isSimulatingLeak)}
+               className={`px-6 py-3 rounded-full font-semibold transition-all shadow-lg text-sm shrink-0 mt-4 md:mt-0 ${isSimulatingLeak ? 'bg-red-600 hover:bg-red-500 shadow-red-500/50 text-white' : 'bg-white/10 hover:bg-white/20 text-white'}`}
+            >
+              {isSimulatingLeak ? 'Stop Leak Simulation' : 'Simulate Hardware Leak'}
+            </button>
+          </div>
+
+          {/* Banner */}
+          <div className={`lg:col-span-3 p-6 rounded-2xl border transition-all duration-500 flex items-center justify-between ${data?.status_label === 'Danger' ? 'bg-red-900/20 border-red-500/50 shadow-[0_0_40px_rgba(239,68,68,0.2)]' : data?.status_label === 'Warning' ? 'bg-amber-900/20 border-amber-500/50 shadow-[0_0_40px_rgba(245,158,11,0.2)]' : 'bg-emerald-900/20 border-emerald-500/50 shadow-[0_0_40px_rgba(16,185,129,0.1)]'}`}>
+             <div className="flex items-center gap-6">
+                <div className="relative">
+                   <div className={`w-5 h-5 rounded-full ${data?.status_label === 'Danger' ? 'bg-red-500 animate-pulse' : data?.status_label === 'Warning' ? 'bg-amber-500 animate-pulse' : 'bg-emerald-500'}`}></div>
+                   <div className={`absolute inset-0 rounded-full animate-ping opacity-75 ${data?.status_label === 'Danger' ? 'bg-red-500' : data?.status_label === 'Warning' ? 'bg-amber-500' : 'bg-emerald-500'}`}></div>
+                </div>
+                <div>
+                   <h2 className={`text-xl font-bold uppercase ${data?.status_label === 'Danger' ? 'text-red-400' : data?.status_label === 'Warning' ? 'text-amber-400' : 'text-emerald-400'}`}>
+                      STATUS: {data?.status_label || 'SYSTEM NORMAL'}
+                   </h2>
+                </div>
+             </div>
+             <div className="text-right">
+                <p className="text-xs tracking-widest text-gray-500 uppercase">ML Confidence</p>
+                <p className="font-mono text-lg">{data?.anomaly_score !== undefined ? (data.anomaly_score * 100).toFixed(1) + '%' : '100%'}</p>
+             </div>
           </div>
 
           {/* Left Column - Live Cards */}
-          <div className="flex flex-col gap-8">
-            <Card title="Live Gas Level" value={espData.mq6.toString()} unit="ppm" accent="glow-blue" change="--" />
-            <Card title="Core Temp" value={espData.temp.toString()} unit="°C" accent="glow-amber" change="--" />
+          <div className="flex flex-col gap-6">
+            <Card title="MQ6 Gas (LPG)" value={data?.sensor_data?.mq6_gas?.toFixed(1) ?? "--"} unit="ppm" accent={isSimulatingLeak ? "glow-red" : "glow-blue"} change="--" />
+            <Card title="Core Temp" value={data?.sensor_data?.temperature?.toFixed(1) ?? "--"} unit="°C" accent={isSimulatingLeak ? "glow-red" : "glow-amber"} change="--" />
             
             {/* ML Output */}
             <div className={`glass-card p-6 flex flex-col gap-4 relative overflow-hidden group`}>
-              <div className="absolute top-0 right-0 w-32 h-32 bg-green-500/10 rounded-full blur-3xl group-hover:bg-green-500/20 transition-all duration-700" />
-              <div className="flex justify-between items-start">
+              <div className={`absolute top-0 right-0 w-32 h-32 rounded-full blur-3xl transition-all duration-700 ${data?.status_label === 'Danger' ? 'bg-red-500/20 group-hover:bg-red-500/30' : data?.status_label === 'Warning' ? 'bg-amber-500/20 group-hover:bg-amber-500/30' : 'bg-green-500/10 group-hover:bg-green-500/20'}`} />
+              <div className="flex justify-between items-start z-10">
                 <span className="text-sm font-medium tracking-wide text-white/50 uppercase">
                   ML Diagnosis
                 </span>
-                <span className="flex items-center gap-2 text-xs font-semibold px-2 py-1 bg-green-500/20 text-green-400 rounded-full">
-                  <span className="w-1.5 h-1.5 rounded-full bg-green-400 pulse-dot" /> Live
+                <span className={`flex items-center gap-2 text-xs font-semibold px-2 py-1 rounded-full ${data?.status_label === 'Danger' ? 'bg-red-500/20 text-red-400' : 'bg-green-500/20 text-green-400'}`}>
+                  <span className={`w-1.5 h-1.5 rounded-full pulse-dot ${data?.status_label === 'Danger' ? 'bg-red-400' : 'bg-green-400'}`} /> Live
                 </span>
               </div>
-              <div className="flex flex-col">
-                <span className="text-3xl font-medium tracking-tight text-green-400 mb-1">
-                  Correct
+              <div className="flex flex-col z-10">
+                <span className={`text-3xl font-medium tracking-tight mb-1 ${data?.status_label === 'Danger' ? 'text-red-400' : data?.status_label === 'Warning' ? 'text-amber-400' : 'text-green-400'}`}>
+                  {data?.status_label || '--'}
                 </span>
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-3 mt-1">
                   <div className="flex-1 h-1.5 bg-white/10 rounded-full overflow-hidden">
-                    <div className="h-full bg-green-400 w-[96%]" />
+                    <div 
+                      className={`h-full transition-all duration-300 ${data?.status_label === 'Danger' ? 'bg-red-400' : 'bg-green-400'}`} 
+                      style={{ width: `${data?.anomaly_score !== undefined ? (data.anomaly_score * 100) : 100}%` }} 
+                    />
                   </div>
-                  <span className="text-sm text-white/70 font-mono">{espData.mlConfidence} Conf.</span>
+                  <span className="text-sm text-white/70 font-mono">{data?.anomaly_score !== undefined ? (data.anomaly_score * 100).toFixed(0) : '100'}% Conf.</span>
                 </div>
               </div>
             </div>
@@ -85,24 +167,35 @@ export default function DashboardSection() {
               </div>
             </div>
 
-            {/* Fake Chart Area */}
+            {/* Dynamic Chart Area */}
             <div className="flex-1 min-h-[300px] w-full chart-grid rounded-lg border border-white/5 relative flex items-end">
               
               {/* Temp Line SVG (Amber) */}
-              <svg className="absolute inset-0 w-full h-full preserve-3d" viewBox="0 0 100 100" preserveAspectRatio="none">
+              <svg className="absolute inset-0 w-full h-full preserve-3d" viewBox="0 10 100 100" preserveAspectRatio="none">
                  <path 
-                   d="M0,80 Q25,85 40,60 T70,40 T100,50" 
+                   d={ (() => {
+                     if (history.length === 0) return "M0,100 L100,100";
+                     const pts = [...history].reverse();
+                     if (pts.length === 1) return `M0,${100 - ((pts[0].sensor_data.temperature - 26) / 10 * 100)} L100,${100 - ((pts[0].sensor_data.temperature - 26) / 10 * 100)}`;
+                     return "M" + pts.map((d, i) => `${(i / (pts.length - 1)) * 100},${Math.max(0, Math.min(100, 100 - ((d.sensor_data.temperature - 26) / 10 * 100)))}`).join(" L");
+                   })() }
                    fill="none" 
                    stroke="currentColor" 
                    strokeWidth="2" 
-                   className="text-amber-500/80 drop-shadow-[0_0_8px_rgba(245,158,11,0.5)]" 
+                   className="text-amber-500/80 drop-shadow-[0_0_8px_rgba(245,158,11,0.5)] transition-all duration-300" 
                    vectorEffect="non-scaling-stroke"
+                   style={{ strokeLinejoin: "round", strokeLinecap: "round" }}
                  />
                  {/* Area under curve */}
                  <path 
-                   d="M0,80 Q25,85 40,60 T70,40 T100,50 L100,100 L0,100 Z" 
+                   d={ (() => {
+                     if (history.length === 0) return "M0,100 L100,100 Z";
+                     const pts = [...history].reverse();
+                     if (pts.length === 1) return `M0,${100 - ((pts[0].sensor_data.temperature - 26) / 10 * 100)} L100,${100 - ((pts[0].sensor_data.temperature - 26) / 10 * 100)} L100,110 L0,110 Z`;
+                     return "M" + pts.map((d, i) => `${(i / (pts.length - 1)) * 100},${Math.max(0, Math.min(100, 100 - ((d.sensor_data.temperature - 26) / 10 * 100)))}`).join(" L") + " L100,110 L0,110 Z";
+                   })() }
                    fill="url(#amber-gradient)" 
-                   className="opacity-20"
+                   className="opacity-20 transition-all duration-300"
                  />
                  <linearGradient id="amber-gradient" x1="0" y1="0" x2="0" y2="1">
                     <stop offset="0%" stopColor="#f59e0b" stopOpacity="1" />
@@ -111,20 +204,31 @@ export default function DashboardSection() {
               </svg>
 
               {/* Gas Line SVG (Blue) */}
-              <svg className="absolute inset-0 w-full h-full preserve-3d" viewBox="0 0 100 100" preserveAspectRatio="none">
+              <svg className="absolute inset-0 w-full h-full preserve-3d" viewBox="0 10 100 100" preserveAspectRatio="none">
                 <path 
-                  d="M0,90 Q30,80 50,40 T80,20 T100,15" 
+                  d={ (() => {
+                     if (history.length === 0) return "M0,100 L100,100";
+                     const pts = [...history].reverse();
+                     if (pts.length === 1) return `M0,${100 - ((pts[0].sensor_data.mq6_gas - 200) / 450 * 100)} L100,${100 - ((pts[0].sensor_data.mq6_gas - 200) / 450 * 100)}`;
+                     return "M" + pts.map((d, i) => `${(i / (pts.length - 1)) * 100},${Math.max(0, Math.min(100, 100 - ((d.sensor_data.mq6_gas - 200) / 450 * 100)))}`).join(" L");
+                   })() }
                   fill="none" 
                   stroke="currentColor" 
                   strokeWidth="2.5" 
-                  className="text-blue-500 drop-shadow-[0_0_8px_rgba(59,130,246,0.6)]" 
+                  className="text-blue-500 drop-shadow-[0_0_8px_rgba(59,130,246,0.6)] transition-all duration-300" 
                   vectorEffect="non-scaling-stroke"
+                  style={{ strokeLinejoin: "round", strokeLinecap: "round" }}
                 />
                  {/* Area under curve */}
                  <path 
-                   d="M0,90 Q30,80 50,40 T80,20 T100,15 L100,100 L0,100 Z" 
+                   d={ (() => {
+                     if (history.length === 0) return "M0,100 L100,100 Z";
+                     const pts = [...history].reverse();
+                     if (pts.length === 1) return `M0,${100 - ((pts[0].sensor_data.mq6_gas - 200) / 450 * 100)} L100,${100 - ((pts[0].sensor_data.mq6_gas - 200) / 450 * 100)} L100,110 L0,110 Z`;
+                     return "M" + pts.map((d, i) => `${(i / (pts.length - 1)) * 100},${Math.max(0, Math.min(100, 100 - ((d.sensor_data.mq6_gas - 200) / 450 * 100)))}`).join(" L") + " L100,110 L0,110 Z";
+                   })() }
                    fill="url(#blue-gradient)" 
-                   className="opacity-20"
+                   className="opacity-20 transition-all duration-300"
                  />
                  <linearGradient id="blue-gradient" x1="0" y1="0" x2="0" y2="1">
                     <stop offset="0%" stopColor="#3b82f6" stopOpacity="1" />
@@ -132,12 +236,28 @@ export default function DashboardSection() {
                  </linearGradient>
               </svg>
 
-              {/* Data tooltips/dots */}
-              <div className="absolute top-[35%] left-[50%] w-3 h-3 bg-white rounded-full glow-blue translate-x-[-50%] translate-y-[-50%]" />
-              <div className="absolute top-[28%] left-[50%] bg-blue-500/10 border border-blue-500/30 text-blue-300 text-xs px-2 py-1 rounded backdrop-blur-md -translate-x-1/2 -translate-y-full">
-                Spike Detected
-              </div>
-
+              {/* Data tooltips/dots (only show if anomaly exists) */}
+              {history.some(log => log.is_anomaly) && (() => {
+                 const pts = [...history].reverse();
+                 const spikeIndex = pts.findIndex(log => log.is_anomaly);
+                 if (spikeIndex !== -1 && pts.length > 1) {
+                    const xPercent = (spikeIndex / (pts.length - 1)) * 100;
+                    const yVal = 100 - ((pts[spikeIndex].sensor_data.mq6_gas - 200) / 450 * 100);
+                    return (
+                      <motion.div 
+                         initial={{ opacity: 0, scale: 0 }}
+                         animate={{ opacity: 1, scale: 1 }}
+                         className="absolute w-3 h-3 bg-white rounded-full glow-blue translate-x-[-50%] translate-y-[-50%] z-20"
+                         style={{ left: `${xPercent}%`, top: `calc(${Math.max(10, Math.min(90, yVal))}% + 10px)` }}
+                      >
+                         <div className="absolute top-[-30px] left-[50%] bg-blue-500/10 border border-blue-500/30 text-blue-300 text-[10px] px-2 py-0.5 rounded backdrop-blur-md -translate-x-1/2 whitespace-nowrap">
+                           Spike
+                         </div>
+                      </motion.div>
+                    );
+                 }
+                 return null;
+              })()}
             </div>
 
             {/* X Axis Labels */}
@@ -157,21 +277,27 @@ export default function DashboardSection() {
              <div className="glass-card p-6 border-l-4 border-l-violet-500">
                <h4 className="text-sm font-medium tracking-wide text-white/70 mb-4 uppercase">Automated Reaction Log</h4>
                <div className="flex flex-col gap-3 font-mono text-xs text-white/60">
-                  <div className="flex gap-4">
-                     <span className="text-white/30">14:02:11</span>
-                     <span className="text-blue-400 font-semibold">[INFO]</span>
-                     <span className="flex-1 truncate">Catalyst introduced to mixture.</span>
-                  </div>
-                  <div className="flex gap-4">
-                     <span className="text-white/30">14:02:43</span>
-                     <span className="text-amber-400 font-semibold">[WARN]</span>
-                     <span className="flex-1 truncate">Minor exothermic spike detected. Heating reduced.</span>
-                  </div>
-                  <div className="flex gap-4">
-                     <span className="text-white/30">14:05:09</span>
-                     <span className="text-violet-400 font-semibold">[ANALYSIS]</span>
-                     <span className="flex-1 truncate">Reaction stabilized. Phase 2 complete.</span>
-                  </div>
+                 <AnimatePresence>
+                   {history.slice(0, 4).map((log, i) => (
+                     <motion.div 
+                       key={i + log.sensor_data.mq6_gas}
+                       initial={{ opacity: 0, x: -10 }}
+                       animate={{ opacity: 1, x: 0 }}
+                       className="flex gap-4 p-2 rounded bg-white/5"
+                     >
+                        <span className="text-white/30 shrink-0">T-{i*2}s</span>
+                        <span className={`font-semibold shrink-0 ${log.status_label === 'Danger' ? 'text-red-400' : log.status_label === 'Warning' ? 'text-amber-400' : 'text-blue-400'}`}>
+                          [{log.status_label.toUpperCase()}]
+                        </span>
+                        <span className="flex-1 truncate">
+                          MQ6: {log.sensor_data.mq6_gas.toFixed(0)}ppm | TMP: {log.sensor_data.temperature.toFixed(1)}°C
+                        </span>
+                     </motion.div>
+                   ))}
+                   {history.length === 0 && (
+                     <div className="text-white/30 p-2">Waiting for first classification...</div>
+                   )}
+                 </AnimatePresence>
                </div>
              </div>
 
@@ -183,7 +309,7 @@ export default function DashboardSection() {
                 </div>
                 <div className="text-right">
                    <div className="text-3xl font-light text-white/90">
-                     {espData.totalAnalyzed}
+                     12.4<span className="text-lg text-white/40 ml-1">k</span>
                    </div>
                    <div className="text-xs text-green-400 mt-1">Reactions Analyzed Today</div>
                 </div>

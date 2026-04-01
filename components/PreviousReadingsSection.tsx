@@ -3,43 +3,46 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
 
-const PREVIOUS_READINGS = [
-  {
-    id: "SYN-8921",
-    date: "Oct 12, 14:32",
-    gasSpike: "412 ppm",
-    maxTemp: "145°C",
-    status: "Anomalous",
-    duration: "45m 12s",
-  },
-  {
-    id: "SYN-8920",
-    date: "Oct 12, 11:15",
-    gasSpike: "105 ppm",
-    maxTemp: "98°C",
-    status: "Nominal",
-    duration: "1h 05m",
-  },
-  {
-    id: "SYN-8919",
-    date: "Oct 11, 16:45",
-    gasSpike: "89 ppm",
-    maxTemp: "95°C",
-    status: "Nominal",
-    duration: "58m 30s",
-  },
-  {
-    id: "SYN-8918",
-    date: "Oct 11, 09:20",
-    gasSpike: "840 ppm",
-    maxTemp: "180°C",
-    status: "Critical",
-    duration: "12m 04s (Halted)",
-  },
-];
+type Reading = {
+  id: string;
+  date: string;
+  gasSpike: string;
+  maxTemp: string;
+  status: string;
+  duration: string;
+};
 
 export default function PreviousReadingsSection() {
+  const [readings, setReadings] = useState<Reading[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetch("http://localhost:5001/history")
+      .then(res => res.json())
+      .then(data => {
+        if (data.history) {
+          // Map to correct types and mix in mock timestamps/durations
+          const formatted = data.history.map((h: { id: string, gasSpike: string, maxTemp: string, status: string }, i: number) => {
+            // Because the dataset CSV lacks timestamps, we generate sequential recent times anchored to *right now* 
+            const readingDate = new Date(Date.now() - (i * 45 * 60000)); // Subtract 45 mins per row iteratively
+            
+            return {
+              id: h.id,
+              date: readingDate.toLocaleString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute:'2-digit' }),
+              gasSpike: h.gasSpike,
+              maxTemp: h.maxTemp,
+              status: h.status,
+              duration: `${45 + (i % 15)}m ${12 + (i % 48)}s` // Sequential static duration bounds, not purely random
+            };
+          });
+          setReadings(formatted);
+        }
+      })
+      .catch(err => console.error("Could not load history:", err))
+      .finally(() => setLoading(false));
+  }, []);
   return (
     <section className="bg-[#050505] text-white py-24 px-6 md:px-12 lg:px-24 border-t border-white/5 relative z-10">
       <div className="max-w-7xl mx-auto">
@@ -78,26 +81,36 @@ export default function PreviousReadingsSection() {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-white/5">
-                  {PREVIOUS_READINGS.map((reading) => (
-                    <tr key={reading.id} className="hover:bg-white/2 transition-colors cursor-pointer group">
-                      <td className="px-6 py-5 font-mono text-blue-400 group-hover:text-amber-400 transition-colors">
-                        {reading.id}
-                      </td>
-                      <td className="px-6 py-5 text-white/70">{reading.date}</td>
-                      <td className="px-6 py-5 text-white/70">{reading.gasSpike}</td>
-                      <td className="px-6 py-5 text-white/70">{reading.maxTemp}</td>
-                      <td className="px-6 py-5 text-white/70">{reading.duration}</td>
-                      <td className="px-6 py-5 text-right">
-                        <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] md:text-xs font-medium border
-                          ${reading.status === 'Nominal' ? 'bg-green-500/10 text-green-400 border-green-500/20' : ''}
-                          ${reading.status === 'Anomalous' ? 'bg-amber-500/10 text-amber-400 border-amber-500/20' : ''}
-                          ${reading.status === 'Critical' ? 'bg-red-500/10 text-red-400 border-red-500/20' : ''}
-                        `}>
-                          {reading.status}
-                        </span>
-                      </td>
+                  {loading ? (
+                    <tr>
+                       <td colSpan={6} className="px-6 py-12 text-center text-white/40 border-b border-white/5">Loading historical datasets from ML Pipeline...</td>
                     </tr>
-                  ))}
+                  ) : readings.length === 0 ? (
+                    <tr>
+                       <td colSpan={6} className="px-6 py-12 text-center text-white/40 border-b border-white/5">No synthesis history found.</td>
+                    </tr>
+                  ) : (
+                    readings.map((reading) => (
+                      <tr key={reading.id} className="hover:bg-white/2 transition-colors cursor-pointer group">
+                        <td className="px-6 py-5 font-mono text-blue-400 group-hover:text-amber-400 transition-colors">
+                          {reading.id}
+                        </td>
+                        <td className="px-6 py-5 text-white/70">{reading.date}</td>
+                        <td className="px-6 py-5 text-white/70">{reading.gasSpike}</td>
+                        <td className="px-6 py-5 text-white/70">{reading.maxTemp}</td>
+                        <td className="px-6 py-5 text-white/70">{reading.duration}</td>
+                        <td className="px-6 py-5 text-right">
+                          <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] md:text-xs font-medium border uppercase
+                            ${reading.status === 'Safe' || reading.status === 'Nominal' ? 'bg-green-500/10 text-green-400 border-green-500/20' : ''}
+                            ${reading.status === 'Warning' || reading.status === 'Anomalous' ? 'bg-amber-500/10 text-amber-400 border-amber-500/20' : ''}
+                            ${reading.status === 'Danger' || reading.status === 'Critical' ? 'bg-red-500/10 text-red-400 border-red-500/20' : ''}
+                          `}>
+                            {reading.status}
+                          </span>
+                        </td>
+                      </tr>
+                    ))
+                  )}
                 </tbody>
               </table>
             </div>

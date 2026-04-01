@@ -154,10 +154,7 @@ export default function GlobalNav() {
                    <div className="w-1.5 h-1.5 rounded-full bg-violet-500 opacity-0 group-hover:opacity-100 transition-all" />
                    Dashboard (Live)
                 </Link>
-                <Link href="/live-monitor" onClick={() => setSidebarOpen(false)} className="hover:text-white hover:translate-x-2 transition-all group flex items-center gap-4">
-                   <div className="w-1.5 h-1.5 rounded-full bg-cyan-500 opacity-0 group-hover:opacity-100 transition-all shadow-[0_0_10px_rgba(6,182,212,0.8)]" />
-                   ESP32 Hardware Monitor
-                </Link>
+
                 <Link href="/account" onClick={() => setSidebarOpen(false)} className="hover:text-white hover:translate-x-2 transition-all group flex items-center gap-4">
                    <div className="w-1.5 h-1.5 rounded-full bg-amber-500 opacity-0 group-hover:opacity-100 transition-all" />
                    Account Info

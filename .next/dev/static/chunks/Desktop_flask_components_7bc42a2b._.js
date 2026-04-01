@@ -427,25 +427,6 @@ function GlobalNav() {
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
-                                            href: "/live-monitor",
-                                            onClick: ()=>setSidebarOpen(false),
-                                            className: "hover:text-white hover:translate-x-2 transition-all group flex items-center gap-4",
-                                            children: [
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                    className: "w-1.5 h-1.5 rounded-full bg-cyan-500 opacity-0 group-hover:opacity-100 transition-all shadow-[0_0_10px_rgba(6,182,212,0.8)]"
-                                                }, void 0, false, {
-                                                    fileName: "[project]/Desktop/flask/components/GlobalNav.tsx",
-                                                    lineNumber: 158,
-                                                    columnNumber: 20
-                                                }, this),
-                                                "ESP32 Hardware Monitor"
-                                            ]
-                                        }, void 0, true, {
-                                            fileName: "[project]/Desktop/flask/components/GlobalNav.tsx",
-                                            lineNumber: 157,
-                                            columnNumber: 17
-                                        }, this),
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
                                             href: "/account",
                                             onClick: ()=>setSidebarOpen(false),
                                             className: "hover:text-white hover:translate-x-2 transition-all group flex items-center gap-4",
@@ -454,14 +435,14 @@ function GlobalNav() {
                                                     className: "w-1.5 h-1.5 rounded-full bg-amber-500 opacity-0 group-hover:opacity-100 transition-all"
                                                 }, void 0, false, {
                                                     fileName: "[project]/Desktop/flask/components/GlobalNav.tsx",
-                                                    lineNumber: 162,
+                                                    lineNumber: 159,
                                                     columnNumber: 20
                                                 }, this),
                                                 "Account Info"
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/Desktop/flask/components/GlobalNav.tsx",
-                                            lineNumber: 161,
+                                            lineNumber: 158,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
@@ -473,14 +454,14 @@ function GlobalNav() {
                                                     className: "w-1.5 h-1.5 rounded-full bg-green-500 opacity-0 group-hover:opacity-100 transition-all"
                                                 }, void 0, false, {
                                                     fileName: "[project]/Desktop/flask/components/GlobalNav.tsx",
-                                                    lineNumber: 166,
+                                                    lineNumber: 163,
                                                     columnNumber: 20
                                                 }, this),
                                                 "Community Analysis"
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/Desktop/flask/components/GlobalNav.tsx",
-                                            lineNumber: 165,
+                                            lineNumber: 162,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
@@ -492,14 +473,14 @@ function GlobalNav() {
                                                     className: "w-1.5 h-1.5 rounded-full bg-rose-500 opacity-0 group-hover:opacity-100 transition-all"
                                                 }, void 0, false, {
                                                     fileName: "[project]/Desktop/flask/components/GlobalNav.tsx",
-                                                    lineNumber: 170,
+                                                    lineNumber: 167,
                                                     columnNumber: 20
                                                 }, this),
                                                 "Global Intelligence"
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/Desktop/flask/components/GlobalNav.tsx",
-                                            lineNumber: 169,
+                                            lineNumber: 166,
                                             columnNumber: 17
                                         }, this)
                                     ]
@@ -543,7 +524,7 @@ function GlobalNav() {
                             className: "absolute inset-0 bg-[#050505]/70 backdrop-blur-md cursor-pointer"
                         }, void 0, false, {
                             fileName: "[project]/Desktop/flask/components/GlobalNav.tsx",
-                            lineNumber: 183,
+                            lineNumber: 180,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["motion"].div, {
@@ -568,7 +549,7 @@ function GlobalNav() {
                                     className: "absolute top-0 right-0 w-64 h-64 bg-blue-600/10 blur-[80px] rounded-full pointer-events-none"
                                 }, void 0, false, {
                                     fileName: "[project]/Desktop/flask/components/GlobalNav.tsx",
-                                    lineNumber: 198,
+                                    lineNumber: 195,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -578,12 +559,12 @@ function GlobalNav() {
                                         size: 20
                                     }, void 0, false, {
                                         fileName: "[project]/Desktop/flask/components/GlobalNav.tsx",
-                                        lineNumber: 204,
+                                        lineNumber: 201,
                                         columnNumber: 17
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/Desktop/flask/components/GlobalNav.tsx",
-                                    lineNumber: 200,
+                                    lineNumber: 197,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
@@ -591,7 +572,7 @@ function GlobalNav() {
                                     children: isLoginView ? "Welcome Back" : "Create Account"
                                 }, void 0, false, {
                                     fileName: "[project]/Desktop/flask/components/GlobalNav.tsx",
-                                    lineNumber: 207,
+                                    lineNumber: 204,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -599,7 +580,7 @@ function GlobalNav() {
                                     children: isLoginView ? "Access your live reaction dashboards globally." : "Join the smartest labs in the world with AI-powered synthesis."
                                 }, void 0, false, {
                                     fileName: "[project]/Desktop/flask/components/GlobalNav.tsx",
-                                    lineNumber: 210,
+                                    lineNumber: 207,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("form", {
@@ -614,7 +595,7 @@ function GlobalNav() {
                                                     children: "Full Name"
                                                 }, void 0, false, {
                                                     fileName: "[project]/Desktop/flask/components/GlobalNav.tsx",
-                                                    lineNumber: 219,
+                                                    lineNumber: 216,
                                                     columnNumber: 21
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -625,13 +606,13 @@ function GlobalNav() {
                                                     className: "w-full bg-white/3 border border-white/10 rounded-lg px-4 py-3 text-sm text-white placeholder:text-white/20 focus:outline-none focus:border-blue-500/50 focus:bg-white/5 transition-all"
                                                 }, void 0, false, {
                                                     fileName: "[project]/Desktop/flask/components/GlobalNav.tsx",
-                                                    lineNumber: 220,
+                                                    lineNumber: 217,
                                                     columnNumber: 21
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/Desktop/flask/components/GlobalNav.tsx",
-                                            lineNumber: 218,
+                                            lineNumber: 215,
                                             columnNumber: 19
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -642,7 +623,7 @@ function GlobalNav() {
                                                     children: "Work Email"
                                                 }, void 0, false, {
                                                     fileName: "[project]/Desktop/flask/components/GlobalNav.tsx",
-                                                    lineNumber: 231,
+                                                    lineNumber: 228,
                                                     columnNumber: 19
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -653,13 +634,13 @@ function GlobalNav() {
                                                     className: "w-full bg-white/3 border border-white/10 rounded-lg px-4 py-3 text-sm text-white placeholder:text-white/20 focus:outline-none focus:border-blue-500/50 focus:bg-white/5 transition-all"
                                                 }, void 0, false, {
                                                     fileName: "[project]/Desktop/flask/components/GlobalNav.tsx",
-                                                    lineNumber: 232,
+                                                    lineNumber: 229,
                                                     columnNumber: 19
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/Desktop/flask/components/GlobalNav.tsx",
-                                            lineNumber: 230,
+                                            lineNumber: 227,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -673,7 +654,7 @@ function GlobalNav() {
                                                             children: "Password"
                                                         }, void 0, false, {
                                                             fileName: "[project]/Desktop/flask/components/GlobalNav.tsx",
-                                                            lineNumber: 243,
+                                                            lineNumber: 240,
                                                             columnNumber: 21
                                                         }, this),
                                                         isLoginView && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -682,13 +663,13 @@ function GlobalNav() {
                                                             children: "Forgot?"
                                                         }, void 0, false, {
                                                             fileName: "[project]/Desktop/flask/components/GlobalNav.tsx",
-                                                            lineNumber: 244,
+                                                            lineNumber: 241,
                                                             columnNumber: 37
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/Desktop/flask/components/GlobalNav.tsx",
-                                                    lineNumber: 242,
+                                                    lineNumber: 239,
                                                     columnNumber: 19
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -699,13 +680,13 @@ function GlobalNav() {
                                                     className: "w-full bg-white/3 border border-white/10 rounded-lg px-4 py-3 text-sm text-white placeholder:text-white/20 focus:outline-none focus:border-blue-500/50 focus:bg-white/5 transition-all"
                                                 }, void 0, false, {
                                                     fileName: "[project]/Desktop/flask/components/GlobalNav.tsx",
-                                                    lineNumber: 246,
+                                                    lineNumber: 243,
                                                     columnNumber: 19
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/Desktop/flask/components/GlobalNav.tsx",
-                                            lineNumber: 241,
+                                            lineNumber: 238,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -714,7 +695,7 @@ function GlobalNav() {
                                             children: isLoginView ? "Sign In" : "Create Account"
                                         }, void 0, false, {
                                             fileName: "[project]/Desktop/flask/components/GlobalNav.tsx",
-                                            lineNumber: 255,
+                                            lineNumber: 252,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -728,36 +709,36 @@ function GlobalNav() {
                                                     children: isLoginView ? "Sign Up" : "Sign In"
                                                 }, void 0, false, {
                                                     fileName: "[project]/Desktop/flask/components/GlobalNav.tsx",
-                                                    lineNumber: 261,
+                                                    lineNumber: 258,
                                                     columnNumber: 19
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/Desktop/flask/components/GlobalNav.tsx",
-                                            lineNumber: 259,
+                                            lineNumber: 256,
                                             columnNumber: 17
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/Desktop/flask/components/GlobalNav.tsx",
-                                    lineNumber: 216,
+                                    lineNumber: 213,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/Desktop/flask/components/GlobalNav.tsx",
-                            lineNumber: 191,
+                            lineNumber: 188,
                             columnNumber: 13
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/Desktop/flask/components/GlobalNav.tsx",
-                    lineNumber: 182,
+                    lineNumber: 179,
                     columnNumber: 11
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/Desktop/flask/components/GlobalNav.tsx",
-                lineNumber: 180,
+                lineNumber: 177,
                 columnNumber: 7
             }, this)
         ]

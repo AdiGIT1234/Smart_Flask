@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 import joblib
 import numpy as np
+import pandas as pd
 import os
 
 app = Flask(__name__)
@@ -12,7 +13,7 @@ model_path = os.path.join(os.path.dirname(__file__), 'anomaly_model.pkl')
 
 try:
     model = joblib.load(model_path)
-    print("Model loaded successfully.")
+    print("Supervised Model loaded successfully.")
 except Exception as e:
     print(f"Error loading model: {e}")
     model = None
@@ -33,20 +34,27 @@ def predict():
         temp = float(data.get('temperature', 0))
         hum = float(data.get('humidity', 0))
 
-        # Isolation forest expects 2D array: [[mq6, mq7, temp, hum]]
+        # Model expects: ['mq6_gas', 'mq7_gas', 'temperature', 'humidity']
         features = np.array([[mq6, mq7, temp, hum]])
         
-        prediction = model.predict(features)
+        # 0 = Safe, 1 = Warning, 2 = Danger
+        prediction = int(model.predict(features)[0])
+        probabilities = model.predict_proba(features)[0]
         
-        # -1 = Anomaly, 1 = Normal
-        is_anomaly = True if prediction[0] == -1 else False
+        # If it is not 'Safe', trigger anomaly flag.
+        is_anomaly = True if prediction > 0 else False
         
-        # Get decision function for an anomaly "score" (lower is more anomalous)
-        score = float(model.decision_function(features)[0])
+        # Assign an anomaly score (higher meaning more dangerous).
+        # We can define score as: probability of (Warning + Danger classes)
+        # Class arrays might be [p_0, p_1, p_2]. So sum of index 1 and 2
+        score = float(np.sum(probabilities[1:]))
+
+        map_status = {0: "Safe", 1: "Warning", 2: "Danger"}
 
         return jsonify({
             "is_anomaly": is_anomaly,
             "anomaly_score": score,
+            "status_label": map_status[prediction],
             "sensor_data": {
                 "mq6_gas": mq6,
                 "mq7_gas": mq7,
@@ -56,6 +64,27 @@ def predict():
         })
     except Exception as e:
         return jsonify({"error": str(e)}), 400
+
+@app.route('/history', methods=['GET'])
+def get_history():
+    try:
+        data_path = os.path.join(os.path.dirname(__file__), 'real_sensor_data.csv')
+        df = pd.read_csv(data_path)
+        # Get last 15 readings
+        tail = df.tail(15).to_dict('records')
+        
+        history = []
+        for i, row in enumerate(tail):
+            history.append({
+                "id": f"SYN-{9000 - i}",
+                "gasSpike": f"{row.get('mq6_gas', 0)} ppm",
+                "maxTemp": f"{row.get('temperature', 0)} °C",
+                "status": row.get('label', 'Unknown')
+            })
+            
+        return jsonify({"history": history})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 @app.route('/health', methods=['GET'])
 def health():

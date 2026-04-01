@@ -1,10 +1,14 @@
 # ⚡️ Smart Flask
 
-![Next.js](https://img.shields.io/badge/Next.js-16+-black?logo=next.js)
-![React](https://img.shields.io/badge/React-19-blue?logo=react)
-![Flask](https://img.shields.io/badge/Flask-API-green?logo=flask)
-![Python](https://img.shields.io/badge/Python-3.12-blue?logo=python)
-![Tailwind CSS](https://img.shields.io/badge/Tailwind-CSS-cyan?logo=tailwindcss)
+<p align="left">
+  <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/nextjs/nextjs-original.svg" width="24" height="24" alt="Next.js" style="vertical-align: middle;" /> <span style="vertical-align: middle; font-weight: 500;">Next.js 16+</span> &nbsp;&nbsp;&nbsp;
+  <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/react/react-original.svg" width="24" height="24" alt="React" style="vertical-align: middle;" /> <span style="vertical-align: middle; font-weight: 500;">React 19</span> &nbsp;&nbsp;&nbsp;
+  <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/python/python-original.svg" width="24" height="24" alt="Python" style="vertical-align: middle;" /> <span style="vertical-align: middle; font-weight: 500;">Python 3.12</span> &nbsp;&nbsp;&nbsp;
+  <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/flask/flask-original.svg" width="24" height="24" alt="Flask" style="vertical-align: middle;" /> <span style="vertical-align: middle; font-weight: 500;">Flask</span> &nbsp;&nbsp;&nbsp;
+  <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/tailwindcss/tailwindcss-original.svg" width="24" height="24" alt="Tailwind" style="vertical-align: middle;" /> <span style="vertical-align: middle; font-weight: 500;">Tailwind CSS</span>
+</p>
+
+---
 
 **Smart Flask** is a real-time chemical reaction monitoring platform. It uses **Next.js** to visualize incoming sensor data (MQ6, MQ7, Temperature, Humidity) and an integrated **Python Flask Machine Learning API** (powered by Scikit-Learn's Isolation Forest algorithm) to immediately detect dangerous atmospheric spikes or synthesis anomalies.
 
@@ -27,45 +31,43 @@ Ensure you have the following installed on your local development machine:
 
 ## 🚀 Getting Started
 
-Follow these instructions to get the project explicitly running on your local machine.
+Follow these instructions to get the project running on your local machine. 
 
 ### 1. Clone the repository
-```bash
+```cmd
 git clone https://github.com/your-username/smart-flask.git
 cd smart-flask
 ```
 
 ### 2. Frontend Setup (Next.js)
 Install the strictly required node modules for the web dashboard:
-```bash
+```cmd
 npm install
 ```
 
 ### 3. Backend Setup (Flask & ML Pipeline)
 Navigate to the ML pipeline directory, create a virtual environment, and install the Python dependencies:
-```bash
+```cmd
 cd ml_pipeline
 python -m venv venv
-source venv/bin/activate  # On Windows, use: venv\\Scripts\\activate
+venv\Scripts\activate   (On Mac/Linux, use: source venv/bin/activate)
 pip install -r requirements.txt
 cd ..
 ```
 
 ### 4. Run the Platform 
-We have bundled the startup sequence! You do not need to boot up development servers independently. Simply run the startup script from the root of the project:
 
-```bash
-# Make the startup script executable (first time only)
-chmod +x start.sh
+Now, launch both the frontend and backend servers.
 
-# Launch both Next.js and Flask Backend!
-./start.sh
-```
+**Windows users:**
+You can open two command prompts:
+1. In the root directory, run: `npm run dev`
+2. In the `ml_pipeline` directory (with your venv activated), run: `python app.py`
+
+*(Mac/Linux users can simply run `./start.sh` from the root directory to boot both servers in the background simultaneously).*
 
 - **Frontend Application** will be running at: `http://localhost:3000`
 - **Flask ML API** will listen synchronously at: `http://localhost:5001`
-
-*(To quit both background services cleanly, simply hit `Ctrl + C` in your terminal).*
 
 ---
 
@@ -79,7 +81,7 @@ chmod +x start.sh
 │   ├── app.py            # Flask API Router for ESP32 & Web inputs
 │   ├── train_model.py    # Generates Isolation Forest predictive models
 │   └── anomaly_model.pkl # Pickled compiled ML model parameters
-├── start.sh              # Unified Bash Launcher
+├── start.sh              # Unified Bash Launcher (Mac/Linux)
 └── package.json          # Node dependencies
 ```
 
