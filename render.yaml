@@ -1,0 +1,8 @@
+services:
+  - type: web
+    name: smart-flask-ml-backend
+    env: python
+    region: ohio
+    plan: free
+    buildCommand: "cd ml_pipeline && pip install -r requirements.txt"
+    startCommand: "cd ml_pipeline && gunicorn -w 1 -b 0.0.0.0:$PORT app:app"
