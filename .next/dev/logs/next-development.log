@@ -163,3 +163,4 @@ It can also happen if the client has a browser extension installed which messes 
 [36:18:55.432] Browser WARN    Detected `scroll-behavior: smooth` on the `<html>` element. To disable smooth scrolling during route transitions, add `data-scroll-behavior="smooth"` to your <html> element. Learn more: https://nextjs.org/docs/messages/missing-data-scroll-behavior
 [36:18:56.093] Browser WARN    Please ensure that the container has a non-static position, like 'relative', 'fixed', or 'absolute' to ensure scroll offset is calculated correctly.
 [36:20:20.099] Server  LOG     ✓ Compiled in 75ms
+[36:27:16.514] Server  LOG     ✓ Compiled in 24ms
