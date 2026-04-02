@@ -20,7 +20,8 @@ DHT dht(DHTPIN, DHTTYPE);
 #define MQ7 D7
 
 // -------- Custom Parameter (Server URL) --------
-char serverUrl[100] = "http://192.168.1.14:5001/predict";
+// If you ever reset your ESP8266, it will default to connecting to your cloud pipeline automatically!
+char serverUrl[100] = "https://smart-flask-ml-backend.onrender.com/predict";
 
 // -------- WiFiManager --------
 WiFiManager wm;

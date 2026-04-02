@@ -42,9 +42,10 @@ export default function DashboardSection() {
         hum = Math.random() * 13 + 33; // 33-46 % (Danger)
       }
 
-      // 2. Post to our new Flask ML API
+      // 2. Post to our new Flask ML API (Environment Variable pointing to Render.com URL if available)
       try {
-        const res = await fetch("http://localhost:5001/predict", {
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5001";
+        const res = await fetch(`${apiUrl}/predict`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({

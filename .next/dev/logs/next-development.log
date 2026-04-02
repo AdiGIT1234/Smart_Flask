@@ -164,3 +164,5 @@ It can also happen if the client has a browser extension installed which messes 
 [36:18:56.093] Browser WARN    Please ensure that the container has a non-static position, like 'relative', 'fixed', or 'absolute' to ensure scroll offset is calculated correctly.
 [36:20:20.099] Server  LOG     ✓ Compiled in 75ms
 [36:27:16.514] Server  LOG     ✓ Compiled in 24ms
+[40:31:01.663] Server  LOG     ✓ Compiled in 32ms
+[40:31:19.861] Server  LOG     ✓ Compiled in 22ms

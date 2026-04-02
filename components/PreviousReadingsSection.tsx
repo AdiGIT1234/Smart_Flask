@@ -19,7 +19,8 @@ export default function PreviousReadingsSection() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("http://localhost:5001/history")
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5001";
+    fetch(`${apiUrl}/history`)
       .then(res => res.json())
       .then(data => {
         if (data.history) {
