@@ -89,7 +89,6 @@ You can open two command prompts:
 
 ---
 
-## 👨‍🔬 Authors
-Designed and maintained natively for modern chemistry workflows. 
+
 
 *Enjoy experimenting locally and tracking real-time models safely!*
