@@ -6,5 +6,6 @@
   "/intelligence/page": "app/intelligence/page.js",
   "/live-monitor/page": "app/live-monitor/page.js",
   "/page": "app/page.js",
-  "/reaction/[id]/page": "app/reaction/[id]/page.js"
+  "/reaction/[id]/page": "app/reaction/[id]/page.js",
+  "/reaction/custom/page": "app/reaction/custom/page.js"
 }

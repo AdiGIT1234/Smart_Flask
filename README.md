@@ -17,6 +17,7 @@
 ## ✨ Features
 * 🌡️ **Real-Time ESP32 Input Dashboard**: Watch synthesized live arrays dynamically updating.
 * 🧠 **Machine Learning Intrusion / Anomaly Detection**: Connects with a Python backend to run Isolation Forest predictions over local hardware readings.
+* 🧪 **Custom Sandbox Experiments**: Define custom chemical parameters and monitor ad-hoc reactions in real-time.
 * 🌐 **Global Intelligence Map**: Crowdsourced analysis models based on historical user reaction parameters.
 * 📱 **Beautiful UI/UX**: Built entirely on Next.js 16+, Framer Motion for flawless physics-based layouts, and TailwindCSS for styling.
 
@@ -74,13 +75,14 @@ You can open two command prompts:
 ## 📂 Project Structure
 
 ```
-├── app/                  # Next.js 16+ App Router pages
+├── app/                  # Next.js 16+ App Router pages (Dashboard, Admin, Custom Sandbox)
 ├── components/           # Reusable React UI Components (Dashboards, Navs, Forms)
 ├── lib/                  # Utilities, mock data engines, and Supabase client
 ├── ml_pipeline/          # Python backend environment
 │   ├── app.py            # Flask API Router for ESP32 & Web inputs
 │   ├── train_model.py    # Generates Isolation Forest predictive models
 │   └── anomaly_model.pkl # Pickled compiled ML model parameters
+├── render.yaml           # Deployment configuration for Render cloud platform
 ├── start.sh              # Unified Bash Launcher (Mac/Linux)
 └── package.json          # Node dependencies
 ```

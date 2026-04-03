@@ -1,7 +1,7 @@
 services:
   - type: web
     name: smart-flask-ml-backend
-    env: python
+    runtime: python
     region: ohio
     plan: free
     buildCommand: "cd ml_pipeline && pip install -r requirements.txt"
