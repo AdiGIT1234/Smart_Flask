@@ -157,6 +157,13 @@ export default function DashboardSection() {
 
           {/* Center Column - Charts */}
           <div className="lg:col-span-2 glass-card p-8 flex flex-col relative overflow-hidden group">
+            {/* Y Axis Title */}
+            <div
+              className="absolute left-2 top-1/2 text-[10px] font-semibold tracking-widest text-white/30 uppercase"
+              style={{ transform: "translateY(-50%) rotate(-90deg)", transformOrigin: "center center", whiteSpace: "nowrap" }}
+            >
+              Sensor Reading
+            </div>
              <div className="absolute top-0 left-1/4 w-64 h-64 bg-violet-600/10 rounded-full blur-[100px] group-hover:bg-violet-600/20 transition-all duration-1000" />
             
             <div className="flex justify-between items-center mb-8">
@@ -269,6 +276,11 @@ export default function DashboardSection() {
               <span>30:00</span>
               <span>45:00</span>
               <span>60:00</span>
+            </div>
+
+            {/* X Axis Title */}
+            <div className="w-full text-center mt-2 text-[10px] font-semibold tracking-widest text-white/30 uppercase">
+              Time (seconds)
             </div>
 
           </div>
