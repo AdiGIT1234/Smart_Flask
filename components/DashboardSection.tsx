@@ -24,6 +24,17 @@ export default function DashboardSection() {
   const [data, setData] = useState<PredictionResult | null>(null);
   const [history, setHistory] = useState<PredictionResult[]>([]);
   const [espConnected, setEspConnected] = useState(false);
+  const [sensorMode, setSensorMode] = useState<'mq6' | 'mq7'>('mq6');
+  const [togglingMode, setTogglingMode] = useState(false);
+
+  // Fetch current sensor mode on mount
+  useEffect(() => {
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5001";
+    fetch(`${apiUrl}/sensor-mode`)
+      .then(r => r.json())
+      .then(d => setSensorMode(d.mode === 'mq7' ? 'mq7' : 'mq6'))
+      .catch(() => {});
+  }, []);
 
   // Poll GET /latest every 2 seconds — real data from ESP8266
   useEffect(() => {
@@ -58,6 +69,25 @@ export default function DashboardSection() {
     return () => clearInterval(interval);
   }, []);
 
+  // Toggle which sensor is on A0
+  const toggleSensorMode = async () => {
+    const newMode = sensorMode === 'mq6' ? 'mq7' : 'mq6';
+    setTogglingMode(true);
+    try {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5001";
+      await fetch(`${apiUrl}/sensor-mode`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ mode: newMode })
+      });
+      setSensorMode(newMode);
+    } catch (e) {
+      console.error('Failed to toggle sensor mode', e);
+    } finally {
+      setTogglingMode(false);
+    }
+  };
+
 
   return (
     <section className="min-h-screen bg-[#050505] text-white pt-24 pb-48 px-6 md:px-12 lg:px-24">
@@ -79,13 +109,37 @@ export default function DashboardSection() {
                 Live streaming Random Forest Classification from the ESP8266 chip directly to this dashboard. Anomalies are detected instantly.
               </p>
             </div>
-            <div className={`flex items-center gap-2 px-5 py-3 rounded-full text-sm font-semibold shrink-0 mt-4 md:mt-0 border ${
-              espConnected
-                ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400'
-                : 'bg-white/5 border-white/10 text-white/40'
-            }`}>
-              <span className={`w-2 h-2 rounded-full ${espConnected ? 'bg-emerald-400 animate-pulse' : 'bg-white/30'}`} />
-              {espConnected ? 'ESP8266 Live' : 'Waiting for ESP...'}
+            <div className="flex flex-col items-end gap-3 shrink-0 mt-4 md:mt-0">
+              {/* ESP Connection Badge */}
+              <div className={`flex items-center gap-2 px-5 py-3 rounded-full text-sm font-semibold border ${
+                espConnected
+                  ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400'
+                  : 'bg-white/5 border-white/10 text-white/40'
+              }`}>
+                <span className={`w-2 h-2 rounded-full ${espConnected ? 'bg-emerald-400 animate-pulse' : 'bg-white/30'}`} />
+                {espConnected ? 'ESP8266 Live' : 'Waiting for ESP...'}
+              </div>
+              {/* A0 Sensor Mode Toggle */}
+              <div className="flex items-center gap-3">
+                <span className="text-xs text-white/40 uppercase tracking-widest">A0 Sensor</span>
+                <button
+                  onClick={toggleSensorMode}
+                  disabled={togglingMode}
+                  className="relative flex items-center bg-white/5 border border-white/10 rounded-full p-1 gap-1 transition-all hover:border-white/20"
+                >
+                  <span className={`px-3 py-1 rounded-full text-xs font-semibold transition-all ${
+                    sensorMode === 'mq6'
+                      ? 'bg-cyan-500/20 text-cyan-400 border border-cyan-500/30'
+                      : 'text-white/30'
+                  }`}>MQ6</span>
+                  <span className={`px-3 py-1 rounded-full text-xs font-semibold transition-all ${
+                    sensorMode === 'mq7'
+                      ? 'bg-red-500/20 text-red-400 border border-red-500/30'
+                      : 'text-white/30'
+                  }`}>MQ7</span>
+                </button>
+                <span className="text-xs text-white/20">{sensorMode === 'mq6' ? 'LPG' : 'CO'}</span>
+              </div>
             </div>
           </div>
 

@@ -24,6 +24,11 @@ DHT dht(DHTPIN, DHTTYPE);
 // pipeline automatically!
 char serverUrl[100] = "https://smart-flask-ml-backend.onrender.com/predict";
 
+// -------- Active Sensor Mode --------
+// 'mq6' = A0 pin is reading MQ6 (LPG), 'mq7' = A0 pin is reading MQ7 (CO)
+// Controlled remotely via Flask /sensor-mode endpoint toggled from dashboard
+String activeMode = "mq6";
+
 // -------- WiFiManager --------
 WiFiManager wm;
 
@@ -105,33 +110,35 @@ void loop() {
     return;
   }
 
-  int mq6_value = analogRead(MQ6);
-  int mq7_value = digitalRead(MQ7);
+  // A0 always read; routed to mq6 or mq7 based on activeMode
+  int a0_value = analogRead(A0);
+  int mq7_digital = digitalRead(MQ7); // D7 digital threshold (0/1)
+
+  int mq6_send = (activeMode == "mq6") ? a0_value : 300;  // 300 = safe default when MQ6 not on A0
+  int mq7_send = (activeMode == "mq7") ? a0_value : mq7_digital;
 
   // -------- Serial --------
-  Serial.print("Temp: ");
-  Serial.print(temp);
-  Serial.print(" Hum: ");
-  Serial.print(hum);
-  Serial.print(" MQ6: ");
-  Serial.print(mq6_value);
-  Serial.print(" MQ7: ");
-  Serial.println(mq7_value);
+  Serial.print("Mode: "); Serial.print(activeMode);
+  Serial.print(" Temp: "); Serial.print(temp);
+  Serial.print(" Hum: "); Serial.print(hum);
+  Serial.print(" A0: "); Serial.print(a0_value);
+  Serial.print(" MQ7_D: "); Serial.println(mq7_digital);
 
-  // -------- LCD Line 1 --------
+  // -------- LCD Line 1: Mode + Temp + Humidity --------
   lcd.setCursor(0, 0);
+  lcd.print(activeMode == "mq6" ? "M6 " : "M7 ");
   lcd.print("T:");
   lcd.print(temp, 1);
   lcd.print(" H:");
   lcd.print(hum, 0);
-  lcd.print("   ");
+  lcd.print("  ");
 
-  // -------- LCD Line 2 --------
+  // -------- LCD Line 2: Gas reading --------
   lcd.setCursor(0, 1);
   lcd.print("                ");
   lcd.setCursor(0, 1);
   lcd.print("G:");
-  lcd.print(mq6_value);
+  lcd.print(a0_value);
   lcd.print(" ");
 
   // -------- HTTP ML Request --------
@@ -148,13 +155,13 @@ void loop() {
     http.addHeader("Content-Type", "application/json");
     http.setTimeout(8000); // 8s — enough for HTTPS handshake + Render response
 
-    String jsonPayload = "{\"mq6_gas\":" + String(mq6_value) +
-                         ",\"mq7_gas\":" + String(mq7_value) +
+    String jsonPayload = "{\"mq6_gas\":" + String(mq6_send) +
+                         ",\"mq7_gas\":" + String(mq7_send) +
                          ",\"temperature\":" + String(temp) +
                          ",\"humidity\":" + String(hum) + "}";
 
-    Serial.print("Posting to: "); Serial.println(serverUrl);
-    Serial.print("Payload: "); Serial.println(jsonPayload);
+    Serial.print("Mode: "); Serial.print(activeMode);
+    Serial.print(" | Posting payload: "); Serial.println(jsonPayload);
 
     int httpResponseCode = http.POST(jsonPayload);
 
@@ -165,10 +172,16 @@ void loop() {
       String response = http.getString();
       Serial.print("Response: "); Serial.println(response);
 
-      DynamicJsonDocument doc(256);
+      DynamicJsonDocument doc(512); // larger to fit sensor_mode field
       deserializeJson(doc, response);
 
-      String status = doc["status_label"];
+      String status = doc["status_label"].as<String>();
+
+      // Update active mode from server response (dashboard may have toggled it)
+      if (doc.containsKey("sensor_mode")) {
+        activeMode = doc["sensor_mode"].as<String>();
+        Serial.print("Mode updated to: "); Serial.println(activeMode);
+      }
 
       if (status == "Danger") {
         lcd.print("[DNG]");

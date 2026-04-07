@@ -13,6 +13,9 @@ CORS(app)
 # In-memory store for the latest ESP8266 reading
 latest_reading = None
 
+# Which sensor is currently on A0: 'mq6' or 'mq7'
+sensor_mode = "mq6"
+
 model_path = os.path.join(os.path.dirname(__file__), 'anomaly_model.pkl')
 
 try:
@@ -60,6 +63,7 @@ def predict():
             "is_anomaly": is_anomaly,
             "anomaly_score": score,
             "status_label": map_status[prediction],
+            "sensor_mode": sensor_mode,   # Tells ESP which sensor is on A0
             "sensor_data": {
                 "mq6_gas": mq6,
                 "mq7_gas": mq7,
@@ -82,6 +86,22 @@ def get_latest():
     if latest_reading is None:
         return jsonify({"error": "No data received from ESP yet"}), 404
     return jsonify(latest_reading)
+
+@app.route('/sensor-mode', methods=['GET'])
+def get_sensor_mode():
+    """Returns the currently active sensor mode."""
+    return jsonify({"mode": sensor_mode})
+
+@app.route('/sensor-mode', methods=['POST'])
+def set_sensor_mode():
+    """Dashboard calls this to switch which sensor is on A0."""
+    global sensor_mode
+    data = request.json
+    mode = data.get('mode', 'mq6') if data else 'mq6'
+    if mode not in ['mq6', 'mq7']:
+        return jsonify({"error": "Invalid mode. Use 'mq6' or 'mq7'"}), 400
+    sensor_mode = mode
+    return jsonify({"mode": sensor_mode, "updated": True})
 
 @app.route('/history', methods=['GET'])
 def get_history():
