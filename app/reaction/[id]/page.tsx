@@ -45,6 +45,7 @@ export default function ReactionPage() {
   const [waitingForUser, setWaitingForUser] = useState(false);
   const [autoAdvanceCountdown, setAutoAdvanceCountdown] = useState(0);
   const [espConnected, setEspConnected] = useState(false);
+  const [sensorMode, setSensorMode] = useState<'mq6' | 'mq7'>('mq6');
   const [simulatedData, setSimulatedData] = useState<
     { time_seconds: number; mq6_ppm: number; mq7_ppm: number; temp_celsius: number; humidity: number; anomaly?: boolean }[]
   >([]);
@@ -99,6 +100,7 @@ export default function ReactionPage() {
 
           const result = await res.json();
           setEspConnected(true);
+          if (result.sensor_mode) setSensorMode(result.sensor_mode as 'mq6' | 'mq7');
 
           setSimulatedData((prev) => [
             ...prev,
@@ -470,7 +472,7 @@ export default function ReactionPage() {
                             className="text-red-400 animate-pulse"
                           />
                           <span className="text-sm text-red-300 font-medium">
-                            Anomaly Detected — MQ6: {latestAnomaly?.mq6_ppm}ppm, MQ7: {latestAnomaly?.mq7_ppm}ppm, Temp: {latestAnomaly?.temp_celsius}°C
+                            Anomaly Detected — {sensorMode === 'mq6' ? 'MQ6' : 'MQ7'}: {sensorMode === 'mq6' ? latestAnomaly?.mq6_ppm : latestAnomaly?.mq7_ppm}ppm, Temp: {latestAnomaly?.temp_celsius}°C
                           </span>
                         </motion.div>
                       )}
@@ -589,10 +591,10 @@ export default function ReactionPage() {
                   <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
                     <div className="glass-card p-4">
                       <span className="text-xs text-white/40 uppercase tracking-widest mb-1 flex items-center gap-1">
-                        <Wind size={10} /> MQ6 (LPG)
+                        <Wind size={10} /> {sensorMode === 'mq6' ? 'MQ6 (LPG)' : 'MQ7 (CO)'}
                       </span>
                       <span className="text-3xl font-medium text-cyan-400">
-                        {latestData ? latestData.mq6_ppm : "--"}
+                        {latestData ? (sensorMode === 'mq6' ? latestData.mq6_ppm : latestData.mq7_ppm) : "--"}
                         <span className="text-sm text-white/30 ml-1">ppm</span>
                       </span>
                     </div>
@@ -630,14 +632,14 @@ export default function ReactionPage() {
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mt-4">
                       <div className="glass-card p-6">
                         <h4 className="text-sm font-medium text-cyan-400/60 uppercase tracking-widest mb-4">
-                          MQ6 (LPG) — Expected vs Actual
+                          {sensorMode === 'mq6' ? 'MQ6 (LPG)' : 'MQ7 (CO)'} — Expected vs Actual
                         </h4>
                         <div className="h-[100px] relative border border-white/5 rounded-lg overflow-hidden bg-[#0a0a0a]">
                           <MiniChart
                             expected={reaction.expected_outputs}
                             actual={simulatedData}
-                            field="mq6_ppm"
-                            color="rgba(34,211,238,0.8)"
+                            field={sensorMode === 'mq6' ? 'mq6_ppm' : 'mq7_ppm'}
+                            color={sensorMode === 'mq6' ? "rgba(34,211,238,0.8)" : "rgba(248,113,113,0.8)"}
                           />
                         </div>
                       </div>
@@ -700,9 +702,9 @@ export default function ReactionPage() {
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
                 <div className="glass-card p-5 text-center">
                   <Wind size={20} className="text-cyan-400 mx-auto mb-2" />
-                  <span className="text-xs text-white/40 uppercase tracking-widest block mb-1">Peak MQ6</span>
+                  <span className="text-xs text-white/40 uppercase tracking-widest block mb-1">Peak {sensorMode === 'mq6' ? 'MQ6' : 'MQ7'}</span>
                   <span className="text-2xl font-medium">
-                    {simulatedData.length > 0 ? Math.max(...simulatedData.map((d) => d.mq6_ppm)) : "--"}
+                    {simulatedData.length > 0 ? Math.max(...simulatedData.map((d) => sensorMode === 'mq6' ? d.mq6_ppm : d.mq7_ppm)) : "--"}
                     <span className="text-sm text-white/30 ml-1">ppm</span>
                   </span>
                 </div>

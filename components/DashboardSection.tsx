@@ -16,6 +16,7 @@ type PredictionResult = {
   is_anomaly: boolean;
   status_label: string;
   anomaly_score: number;
+  sensor_mode?: string;
   sensor_data: SensorData;
   error?: string;
 };
@@ -52,6 +53,8 @@ export default function DashboardSection() {
         const result: PredictionResult = await res.json();
         setEspConnected(true);
         setData(result);
+        // Sync sensor mode in case it was toggled from another tab/device
+        if (result.sensor_mode) setSensorMode(result.sensor_mode as 'mq6' | 'mq7');
 
         // Keep last 20 readings for chart and log feed
         setHistory(prev => {
@@ -164,7 +167,13 @@ export default function DashboardSection() {
 
           {/* Left Column - Live Cards */}
           <div className="flex flex-col gap-6">
-            <Card title="MQ6 Gas (LPG)" value={data?.sensor_data?.mq6_gas?.toFixed(1) ?? "--"} unit="ppm" accent={data?.status_label === 'Danger' ? "glow-red" : "glow-blue"} change="--" />
+            <Card
+              title={sensorMode === 'mq6' ? 'MQ6 Gas (LPG)' : 'MQ7 Gas (CO)'}
+              value={(sensorMode === 'mq6' ? data?.sensor_data?.mq6_gas : data?.sensor_data?.mq7_gas)?.toFixed(1) ?? "--"}
+              unit="ppm"
+              accent={data?.status_label === 'Danger' ? "glow-red" : "glow-blue"}
+              change="--"
+            />
             <Card title="Core Temp" value={data?.sensor_data?.temperature?.toFixed(1) ?? "--"} unit="°C" accent={data?.status_label === 'Danger' ? "glow-red" : "glow-amber"} change="--" />
             
             {/* ML Output */}
@@ -344,7 +353,7 @@ export default function DashboardSection() {
                           [{log.status_label.toUpperCase()}]
                         </span>
                         <span className="flex-1 truncate">
-                          MQ6: {log.sensor_data.mq6_gas.toFixed(0)}ppm | TMP: {log.sensor_data.temperature.toFixed(1)}°C
+                           {(log.sensor_mode ?? 'mq6') !== 'mq7' ? 'MQ6' : 'MQ7'}: {((log.sensor_mode ?? 'mq6') !== 'mq7' ? log.sensor_data.mq6_gas : log.sensor_data.mq7_gas).toFixed(0)}ppm | TMP: {log.sensor_data.temperature.toFixed(1)}°C
                         </span>
                      </motion.div>
                    ))}
