@@ -135,6 +135,9 @@ void loop() {
   lcd.print(" ");
 
   // -------- HTTP ML Request --------
+  Serial.print("WiFi status: ");
+  Serial.println(WiFi.status() == WL_CONNECTED ? "CONNECTED" : "DISCONNECTED");
+
   if (WiFi.status() == WL_CONNECTED) {
 
     WiFiClientSecure client;
@@ -150,10 +153,17 @@ void loop() {
                          ",\"temperature\":" + String(temp) +
                          ",\"humidity\":" + String(hum) + "}";
 
+    Serial.print("Posting to: "); Serial.println(serverUrl);
+    Serial.print("Payload: "); Serial.println(jsonPayload);
+
     int httpResponseCode = http.POST(jsonPayload);
+
+    Serial.print("HTTP Response Code: ");
+    Serial.println(httpResponseCode);
 
     if (httpResponseCode > 0) {
       String response = http.getString();
+      Serial.print("Response: "); Serial.println(response);
 
       DynamicJsonDocument doc(256);
       deserializeJson(doc, response);
@@ -169,12 +179,14 @@ void loop() {
       }
     } else {
       lcd.print("ERR");
+      Serial.print("Error: ");
       Serial.println(http.errorToString(httpResponseCode));
     }
 
     http.end();
   } else {
     lcd.print("NoWiFi");
+    Serial.println("WiFi not connected — skipping HTTP");
   }
 
   delay(2000);
