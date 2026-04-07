@@ -39,6 +39,7 @@ export default function CustomReactionPage() {
   // Execution
   const [stopwatchRunning, setStopwatchRunning] = useState(false);
   const [totalTime, setTotalTime] = useState(0);
+  const [espConnected, setEspConnected] = useState(false);
   const [, setStepTimings] = useState<number[]>([]);
   const executionStartRef = useRef<number>(0);
   const dataSimulationRef = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -67,59 +68,34 @@ export default function CustomReactionPage() {
 
     dataSimulationRef.current = setInterval(async () => {
       const elapsed = (Date.now() - executionStartRef.current) / 1000;
-
-      // Make API call to backend
       try {
         const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5001";
-        
-        // Generate realistic background values
-        const mq6 = Math.random() * 50 + 280; 
-        const mq7 = Math.random() < 0.8 ? 0 : 1;
-        const temp = Math.random() * 1.5 + 28.5;
-        const hum = Math.random() * 7 + 56;
-        
-        const res = await fetch(`${apiUrl}/predict`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            mq6_gas: mq6,
-            mq7_gas: mq7,
-            temperature: temp,
-            humidity: hum
-          })
-        });
+        const res = await fetch(`${apiUrl}/latest`);
+
+        if (res.status === 404) {
+          setEspConnected(false);
+          return; // No ESP data yet — wait silently
+        }
 
         const result = await res.json();
+        setEspConnected(true);
 
         setSimulatedData((prev) => [
           ...prev,
           {
             time_seconds: Math.round(elapsed),
-            mq6_ppm: Math.round(mq6),
-            mq7_ppm: Math.round(mq7),
-            temp_celsius: Math.round(temp * 10) / 10,
-            humidity: Math.round(hum * 10) / 10,
+            mq6_ppm: Math.round(result.sensor_data.mq6_gas),
+            mq7_ppm: Math.round(result.sensor_data.mq7_gas),
+            temp_celsius: Math.round(result.sensor_data.temperature * 10) / 10,
+            humidity: Math.round(result.sensor_data.humidity * 10) / 10,
             anomaly: result.is_anomaly,
-            status_label: result.status_label
+            status_label: result.status_label,
           },
         ]);
-
       } catch {
-        // Fallback
-        setSimulatedData((prev) => [
-          ...prev,
-          {
-            time_seconds: Math.round(elapsed),
-            mq6_ppm: Math.round(Math.random() * 50 + 280),
-            mq7_ppm: Math.round(Math.random() < 0.8 ? 0 : 1),
-            temp_celsius: Math.round((Math.random() * 1.5 + 28.5) * 10) / 10,
-            humidity: Math.round((Math.random() * 7 + 56) * 10) / 10,
-            anomaly: false,
-            status_label: "Safe"
-          },
-        ]);
+        setEspConnected(false);
       }
-    }, 2000); // Poll every 2 seconds
+    }, 2000);
   };
 
   const handleFinishExperiment = (time: number) => {
@@ -317,11 +293,18 @@ export default function CustomReactionPage() {
                          </h3>
                          <p className="text-white/40 text-sm font-mono">{formula || "Custom Sandbox"}</p>
                        </div>
-                       <div className="text-right">
-                          <span className="text-xs uppercase tracking-widest text-white/40 block mb-1">Status</span>
-                          <span className="flex items-center gap-2 text-sm text-green-400">
-                             <div className="w-2 h-2 rounded-full bg-green-400 animate-pulse" /> Live Monitoring
-                          </span>
+                       <div className="flex flex-col items-end gap-2">
+                         <div className={`flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold border ${
+                           espConnected
+                             ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400'
+                             : 'bg-white/5 border-white/10 text-white/40'
+                         }`}>
+                           <span className={`w-1.5 h-1.5 rounded-full ${espConnected ? 'bg-emerald-400 animate-pulse' : 'bg-white/30'}`} />
+                           {espConnected ? 'ESP8266 Live' : 'Waiting for ESP...'}
+                         </div>
+                         <span className="flex items-center gap-2 text-sm text-green-400">
+                            <div className="w-2 h-2 rounded-full bg-green-400 animate-pulse" /> Live Monitoring
+                         </span>
                        </div>
                     </div>
 

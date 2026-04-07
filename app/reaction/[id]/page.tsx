@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useParams, useRouter } from "next/navigation";
 import { STORED_REACTIONS } from "@/lib/reactions";
-import type { Reaction, ExpectedDataPoint } from "@/lib/supabase";
+import type { ExpectedDataPoint } from "@/lib/supabase";
 import Stopwatch from "@/components/Stopwatch";
 import { useAuth } from "@/components/AuthContext";
 import {
@@ -44,6 +44,7 @@ export default function ReactionPage() {
   const [totalTime, setTotalTime] = useState(0);
   const [waitingForUser, setWaitingForUser] = useState(false);
   const [autoAdvanceCountdown, setAutoAdvanceCountdown] = useState(0);
+  const [espConnected, setEspConnected] = useState(false);
   const [simulatedData, setSimulatedData] = useState<
     { time_seconds: number; mq6_ppm: number; mq7_ppm: number; temp_celsius: number; humidity: number; anomaly?: boolean }[]
   >([]);
@@ -80,54 +81,40 @@ export default function ReactionPage() {
     }, 1000);
   }, []);
 
-  // ── Simulated data generation ──
+  // ── Real-time ESP8266 data via GET /latest ──
   const startDataSimulation = useCallback(
-    (rxn: Reaction) => {
+    () => {
       executionStartRef.current = Date.now();
-      const totalExpectedTime =
-        rxn.expected_outputs[rxn.expected_outputs.length - 1].time_seconds;
 
-      dataSimulationRef.current = setInterval(() => {
+      dataSimulationRef.current = setInterval(async () => {
         const elapsed = (Date.now() - executionStartRef.current) / 1000;
-        const fraction = Math.min(elapsed / totalExpectedTime, 1);
+        try {
+          const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5001";
+          const res = await fetch(`${apiUrl}/latest`);
 
-        // Interpolate expected outputs
-        const expected = interpolateExpected(rxn.expected_outputs, elapsed);
+          if (res.status === 404) {
+            setEspConnected(false);
+            return; // No ESP data yet — wait silently
+          }
 
-        // Add some noise to simulate real sensor data
-        const noise_mq6 = (Math.random() - 0.5) * 30;
-        const noise_mq7 = (Math.random() - 0.5) * 20;
-        const noise_temp = (Math.random() - 0.5) * 2;
-        const noise_hum = (Math.random() - 0.5) * 3;
+          const result = await res.json();
+          setEspConnected(true);
 
-        const mq6 = Math.max(0, expected.mq6_ppm + noise_mq6);
-        const mq7 = Math.max(0, expected.mq7_ppm + noise_mq7);
-        const temp = Math.max(0, expected.temp_celsius + noise_temp);
-        const hum = Math.max(0, Math.min(100, expected.humidity + noise_hum));
-
-        // Detect anomaly: if deviation is > 40% from expected on any sensor
-        const mq6Dev = Math.abs(mq6 - expected.mq6_ppm) / (expected.mq6_ppm || 1);
-        const mq7Dev = Math.abs(mq7 - expected.mq7_ppm) / (expected.mq7_ppm || 1);
-        const tempDev = Math.abs(temp - expected.temp_celsius) / (expected.temp_celsius || 1);
-        const anomaly = mq6Dev > 0.4 || mq7Dev > 0.4 || tempDev > 0.4;
-
-        setSimulatedData((prev) => [
-          ...prev,
-          {
-            time_seconds: Math.round(elapsed),
-            mq6_ppm: Math.round(mq6),
-            mq7_ppm: Math.round(mq7),
-            temp_celsius: Math.round(temp * 10) / 10,
-            humidity: Math.round(hum * 10) / 10,
-            anomaly,
-          },
-        ]);
-
-        if (fraction >= 1) {
-          if (dataSimulationRef.current)
-            clearInterval(dataSimulationRef.current);
+          setSimulatedData((prev) => [
+            ...prev,
+            {
+              time_seconds: Math.round(elapsed),
+              mq6_ppm: Math.round(result.sensor_data.mq6_gas),
+              mq7_ppm: Math.round(result.sensor_data.mq7_gas),
+              temp_celsius: Math.round(result.sensor_data.temperature * 10) / 10,
+              humidity: Math.round(result.sensor_data.humidity * 10) / 10,
+              anomaly: result.is_anomaly,
+            },
+          ]);
+        } catch {
+          setEspConnected(false);
         }
-      }, 2000); // every 2 seconds
+      }, 2000);
     },
     []
   );
@@ -167,7 +154,7 @@ export default function ReactionPage() {
     setCurrentStep(0);
     setStopwatchRunning(true);
     setSimulatedData([]);
-    startDataSimulation(reaction);
+    startDataSimulation();
   };
 
   const handleStepComplete = (lapTime: number) => {
@@ -590,8 +577,16 @@ export default function ReactionPage() {
                     </div>
                   </div>
 
-                  {/* Live Sensor Readings */}
-                  <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mt-4">
+                  {/* ESP Connection Badge + Live Sensor Readings */}
+                  <div className={`mt-4 mb-2 flex items-center gap-2 px-4 py-2 rounded-full text-xs font-semibold w-fit border ${
+                    espConnected
+                      ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400'
+                      : 'bg-white/5 border-white/10 text-white/40'
+                  }`}>
+                    <span className={`w-1.5 h-1.5 rounded-full ${espConnected ? 'bg-emerald-400 animate-pulse' : 'bg-white/30'}`} />
+                    {espConnected ? 'ESP8266 Live' : 'Waiting for ESP...'}
+                  </div>
+                  <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
                     <div className="glass-card p-4">
                       <span className="text-xs text-white/40 uppercase tracking-widest mb-1 flex items-center gap-1">
                         <Wind size={10} /> MQ6 (LPG)
@@ -824,34 +819,7 @@ export default function ReactionPage() {
   );
 }
 
-// ── Helper: Interpolate expected outputs ──
-function interpolateExpected(
-  points: ExpectedDataPoint[],
-  timeSeconds: number
-) {
-  if (timeSeconds <= points[0].time_seconds) return points[0];
-  if (timeSeconds >= points[points.length - 1].time_seconds)
-    return points[points.length - 1];
 
-  for (let i = 0; i < points.length - 1; i++) {
-    if (
-      timeSeconds >= points[i].time_seconds &&
-      timeSeconds <= points[i + 1].time_seconds
-    ) {
-      const range = points[i + 1].time_seconds - points[i].time_seconds;
-      const fraction = (timeSeconds - points[i].time_seconds) / range;
-      const lerp = (a: number, b: number) => a + (b - a) * fraction;
-      return {
-        time_seconds: timeSeconds,
-        mq6_ppm: lerp(points[i].mq6_ppm, points[i + 1].mq6_ppm),
-        mq7_ppm: lerp(points[i].mq7_ppm, points[i + 1].mq7_ppm),
-        temp_celsius: lerp(points[i].temp_celsius, points[i + 1].temp_celsius),
-        humidity: lerp(points[i].humidity, points[i + 1].humidity),
-      };
-    }
-  }
-  return points[points.length - 1];
-}
 
 // ── Mini SVG Chart ──
 type SensorField = "mq6_ppm" | "mq7_ppm" | "temp_celsius" | "humidity";
