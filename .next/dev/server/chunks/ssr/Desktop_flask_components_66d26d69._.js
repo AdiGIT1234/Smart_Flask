@@ -18,6 +18,13 @@ function DashboardSection() {
     const [data, setData] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(null);
     const [history, setHistory] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])([]);
     const [espConnected, setEspConnected] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(false);
+    const [sensorMode, setSensorMode] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])('mq6');
+    const [togglingMode, setTogglingMode] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(false);
+    // Fetch current sensor mode on mount
+    (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useEffect"])(()=>{
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5001";
+        fetch(`${apiUrl}/sensor-mode`).then((r)=>r.json()).then((d)=>setSensorMode(d.mode === 'mq7' ? 'mq7' : 'mq6')).catch(()=>{});
+    }, []);
     // Poll GET /latest every 2 seconds — real data from ESP8266
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useEffect"])(()=>{
         const interval = setInterval(async ()=>{
@@ -32,6 +39,8 @@ function DashboardSection() {
                 const result = await res.json();
                 setEspConnected(true);
                 setData(result);
+                // Sync sensor mode in case it was toggled from another tab/device
+                if (result.sensor_mode) setSensorMode(result.sensor_mode);
                 // Keep last 20 readings for chart and log feed
                 setHistory((prev)=>{
                     const updated = [
@@ -48,6 +57,28 @@ function DashboardSection() {
         }, 2000);
         return ()=>clearInterval(interval);
     }, []);
+    // Toggle which sensor is on A0
+    const toggleSensorMode = async ()=>{
+        const newMode = sensorMode === 'mq6' ? 'mq7' : 'mq6';
+        setTogglingMode(true);
+        try {
+            const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5001";
+            await fetch(`${apiUrl}/sensor-mode`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    mode: newMode
+                })
+            });
+            setSensorMode(newMode);
+        } catch (e) {
+            console.error('Failed to toggle sensor mode', e);
+        } finally{
+            setTogglingMode(false);
+        }
+    };
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("section", {
         className: "min-h-screen bg-[#050505] text-white pt-24 pb-48 px-6 md:px-12 lg:px-24",
         children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -81,7 +112,7 @@ function DashboardSection() {
                                         children: "Intelligence in Action"
                                     }, void 0, false, {
                                         fileName: "[project]/Desktop/flask/components/DashboardSection.tsx",
-                                        lineNumber: 75,
+                                        lineNumber: 108,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -89,36 +120,97 @@ function DashboardSection() {
                                         children: "Live streaming Random Forest Classification from the ESP8266 chip directly to this dashboard. Anomalies are detected instantly."
                                     }, void 0, false, {
                                         fileName: "[project]/Desktop/flask/components/DashboardSection.tsx",
-                                        lineNumber: 78,
+                                        lineNumber: 111,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/Desktop/flask/components/DashboardSection.tsx",
-                                lineNumber: 74,
+                                lineNumber: 107,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                className: `flex items-center gap-2 px-5 py-3 rounded-full text-sm font-semibold shrink-0 mt-4 md:mt-0 border ${espConnected ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400' : 'bg-white/5 border-white/10 text-white/40'}`,
+                                className: "flex flex-col items-end gap-3 shrink-0 mt-4 md:mt-0",
                                 children: [
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                        className: `w-2 h-2 rounded-full ${espConnected ? 'bg-emerald-400 animate-pulse' : 'bg-white/30'}`
-                                    }, void 0, false, {
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                        className: `flex items-center gap-2 px-5 py-3 rounded-full text-sm font-semibold border ${espConnected ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400' : 'bg-white/5 border-white/10 text-white/40'}`,
+                                        children: [
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                className: `w-2 h-2 rounded-full ${espConnected ? 'bg-emerald-400 animate-pulse' : 'bg-white/30'}`
+                                            }, void 0, false, {
+                                                fileName: "[project]/Desktop/flask/components/DashboardSection.tsx",
+                                                lineNumber: 122,
+                                                columnNumber: 17
+                                            }, this),
+                                            espConnected ? 'ESP8266 Live' : 'Waiting for ESP...'
+                                        ]
+                                    }, void 0, true, {
                                         fileName: "[project]/Desktop/flask/components/DashboardSection.tsx",
-                                        lineNumber: 87,
+                                        lineNumber: 117,
                                         columnNumber: 15
                                     }, this),
-                                    espConnected ? 'ESP8266 Live' : 'Waiting for ESP...'
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                        className: "flex items-center gap-3",
+                                        children: [
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                className: "text-xs text-white/40 uppercase tracking-widest",
+                                                children: "A0 Sensor"
+                                            }, void 0, false, {
+                                                fileName: "[project]/Desktop/flask/components/DashboardSection.tsx",
+                                                lineNumber: 127,
+                                                columnNumber: 17
+                                            }, this),
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                                onClick: toggleSensorMode,
+                                                disabled: togglingMode,
+                                                className: "relative flex items-center bg-white/5 border border-white/10 rounded-full p-1 gap-1 transition-all hover:border-white/20",
+                                                children: [
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                        className: `px-3 py-1 rounded-full text-xs font-semibold transition-all ${sensorMode === 'mq6' ? 'bg-cyan-500/20 text-cyan-400 border border-cyan-500/30' : 'text-white/30'}`,
+                                                        children: "MQ6"
+                                                    }, void 0, false, {
+                                                        fileName: "[project]/Desktop/flask/components/DashboardSection.tsx",
+                                                        lineNumber: 133,
+                                                        columnNumber: 19
+                                                    }, this),
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                        className: `px-3 py-1 rounded-full text-xs font-semibold transition-all ${sensorMode === 'mq7' ? 'bg-red-500/20 text-red-400 border border-red-500/30' : 'text-white/30'}`,
+                                                        children: "MQ7"
+                                                    }, void 0, false, {
+                                                        fileName: "[project]/Desktop/flask/components/DashboardSection.tsx",
+                                                        lineNumber: 138,
+                                                        columnNumber: 19
+                                                    }, this)
+                                                ]
+                                            }, void 0, true, {
+                                                fileName: "[project]/Desktop/flask/components/DashboardSection.tsx",
+                                                lineNumber: 128,
+                                                columnNumber: 17
+                                            }, this),
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                className: "text-xs text-white/20",
+                                                children: sensorMode === 'mq6' ? 'LPG' : 'CO'
+                                            }, void 0, false, {
+                                                fileName: "[project]/Desktop/flask/components/DashboardSection.tsx",
+                                                lineNumber: 144,
+                                                columnNumber: 17
+                                            }, this)
+                                        ]
+                                    }, void 0, true, {
+                                        fileName: "[project]/Desktop/flask/components/DashboardSection.tsx",
+                                        lineNumber: 126,
+                                        columnNumber: 15
+                                    }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/Desktop/flask/components/DashboardSection.tsx",
-                                lineNumber: 82,
+                                lineNumber: 115,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/Desktop/flask/components/DashboardSection.tsx",
-                        lineNumber: 73,
+                        lineNumber: 106,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -134,20 +226,20 @@ function DashboardSection() {
                                                 className: `w-5 h-5 rounded-full ${data?.status_label === 'Danger' ? 'bg-red-500 animate-pulse' : data?.status_label === 'Warning' ? 'bg-amber-500 animate-pulse' : 'bg-emerald-500'}`
                                             }, void 0, false, {
                                                 fileName: "[project]/Desktop/flask/components/DashboardSection.tsx",
-                                                lineNumber: 96,
+                                                lineNumber: 153,
                                                 columnNumber: 20
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                 className: `absolute inset-0 rounded-full animate-ping opacity-75 ${data?.status_label === 'Danger' ? 'bg-red-500' : data?.status_label === 'Warning' ? 'bg-amber-500' : 'bg-emerald-500'}`
                                             }, void 0, false, {
                                                 fileName: "[project]/Desktop/flask/components/DashboardSection.tsx",
-                                                lineNumber: 97,
+                                                lineNumber: 154,
                                                 columnNumber: 20
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/Desktop/flask/components/DashboardSection.tsx",
-                                        lineNumber: 95,
+                                        lineNumber: 152,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -159,18 +251,18 @@ function DashboardSection() {
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/Desktop/flask/components/DashboardSection.tsx",
-                                            lineNumber: 100,
+                                            lineNumber: 157,
                                             columnNumber: 20
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/Desktop/flask/components/DashboardSection.tsx",
-                                        lineNumber: 99,
+                                        lineNumber: 156,
                                         columnNumber: 17
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/Desktop/flask/components/DashboardSection.tsx",
-                                lineNumber: 94,
+                                lineNumber: 151,
                                 columnNumber: 14
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -181,7 +273,7 @@ function DashboardSection() {
                                         children: "ML Confidence"
                                     }, void 0, false, {
                                         fileName: "[project]/Desktop/flask/components/DashboardSection.tsx",
-                                        lineNumber: 106,
+                                        lineNumber: 163,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -189,33 +281,33 @@ function DashboardSection() {
                                         children: data?.anomaly_score !== undefined ? (data.anomaly_score * 100).toFixed(1) + '%' : '100%'
                                     }, void 0, false, {
                                         fileName: "[project]/Desktop/flask/components/DashboardSection.tsx",
-                                        lineNumber: 107,
+                                        lineNumber: 164,
                                         columnNumber: 17
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/Desktop/flask/components/DashboardSection.tsx",
-                                lineNumber: 105,
+                                lineNumber: 162,
                                 columnNumber: 14
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/Desktop/flask/components/DashboardSection.tsx",
-                        lineNumber: 93,
+                        lineNumber: 150,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                         className: "flex flex-col gap-6",
                         children: [
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(Card, {
-                                title: "MQ6 Gas (LPG)",
-                                value: data?.sensor_data?.mq6_gas?.toFixed(1) ?? "--",
+                                title: sensorMode === 'mq6' ? 'MQ6 Gas (LPG)' : 'MQ7 Gas (CO)',
+                                value: (sensorMode === 'mq6' ? data?.sensor_data?.mq6_gas : data?.sensor_data?.mq7_gas)?.toFixed(1) ?? "--",
                                 unit: "ppm",
                                 accent: data?.status_label === 'Danger' ? "glow-red" : "glow-blue",
                                 change: "--"
                             }, void 0, false, {
                                 fileName: "[project]/Desktop/flask/components/DashboardSection.tsx",
-                                lineNumber: 113,
+                                lineNumber: 170,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(Card, {
@@ -226,7 +318,7 @@ function DashboardSection() {
                                 change: "--"
                             }, void 0, false, {
                                 fileName: "[project]/Desktop/flask/components/DashboardSection.tsx",
-                                lineNumber: 114,
+                                lineNumber: 177,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -236,7 +328,7 @@ function DashboardSection() {
                                         className: `absolute top-0 right-0 w-32 h-32 rounded-full blur-3xl transition-all duration-700 ${data?.status_label === 'Danger' ? 'bg-red-500/20 group-hover:bg-red-500/30' : data?.status_label === 'Warning' ? 'bg-amber-500/20 group-hover:bg-amber-500/30' : 'bg-green-500/10 group-hover:bg-green-500/20'}`
                                     }, void 0, false, {
                                         fileName: "[project]/Desktop/flask/components/DashboardSection.tsx",
-                                        lineNumber: 118,
+                                        lineNumber: 181,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -247,7 +339,7 @@ function DashboardSection() {
                                                 children: "ML Diagnosis"
                                             }, void 0, false, {
                                                 fileName: "[project]/Desktop/flask/components/DashboardSection.tsx",
-                                                lineNumber: 120,
+                                                lineNumber: 183,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -257,20 +349,20 @@ function DashboardSection() {
                                                         className: `w-1.5 h-1.5 rounded-full pulse-dot ${data?.status_label === 'Danger' ? 'bg-red-400' : 'bg-green-400'}`
                                                     }, void 0, false, {
                                                         fileName: "[project]/Desktop/flask/components/DashboardSection.tsx",
-                                                        lineNumber: 124,
+                                                        lineNumber: 187,
                                                         columnNumber: 19
                                                     }, this),
                                                     " Live"
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/Desktop/flask/components/DashboardSection.tsx",
-                                                lineNumber: 123,
+                                                lineNumber: 186,
                                                 columnNumber: 17
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/Desktop/flask/components/DashboardSection.tsx",
-                                        lineNumber: 119,
+                                        lineNumber: 182,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -281,7 +373,7 @@ function DashboardSection() {
                                                 children: data?.status_label || '--'
                                             }, void 0, false, {
                                                 fileName: "[project]/Desktop/flask/components/DashboardSection.tsx",
-                                                lineNumber: 128,
+                                                lineNumber: 191,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -296,12 +388,12 @@ function DashboardSection() {
                                                             }
                                                         }, void 0, false, {
                                                             fileName: "[project]/Desktop/flask/components/DashboardSection.tsx",
-                                                            lineNumber: 133,
+                                                            lineNumber: 196,
                                                             columnNumber: 21
                                                         }, this)
                                                     }, void 0, false, {
                                                         fileName: "[project]/Desktop/flask/components/DashboardSection.tsx",
-                                                        lineNumber: 132,
+                                                        lineNumber: 195,
                                                         columnNumber: 19
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -312,31 +404,31 @@ function DashboardSection() {
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/Desktop/flask/components/DashboardSection.tsx",
-                                                        lineNumber: 138,
+                                                        lineNumber: 201,
                                                         columnNumber: 19
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/Desktop/flask/components/DashboardSection.tsx",
-                                                lineNumber: 131,
+                                                lineNumber: 194,
                                                 columnNumber: 17
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/Desktop/flask/components/DashboardSection.tsx",
-                                        lineNumber: 127,
+                                        lineNumber: 190,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/Desktop/flask/components/DashboardSection.tsx",
-                                lineNumber: 117,
+                                lineNumber: 180,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/Desktop/flask/components/DashboardSection.tsx",
-                        lineNumber: 112,
+                        lineNumber: 169,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -352,14 +444,14 @@ function DashboardSection() {
                                 children: "Sensor Reading"
                             }, void 0, false, {
                                 fileName: "[project]/Desktop/flask/components/DashboardSection.tsx",
-                                lineNumber: 147,
+                                lineNumber: 210,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                 className: "absolute top-0 left-1/4 w-64 h-64 bg-violet-600/10 rounded-full blur-[100px] group-hover:bg-violet-600/20 transition-all duration-1000"
                             }, void 0, false, {
                                 fileName: "[project]/Desktop/flask/components/DashboardSection.tsx",
-                                lineNumber: 153,
+                                lineNumber: 216,
                                 columnNumber: 14
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -370,7 +462,7 @@ function DashboardSection() {
                                         children: "Reaction Dynamics timeline"
                                     }, void 0, false, {
                                         fileName: "[project]/Desktop/flask/components/DashboardSection.tsx",
-                                        lineNumber: 156,
+                                        lineNumber: 219,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -383,14 +475,14 @@ function DashboardSection() {
                                                         className: "w-2 h-2 rounded-full bg-blue-500"
                                                     }, void 0, false, {
                                                         fileName: "[project]/Desktop/flask/components/DashboardSection.tsx",
-                                                        lineNumber: 160,
+                                                        lineNumber: 223,
                                                         columnNumber: 59
                                                     }, this),
                                                     " Gas"
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/Desktop/flask/components/DashboardSection.tsx",
-                                                lineNumber: 160,
+                                                lineNumber: 223,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -400,26 +492,26 @@ function DashboardSection() {
                                                         className: "w-2 h-2 rounded-full bg-amber-500"
                                                     }, void 0, false, {
                                                         fileName: "[project]/Desktop/flask/components/DashboardSection.tsx",
-                                                        lineNumber: 161,
+                                                        lineNumber: 224,
                                                         columnNumber: 59
                                                     }, this),
                                                     " Temp"
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/Desktop/flask/components/DashboardSection.tsx",
-                                                lineNumber: 161,
+                                                lineNumber: 224,
                                                 columnNumber: 17
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/Desktop/flask/components/DashboardSection.tsx",
-                                        lineNumber: 159,
+                                        lineNumber: 222,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/Desktop/flask/components/DashboardSection.tsx",
-                                lineNumber: 155,
+                                lineNumber: 218,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -450,7 +542,7 @@ function DashboardSection() {
                                                 }
                                             }, void 0, false, {
                                                 fileName: "[project]/Desktop/flask/components/DashboardSection.tsx",
-                                                lineNumber: 170,
+                                                lineNumber: 233,
                                                 columnNumber: 18
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
@@ -466,7 +558,7 @@ function DashboardSection() {
                                                 className: "opacity-20 transition-all duration-300"
                                             }, void 0, false, {
                                                 fileName: "[project]/Desktop/flask/components/DashboardSection.tsx",
-                                                lineNumber: 185,
+                                                lineNumber: 248,
                                                 columnNumber: 18
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("linearGradient", {
@@ -482,7 +574,7 @@ function DashboardSection() {
                                                         stopOpacity: "1"
                                                     }, void 0, false, {
                                                         fileName: "[project]/Desktop/flask/components/DashboardSection.tsx",
-                                                        lineNumber: 196,
+                                                        lineNumber: 259,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("stop", {
@@ -491,19 +583,19 @@ function DashboardSection() {
                                                         stopOpacity: "0"
                                                     }, void 0, false, {
                                                         fileName: "[project]/Desktop/flask/components/DashboardSection.tsx",
-                                                        lineNumber: 197,
+                                                        lineNumber: 260,
                                                         columnNumber: 21
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/Desktop/flask/components/DashboardSection.tsx",
-                                                lineNumber: 195,
+                                                lineNumber: 258,
                                                 columnNumber: 18
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/Desktop/flask/components/DashboardSection.tsx",
-                                        lineNumber: 169,
+                                        lineNumber: 232,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("svg", {
@@ -531,7 +623,7 @@ function DashboardSection() {
                                                 }
                                             }, void 0, false, {
                                                 fileName: "[project]/Desktop/flask/components/DashboardSection.tsx",
-                                                lineNumber: 203,
+                                                lineNumber: 266,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
@@ -547,7 +639,7 @@ function DashboardSection() {
                                                 className: "opacity-20 transition-all duration-300"
                                             }, void 0, false, {
                                                 fileName: "[project]/Desktop/flask/components/DashboardSection.tsx",
-                                                lineNumber: 218,
+                                                lineNumber: 281,
                                                 columnNumber: 18
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("linearGradient", {
@@ -563,7 +655,7 @@ function DashboardSection() {
                                                         stopOpacity: "1"
                                                     }, void 0, false, {
                                                         fileName: "[project]/Desktop/flask/components/DashboardSection.tsx",
-                                                        lineNumber: 229,
+                                                        lineNumber: 292,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("stop", {
@@ -572,19 +664,19 @@ function DashboardSection() {
                                                         stopOpacity: "0"
                                                     }, void 0, false, {
                                                         fileName: "[project]/Desktop/flask/components/DashboardSection.tsx",
-                                                        lineNumber: 230,
+                                                        lineNumber: 293,
                                                         columnNumber: 21
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/Desktop/flask/components/DashboardSection.tsx",
-                                                lineNumber: 228,
+                                                lineNumber: 291,
                                                 columnNumber: 18
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/Desktop/flask/components/DashboardSection.tsx",
-                                        lineNumber: 202,
+                                        lineNumber: 265,
                                         columnNumber: 15
                                     }, this),
                                     history.some((log)=>log.is_anomaly) && (()=>{
@@ -614,12 +706,12 @@ function DashboardSection() {
                                                     children: "Spike"
                                                 }, void 0, false, {
                                                     fileName: "[project]/Desktop/flask/components/DashboardSection.tsx",
-                                                    lineNumber: 248,
+                                                    lineNumber: 311,
                                                     columnNumber: 26
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/Desktop/flask/components/DashboardSection.tsx",
-                                                lineNumber: 242,
+                                                lineNumber: 305,
                                                 columnNumber: 23
                                             }, this);
                                         }
@@ -628,7 +720,7 @@ function DashboardSection() {
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/Desktop/flask/components/DashboardSection.tsx",
-                                lineNumber: 166,
+                                lineNumber: 229,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -638,41 +730,41 @@ function DashboardSection() {
                                         children: "00:00"
                                     }, void 0, false, {
                                         fileName: "[project]/Desktop/flask/components/DashboardSection.tsx",
-                                        lineNumber: 260,
+                                        lineNumber: 323,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                         children: "15:00"
                                     }, void 0, false, {
                                         fileName: "[project]/Desktop/flask/components/DashboardSection.tsx",
-                                        lineNumber: 261,
+                                        lineNumber: 324,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                         children: "30:00"
                                     }, void 0, false, {
                                         fileName: "[project]/Desktop/flask/components/DashboardSection.tsx",
-                                        lineNumber: 262,
+                                        lineNumber: 325,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                         children: "45:00"
                                     }, void 0, false, {
                                         fileName: "[project]/Desktop/flask/components/DashboardSection.tsx",
-                                        lineNumber: 263,
+                                        lineNumber: 326,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                         children: "60:00"
                                     }, void 0, false, {
                                         fileName: "[project]/Desktop/flask/components/DashboardSection.tsx",
-                                        lineNumber: 264,
+                                        lineNumber: 327,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/Desktop/flask/components/DashboardSection.tsx",
-                                lineNumber: 259,
+                                lineNumber: 322,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -680,13 +772,13 @@ function DashboardSection() {
                                 children: "Time (seconds)"
                             }, void 0, false, {
                                 fileName: "[project]/Desktop/flask/components/DashboardSection.tsx",
-                                lineNumber: 268,
+                                lineNumber: 331,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/Desktop/flask/components/DashboardSection.tsx",
-                        lineNumber: 145,
+                        lineNumber: 208,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -700,7 +792,7 @@ function DashboardSection() {
                                         children: "Automated Reaction Log"
                                     }, void 0, false, {
                                         fileName: "[project]/Desktop/flask/components/DashboardSection.tsx",
-                                        lineNumber: 278,
+                                        lineNumber: 341,
                                         columnNumber: 16
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -727,7 +819,7 @@ function DashboardSection() {
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/Desktop/flask/components/DashboardSection.tsx",
-                                                                lineNumber: 288,
+                                                                lineNumber: 351,
                                                                 columnNumber: 25
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -739,27 +831,28 @@ function DashboardSection() {
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/Desktop/flask/components/DashboardSection.tsx",
-                                                                lineNumber: 289,
+                                                                lineNumber: 352,
                                                                 columnNumber: 25
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                                 className: "flex-1 truncate",
                                                                 children: [
-                                                                    "MQ6: ",
-                                                                    log.sensor_data.mq6_gas.toFixed(0),
+                                                                    (log.sensor_mode ?? 'mq6') !== 'mq7' ? 'MQ6' : 'MQ7',
+                                                                    ": ",
+                                                                    ((log.sensor_mode ?? 'mq6') !== 'mq7' ? log.sensor_data.mq6_gas : log.sensor_data.mq7_gas).toFixed(0),
                                                                     "ppm | TMP: ",
                                                                     log.sensor_data.temperature.toFixed(1),
                                                                     "°C"
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/Desktop/flask/components/DashboardSection.tsx",
-                                                                lineNumber: 292,
+                                                                lineNumber: 355,
                                                                 columnNumber: 25
                                                             }, this)
                                                         ]
                                                     }, i + log.sensor_data.mq6_gas, true, {
                                                         fileName: "[project]/Desktop/flask/components/DashboardSection.tsx",
-                                                        lineNumber: 282,
+                                                        lineNumber: 345,
                                                         columnNumber: 22
                                                     }, this)),
                                                 history.length === 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -767,24 +860,24 @@ function DashboardSection() {
                                                     children: "Waiting for first classification..."
                                                 }, void 0, false, {
                                                     fileName: "[project]/Desktop/flask/components/DashboardSection.tsx",
-                                                    lineNumber: 298,
+                                                    lineNumber: 361,
                                                     columnNumber: 22
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/Desktop/flask/components/DashboardSection.tsx",
-                                            lineNumber: 280,
+                                            lineNumber: 343,
                                             columnNumber: 18
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/Desktop/flask/components/DashboardSection.tsx",
-                                        lineNumber: 279,
+                                        lineNumber: 342,
                                         columnNumber: 16
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/Desktop/flask/components/DashboardSection.tsx",
-                                lineNumber: 277,
+                                lineNumber: 340,
                                 columnNumber: 14
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -797,7 +890,7 @@ function DashboardSection() {
                                                 children: "Global Intel"
                                             }, void 0, false, {
                                                 fileName: "[project]/Desktop/flask/components/DashboardSection.tsx",
-                                                lineNumber: 307,
+                                                lineNumber: 370,
                                                 columnNumber: 20
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -805,13 +898,13 @@ function DashboardSection() {
                                                 children: "Shared insights from connected labs"
                                             }, void 0, false, {
                                                 fileName: "[project]/Desktop/flask/components/DashboardSection.tsx",
-                                                lineNumber: 308,
+                                                lineNumber: 371,
                                                 columnNumber: 20
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/Desktop/flask/components/DashboardSection.tsx",
-                                        lineNumber: 306,
+                                        lineNumber: 369,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -826,13 +919,13 @@ function DashboardSection() {
                                                         children: "k"
                                                     }, void 0, false, {
                                                         fileName: "[project]/Desktop/flask/components/DashboardSection.tsx",
-                                                        lineNumber: 312,
+                                                        lineNumber: 375,
                                                         columnNumber: 26
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/Desktop/flask/components/DashboardSection.tsx",
-                                                lineNumber: 311,
+                                                lineNumber: 374,
                                                 columnNumber: 20
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -840,41 +933,41 @@ function DashboardSection() {
                                                 children: "Reactions Analyzed Today"
                                             }, void 0, false, {
                                                 fileName: "[project]/Desktop/flask/components/DashboardSection.tsx",
-                                                lineNumber: 314,
+                                                lineNumber: 377,
                                                 columnNumber: 20
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/Desktop/flask/components/DashboardSection.tsx",
-                                        lineNumber: 310,
+                                        lineNumber: 373,
                                         columnNumber: 17
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/Desktop/flask/components/DashboardSection.tsx",
-                                lineNumber: 305,
+                                lineNumber: 368,
                                 columnNumber: 14
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/Desktop/flask/components/DashboardSection.tsx",
-                        lineNumber: 275,
+                        lineNumber: 338,
                         columnNumber: 11
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/Desktop/flask/components/DashboardSection.tsx",
-                lineNumber: 65,
+                lineNumber: 98,
                 columnNumber: 9
             }, this)
         }, void 0, false, {
             fileName: "[project]/Desktop/flask/components/DashboardSection.tsx",
-            lineNumber: 64,
+            lineNumber: 97,
             columnNumber: 7
         }, this)
     }, void 0, false, {
         fileName: "[project]/Desktop/flask/components/DashboardSection.tsx",
-        lineNumber: 63,
+        lineNumber: 96,
         columnNumber: 5
     }, this);
 }
@@ -888,7 +981,7 @@ function Card({ title, value, unit, change, accent }) {
                 className: `absolute -right-12 -top-12 w-32 h-32 rounded-full blur-[60px] opacity-20 group-hover:opacity-40 transition-opacity duration-500 bg-current text-${accent.split('-')[1]}-500`
             }, void 0, false, {
                 fileName: "[project]/Desktop/flask/components/DashboardSection.tsx",
-                lineNumber: 342,
+                lineNumber: 405,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -896,7 +989,7 @@ function Card({ title, value, unit, change, accent }) {
                 children: title
             }, void 0, false, {
                 fileName: "[project]/Desktop/flask/components/DashboardSection.tsx",
-                lineNumber: 344,
+                lineNumber: 407,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -907,7 +1000,7 @@ function Card({ title, value, unit, change, accent }) {
                         children: value
                     }, void 0, false, {
                         fileName: "[project]/Desktop/flask/components/DashboardSection.tsx",
-                        lineNumber: 349,
+                        lineNumber: 412,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -915,13 +1008,13 @@ function Card({ title, value, unit, change, accent }) {
                         children: unit
                     }, void 0, false, {
                         fileName: "[project]/Desktop/flask/components/DashboardSection.tsx",
-                        lineNumber: 352,
+                        lineNumber: 415,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/Desktop/flask/components/DashboardSection.tsx",
-                lineNumber: 348,
+                lineNumber: 411,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -932,7 +1025,7 @@ function Card({ title, value, unit, change, accent }) {
                         children: change
                     }, void 0, false, {
                         fileName: "[project]/Desktop/flask/components/DashboardSection.tsx",
-                        lineNumber: 356,
+                        lineNumber: 419,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -940,19 +1033,19 @@ function Card({ title, value, unit, change, accent }) {
                         children: "from last hour"
                     }, void 0, false, {
                         fileName: "[project]/Desktop/flask/components/DashboardSection.tsx",
-                        lineNumber: 359,
+                        lineNumber: 422,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/Desktop/flask/components/DashboardSection.tsx",
-                lineNumber: 355,
+                lineNumber: 418,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/Desktop/flask/components/DashboardSection.tsx",
-        lineNumber: 340,
+        lineNumber: 403,
         columnNumber: 5
     }, this);
 }

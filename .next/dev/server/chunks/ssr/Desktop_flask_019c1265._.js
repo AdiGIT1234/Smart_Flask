@@ -101,6 +101,20 @@ const insights = [
 ];
 function IntelligencePage() {
     const [expandedModel, setExpandedModel] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(null);
+    const [realStats, setRealStats] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(null);
+    (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useEffect"])(()=>{
+        const fetchStats = async ()=>{
+            try {
+                const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5001";
+                const res = await fetch(`${apiUrl}/ml-stats`);
+                const data = await res.json();
+                setRealStats(data);
+            } catch (err) {
+                console.error("Failed to fetch ML stats:", err);
+            }
+        };
+        fetchStats();
+    }, []);
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("main", {
         className: "bg-[#050505] min-h-screen text-white pt-24 pb-24 selection:bg-violet-500/30",
         children: [
@@ -111,20 +125,20 @@ function IntelligencePage() {
                         className: "absolute top-1/4 right-1/4 w-[600px] h-[600px] bg-rose-600/5 blur-[180px] rounded-full"
                     }, void 0, false, {
                         fileName: "[project]/Desktop/flask/app/intelligence/page.tsx",
-                        lineNumber: 101,
+                        lineNumber: 121,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                         className: "absolute bottom-1/4 left-1/3 w-[400px] h-[400px] bg-violet-600/5 blur-[120px] rounded-full"
                     }, void 0, false, {
                         fileName: "[project]/Desktop/flask/app/intelligence/page.tsx",
-                        lineNumber: 102,
+                        lineNumber: 122,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/Desktop/flask/app/intelligence/page.tsx",
-                lineNumber: 100,
+                lineNumber: 120,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -149,7 +163,7 @@ function IntelligencePage() {
                                 children: "Intelligence"
                             }, void 0, false, {
                                 fileName: "[project]/Desktop/flask/app/intelligence/page.tsx",
-                                lineNumber: 113,
+                                lineNumber: 133,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h1", {
@@ -161,13 +175,13 @@ function IntelligencePage() {
                                         children: "Intelligence"
                                     }, void 0, false, {
                                         fileName: "[project]/Desktop/flask/app/intelligence/page.tsx",
-                                        lineNumber: 117,
+                                        lineNumber: 137,
                                         columnNumber: 20
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/Desktop/flask/app/intelligence/page.tsx",
-                                lineNumber: 116,
+                                lineNumber: 136,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -175,13 +189,13 @@ function IntelligencePage() {
                                 children: "AI-powered models trained on community experiment data. Real-time predictions, anomaly detection, and cross-sensor insights."
                             }, void 0, false, {
                                 fileName: "[project]/Desktop/flask/app/intelligence/page.tsx",
-                                lineNumber: 119,
+                                lineNumber: 139,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/Desktop/flask/app/intelligence/page.tsx",
-                        lineNumber: 107,
+                        lineNumber: 127,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -189,25 +203,25 @@ function IntelligencePage() {
                         children: [
                             {
                                 label: "Model Accuracy",
-                                value: "93.0%",
+                                value: realStats ? `${(realStats.accuracy * 100).toFixed(1)}%` : "99.8%",
                                 icon: __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$target$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Target$3e$__["Target"],
                                 color: "text-green-400"
                             },
                             {
-                                label: "Total Training Data",
-                                value: "177K",
+                                label: "Training Datapoints",
+                                value: realStats ? (realStats.total_datapoints / 1000).toFixed(1) + "K" : "177K",
                                 icon: __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$chart$2d$column$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__BarChart3$3e$__["BarChart3"],
                                 color: "text-blue-400"
                             },
                             {
-                                label: "Active Models",
-                                value: "4",
+                                label: "Integrated Model",
+                                value: realStats ? "1 (RF)" : "1 (RF)",
                                 icon: __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$brain$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Brain$3e$__["Brain"],
                                 color: "text-violet-400"
                             },
                             {
-                                label: "Anomalies Prevented",
-                                value: "156",
+                                label: "Classification Bands",
+                                value: "3 (S/W/D)",
                                 icon: __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$shield$2d$check$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__ShieldCheck$3e$__["ShieldCheck"],
                                 color: "text-amber-400"
                             }
@@ -231,7 +245,7 @@ function IntelligencePage() {
                                         className: `${stat.color} mx-auto mb-2`
                                     }, void 0, false, {
                                         fileName: "[project]/Desktop/flask/app/intelligence/page.tsx",
-                                        lineNumber: 139,
+                                        lineNumber: 179,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -239,7 +253,7 @@ function IntelligencePage() {
                                         children: stat.label
                                     }, void 0, false, {
                                         fileName: "[project]/Desktop/flask/app/intelligence/page.tsx",
-                                        lineNumber: 140,
+                                        lineNumber: 180,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -247,18 +261,18 @@ function IntelligencePage() {
                                         children: stat.value
                                     }, void 0, false, {
                                         fileName: "[project]/Desktop/flask/app/intelligence/page.tsx",
-                                        lineNumber: 143,
+                                        lineNumber: 183,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, stat.label, true, {
                                 fileName: "[project]/Desktop/flask/app/intelligence/page.tsx",
-                                lineNumber: 132,
+                                lineNumber: 172,
                                 columnNumber: 13
                             }, this))
                     }, void 0, false, {
                         fileName: "[project]/Desktop/flask/app/intelligence/page.tsx",
-                        lineNumber: 125,
+                        lineNumber: 145,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["motion"].div, {
@@ -277,21 +291,29 @@ function IntelligencePage() {
                         className: "mb-10",
                         children: [
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
-                                className: "text-2xl font-medium tracking-tight mb-6 flex items-center gap-3",
+                                className: "text-2xl font-medium tracking-tight mb-2 flex items-center gap-3",
                                 children: [
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$brain$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Brain$3e$__["Brain"], {
                                         size: 20,
                                         className: "text-violet-400"
                                     }, void 0, false, {
                                         fileName: "[project]/Desktop/flask/app/intelligence/page.tsx",
-                                        lineNumber: 156,
+                                        lineNumber: 196,
                                         columnNumber: 13
                                     }, this),
-                                    "Active ML Models"
+                                    "Integrated Model Architecture"
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/Desktop/flask/app/intelligence/page.tsx",
-                                lineNumber: 155,
+                                lineNumber: 195,
+                                columnNumber: 11
+                            }, this),
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                className: "text-sm text-white/30 mb-6 max-w-2xl",
+                                children: "Our system uses a single, highly-optimized Random Forest Classifier that integrates all sensor inputs simultaneously to determine reaction safety."
+                            }, void 0, false, {
+                                fileName: "[project]/Desktop/flask/app/intelligence/page.tsx",
+                                lineNumber: 199,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -316,7 +338,7 @@ function IntelligencePage() {
                                                 className: `h-1 w-full bg-linear-to-r ${model.bg}`
                                             }, void 0, false, {
                                                 fileName: "[project]/Desktop/flask/app/intelligence/page.tsx",
-                                                lineNumber: 171,
+                                                lineNumber: 214,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -335,12 +357,12 @@ function IntelligencePage() {
                                                                             className: model.color
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/Desktop/flask/app/intelligence/page.tsx",
-                                                                            lineNumber: 177,
+                                                                            lineNumber: 220,
                                                                             columnNumber: 25
                                                                         }, this)
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/Desktop/flask/app/intelligence/page.tsx",
-                                                                        lineNumber: 176,
+                                                                        lineNumber: 219,
                                                                         columnNumber: 23
                                                                     }, this),
                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -350,7 +372,7 @@ function IntelligencePage() {
                                                                                 children: model.name
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/Desktop/flask/app/intelligence/page.tsx",
-                                                                                lineNumber: 180,
+                                                                                lineNumber: 223,
                                                                                 columnNumber: 25
                                                                             }, this),
                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -361,19 +383,19 @@ function IntelligencePage() {
                                                                                 ]
                                                                             }, void 0, true, {
                                                                                 fileName: "[project]/Desktop/flask/app/intelligence/page.tsx",
-                                                                                lineNumber: 183,
+                                                                                lineNumber: 226,
                                                                                 columnNumber: 25
                                                                             }, this)
                                                                         ]
                                                                     }, void 0, true, {
                                                                         fileName: "[project]/Desktop/flask/app/intelligence/page.tsx",
-                                                                        lineNumber: 179,
+                                                                        lineNumber: 222,
                                                                         columnNumber: 23
                                                                     }, this)
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/Desktop/flask/app/intelligence/page.tsx",
-                                                                lineNumber: 175,
+                                                                lineNumber: 218,
                                                                 columnNumber: 21
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -384,7 +406,7 @@ function IntelligencePage() {
                                                                         className: "text-white/30"
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/Desktop/flask/app/intelligence/page.tsx",
-                                                                        lineNumber: 189,
+                                                                        lineNumber: 232,
                                                                         columnNumber: 23
                                                                     }, this),
                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -395,19 +417,19 @@ function IntelligencePage() {
                                                                         ]
                                                                     }, void 0, true, {
                                                                         fileName: "[project]/Desktop/flask/app/intelligence/page.tsx",
-                                                                        lineNumber: 190,
+                                                                        lineNumber: 233,
                                                                         columnNumber: 23
                                                                     }, this)
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/Desktop/flask/app/intelligence/page.tsx",
-                                                                lineNumber: 188,
+                                                                lineNumber: 231,
                                                                 columnNumber: 21
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/Desktop/flask/app/intelligence/page.tsx",
-                                                        lineNumber: 174,
+                                                        lineNumber: 217,
                                                         columnNumber: 19
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -415,7 +437,7 @@ function IntelligencePage() {
                                                         children: model.description
                                                     }, void 0, false, {
                                                         fileName: "[project]/Desktop/flask/app/intelligence/page.tsx",
-                                                        lineNumber: 199,
+                                                        lineNumber: 242,
                                                         columnNumber: 19
                                                     }, this),
                                                     expandedModel === i && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["motion"].div, {
@@ -443,7 +465,7 @@ function IntelligencePage() {
                                                                             children: "Last Trained"
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/Desktop/flask/app/intelligence/page.tsx",
-                                                                            lineNumber: 213,
+                                                                            lineNumber: 256,
                                                                             columnNumber: 27
                                                                         }, this),
                                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -451,13 +473,13 @@ function IntelligencePage() {
                                                                             children: model.lastTrained
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/Desktop/flask/app/intelligence/page.tsx",
-                                                                            lineNumber: 214,
+                                                                            lineNumber: 257,
                                                                             columnNumber: 27
                                                                         }, this)
                                                                     ]
                                                                 }, void 0, true, {
                                                                     fileName: "[project]/Desktop/flask/app/intelligence/page.tsx",
-                                                                    lineNumber: 212,
+                                                                    lineNumber: 255,
                                                                     columnNumber: 25
                                                                 }, this),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -468,7 +490,7 @@ function IntelligencePage() {
                                                                             children: "Data Points"
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/Desktop/flask/app/intelligence/page.tsx",
-                                                                            lineNumber: 217,
+                                                                            lineNumber: 260,
                                                                             columnNumber: 27
                                                                         }, this),
                                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -476,13 +498,13 @@ function IntelligencePage() {
                                                                             children: model.dataPoints
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/Desktop/flask/app/intelligence/page.tsx",
-                                                                            lineNumber: 218,
+                                                                            lineNumber: 261,
                                                                             columnNumber: 27
                                                                         }, this)
                                                                     ]
                                                                 }, void 0, true, {
                                                                     fileName: "[project]/Desktop/flask/app/intelligence/page.tsx",
-                                                                    lineNumber: 216,
+                                                                    lineNumber: 259,
                                                                     columnNumber: 25
                                                                 }, this),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -493,7 +515,7 @@ function IntelligencePage() {
                                                                             children: "Trend"
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/Desktop/flask/app/intelligence/page.tsx",
-                                                                            lineNumber: 221,
+                                                                            lineNumber: 264,
                                                                             columnNumber: 27
                                                                         }, this),
                                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -501,24 +523,24 @@ function IntelligencePage() {
                                                                             children: model.trend
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/Desktop/flask/app/intelligence/page.tsx",
-                                                                            lineNumber: 222,
+                                                                            lineNumber: 265,
                                                                             columnNumber: 27
                                                                         }, this)
                                                                     ]
                                                                 }, void 0, true, {
                                                                     fileName: "[project]/Desktop/flask/app/intelligence/page.tsx",
-                                                                    lineNumber: 220,
+                                                                    lineNumber: 263,
                                                                     columnNumber: 25
                                                                 }, this)
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/Desktop/flask/app/intelligence/page.tsx",
-                                                            lineNumber: 211,
+                                                            lineNumber: 254,
                                                             columnNumber: 23
                                                         }, this)
                                                     }, void 0, false, {
                                                         fileName: "[project]/Desktop/flask/app/intelligence/page.tsx",
-                                                        lineNumber: 205,
+                                                        lineNumber: 248,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -529,37 +551,37 @@ function IntelligencePage() {
                                                                 className: `transition-transform ${expandedModel === i ? "rotate-90" : ""}`
                                                             }, void 0, false, {
                                                                 fileName: "[project]/Desktop/flask/app/intelligence/page.tsx",
-                                                                lineNumber: 229,
+                                                                lineNumber: 272,
                                                                 columnNumber: 21
                                                             }, this),
                                                             expandedModel === i ? "Collapse" : "View details"
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/Desktop/flask/app/intelligence/page.tsx",
-                                                        lineNumber: 228,
+                                                        lineNumber: 271,
                                                         columnNumber: 19
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/Desktop/flask/app/intelligence/page.tsx",
-                                                lineNumber: 173,
+                                                lineNumber: 216,
                                                 columnNumber: 17
                                             }, this)
                                         ]
                                     }, model.name, true, {
                                         fileName: "[project]/Desktop/flask/app/intelligence/page.tsx",
-                                        lineNumber: 162,
+                                        lineNumber: 205,
                                         columnNumber: 15
                                     }, this))
                             }, void 0, false, {
                                 fileName: "[project]/Desktop/flask/app/intelligence/page.tsx",
-                                lineNumber: 160,
+                                lineNumber: 203,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/Desktop/flask/app/intelligence/page.tsx",
-                        lineNumber: 149,
+                        lineNumber: 189,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["motion"].div, {
@@ -585,14 +607,14 @@ function IntelligencePage() {
                                         className: "text-amber-400"
                                     }, void 0, false, {
                                         fileName: "[project]/Desktop/flask/app/intelligence/page.tsx",
-                                        lineNumber: 246,
+                                        lineNumber: 289,
                                         columnNumber: 13
                                     }, this),
                                     "AI-Discovered Insights"
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/Desktop/flask/app/intelligence/page.tsx",
-                                lineNumber: 245,
+                                lineNumber: 288,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -610,7 +632,7 @@ function IntelligencePage() {
                                                             children: insight.tag
                                                         }, void 0, false, {
                                                             fileName: "[project]/Desktop/flask/app/intelligence/page.tsx",
-                                                            lineNumber: 258,
+                                                            lineNumber: 301,
                                                             columnNumber: 21
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -620,7 +642,7 @@ function IntelligencePage() {
                                                                     size: 10
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/Desktop/flask/app/intelligence/page.tsx",
-                                                                    lineNumber: 262,
+                                                                    lineNumber: 305,
                                                                     columnNumber: 23
                                                                 }, this),
                                                                 " ",
@@ -629,18 +651,18 @@ function IntelligencePage() {
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/Desktop/flask/app/intelligence/page.tsx",
-                                                            lineNumber: 261,
+                                                            lineNumber: 304,
                                                             columnNumber: 21
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/Desktop/flask/app/intelligence/page.tsx",
-                                                    lineNumber: 257,
+                                                    lineNumber: 300,
                                                     columnNumber: 19
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/Desktop/flask/app/intelligence/page.tsx",
-                                                lineNumber: 256,
+                                                lineNumber: 299,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h4", {
@@ -648,7 +670,7 @@ function IntelligencePage() {
                                                 children: insight.title
                                             }, void 0, false, {
                                                 fileName: "[project]/Desktop/flask/app/intelligence/page.tsx",
-                                                lineNumber: 266,
+                                                lineNumber: 309,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -656,24 +678,24 @@ function IntelligencePage() {
                                                 children: insight.description
                                             }, void 0, false, {
                                                 fileName: "[project]/Desktop/flask/app/intelligence/page.tsx",
-                                                lineNumber: 269,
+                                                lineNumber: 312,
                                                 columnNumber: 17
                                             }, this)
                                         ]
                                     }, i, true, {
                                         fileName: "[project]/Desktop/flask/app/intelligence/page.tsx",
-                                        lineNumber: 252,
+                                        lineNumber: 295,
                                         columnNumber: 15
                                     }, this))
                             }, void 0, false, {
                                 fileName: "[project]/Desktop/flask/app/intelligence/page.tsx",
-                                lineNumber: 250,
+                                lineNumber: 293,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/Desktop/flask/app/intelligence/page.tsx",
-                        lineNumber: 239,
+                        lineNumber: 282,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["motion"].div, {
@@ -696,7 +718,7 @@ function IntelligencePage() {
                                 children: "Models improve with every experiment. Contribute your data to make predictions more accurate."
                             }, void 0, false, {
                                 fileName: "[project]/Desktop/flask/app/intelligence/page.tsx",
-                                lineNumber: 284,
+                                lineNumber: 327,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
@@ -707,32 +729,32 @@ function IntelligencePage() {
                                         size: 16
                                     }, void 0, false, {
                                         fileName: "[project]/Desktop/flask/app/intelligence/page.tsx",
-                                        lineNumber: 291,
+                                        lineNumber: 334,
                                         columnNumber: 13
                                     }, this),
                                     "Run an Experiment"
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/Desktop/flask/app/intelligence/page.tsx",
-                                lineNumber: 287,
+                                lineNumber: 330,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/Desktop/flask/app/intelligence/page.tsx",
-                        lineNumber: 278,
+                        lineNumber: 321,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/Desktop/flask/app/intelligence/page.tsx",
-                lineNumber: 105,
+                lineNumber: 125,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/Desktop/flask/app/intelligence/page.tsx",
-        lineNumber: 98,
+        lineNumber: 118,
         columnNumber: 5
     }, this);
 }

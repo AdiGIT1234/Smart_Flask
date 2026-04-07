@@ -17,7 +17,7 @@ ANOMALY_RATE = 0.05  # 5% of data will be simulated gas/temp leaks
 
 mq6_normal = np.random.normal(loc=300, scale=30, size=NUM_SAMPLES)
 mq7_normal = np.random.normal(loc=35, scale=5, size=NUM_SAMPLES)
-temp_normal = np.random.normal(loc=25, scale=2, size=NUM_SAMPLES)
+temp_normal = np.random.normal(loc=31, scale=2, size=NUM_SAMPLES)
 hum_normal = np.random.normal(loc=45, scale=5, size=NUM_SAMPLES)
 
 data = pd.DataFrame({
@@ -25,6 +25,7 @@ data = pd.DataFrame({
     'mq7_gas': mq7_normal,
     'temperature': temp_normal,
     'humidity': hum_normal,
+    'label': 'Safe',
     'is_anomaly': 0
 })
 
@@ -40,11 +41,14 @@ for idx in anomaly_indices:
     
     if anomaly_type == 'gas_leak_mq6':
         data.at[idx, 'mq6_gas'] = np.random.uniform(800, 2000) # huge spike
+        data.at[idx, 'label'] = 'Danger'
     elif anomaly_type == 'gas_leak_mq7':
         data.at[idx, 'mq7_gas'] = np.random.uniform(200, 1000)
+        data.at[idx, 'label'] = 'Danger'
     elif anomaly_type == 'overheating':
         data.at[idx, 'temperature'] = np.random.uniform(50, 100)
         data.at[idx, 'humidity'] = np.random.uniform(10, 25)
+        data.at[idx, 'label'] = 'Warning' if np.random.random() > 0.5 else 'Danger'
     
     data.at[idx, 'is_anomaly'] = 1
 

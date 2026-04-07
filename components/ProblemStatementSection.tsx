@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
 import { useState, useEffect, useRef } from "react";
@@ -72,7 +73,7 @@ function SensorTile({
       initial={{ opacity: 0, scale: 0.95 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ delay, duration: 0.4 }}
-      className="bg-white/[0.03] border border-white/[0.07] rounded-xl p-4 flex flex-col justify-between"
+      className="bg-white/3 border border-white/[0.07] rounded-xl p-4 flex flex-col justify-between"
     >
       <span className="text-[10px] uppercase tracking-widest text-white/30 mb-2">{label}</span>
       <span className={`text-2xl font-light ${color}`}>

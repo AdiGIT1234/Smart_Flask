@@ -4,8 +4,8 @@ from sklearn.ensemble import RandomForestClassifier
 import joblib
 import os
 
-print("Loading real sensor dataset...")
-data_path = os.path.join(os.path.dirname(__file__), 'real_sensor_data.csv')
+print("Loading updated synthetic sensor dataset...")
+data_path = os.path.join(os.path.dirname(__file__), 'synthetic_sensor_data.csv')
 
 try:
     data = pd.read_csv(data_path)
