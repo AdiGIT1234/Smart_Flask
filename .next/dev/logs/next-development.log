@@ -1,3 +1,7 @@
 [00:00:00.851] Server  LOG     ✓ Ready in 657ms
 [00:00:11.533] Browser WARN    Please ensure that the container has a non-static position, like 'relative', 'fixed', or 'absolute' to ensure scroll offset is calculated correctly.
 [00:00:17.892] Browser WARN    Detected `scroll-behavior: smooth` on the `<html>` element. To disable smooth scrolling during route transitions, add `data-scroll-behavior="smooth"` to your <html> element. Learn more: https://nextjs.org/docs/messages/missing-data-scroll-behavior
+[00:08:32.991] Server  LOG     ✓ Compiled in 155ms
+[00:08:33.187] Browser ERROR   uncaughtError: ReferenceError: isSimulatingLeak is not defined
+[00:09:09.558] Server  WARN    ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+[00:09:09.673] Server  LOG     ✓ Compiled in 126ms

@@ -1,11 +1,11 @@
-#include <ESP8266WiFi.h>
-#include <ESP8266HTTPClient.h>
-#include <WiFiClient.h>
-#include <Wire.h>
-#include <LiquidCrystal_I2C.h>
-#include <DHT.h>
-#include <WiFiManager.h>
 #include <ArduinoJson.h>
+#include <DHT.h>
+#include <ESP8266HTTPClient.h>
+#include <ESP8266WiFi.h>
+#include <LiquidCrystal_I2C.h>
+#include <WiFiClient.h>
+#include <WiFiManager.h>
+#include <Wire.h>
 
 // -------- LCD --------
 LiquidCrystal_I2C lcd(0x27, 16, 2);
@@ -20,7 +20,8 @@ DHT dht(DHTPIN, DHTTYPE);
 #define MQ7 D7
 
 // -------- Custom Parameter (Server URL) --------
-// If you ever reset your ESP8266, it will default to connecting to your cloud pipeline automatically!
+// If you ever reset your ESP8266, it will default to connecting to your cloud
+// pipeline automatically!
 char serverUrl[100] = "https://smart-flask-ml-backend.onrender.com/predict";
 
 // -------- WiFiManager --------
@@ -47,7 +48,7 @@ void setup() {
     ESP.restart();
   }
 
-  lcd.setCursor(0,0);
+  lcd.setCursor(0, 0);
   lcd.print("WiFi Setup...");
 
   // Add custom field
@@ -72,12 +73,12 @@ void setup() {
   Serial.println(serverUrl);
 
   lcd.clear();
-  lcd.setCursor(0,0);
+  lcd.setCursor(0, 0);
   lcd.print("Connected!");
   delay(1000);
 
   lcd.clear();
-  lcd.setCursor(0,0);
+  lcd.setCursor(0, 0);
   lcd.print("IP:");
   lcd.print(WiFi.localIP());
   delay(2000);
@@ -97,7 +98,7 @@ void loop() {
 
   // -------- Read sensors --------
   float temp = dht.readTemperature();
-  float hum  = dht.readHumidity();
+  float hum = dht.readHumidity();
 
   if (isnan(temp) || isnan(hum)) {
     Serial.println("DHT error!");
@@ -108,23 +109,27 @@ void loop() {
   int mq7_value = digitalRead(MQ7);
 
   // -------- Serial --------
-  Serial.print("Temp: "); Serial.print(temp);
-  Serial.print(" Hum: "); Serial.print(hum);
-  Serial.print(" MQ6: "); Serial.print(mq6_value);
-  Serial.print(" MQ7: "); Serial.println(mq7_value);
+  Serial.print("Temp: ");
+  Serial.print(temp);
+  Serial.print(" Hum: ");
+  Serial.print(hum);
+  Serial.print(" MQ6: ");
+  Serial.print(mq6_value);
+  Serial.print(" MQ7: ");
+  Serial.println(mq7_value);
 
   // -------- LCD Line 1 --------
-  lcd.setCursor(0,0);
+  lcd.setCursor(0, 0);
   lcd.print("T:");
-  lcd.print(temp,1);
+  lcd.print(temp, 1);
   lcd.print(" H:");
-  lcd.print(hum,0);
+  lcd.print(hum, 0);
   lcd.print("   ");
 
   // -------- LCD Line 2 --------
-  lcd.setCursor(0,1);
+  lcd.setCursor(0, 1);
   lcd.print("                ");
-  lcd.setCursor(0,1);
+  lcd.setCursor(0, 1);
   lcd.print("G:");
   lcd.print(mq6_value);
   lcd.print(" ");
@@ -156,22 +161,18 @@ void loop() {
 
       if (status == "Danger") {
         lcd.print("[DNG]");
-      } 
-      else if (status == "Warning") {
+      } else if (status == "Warning") {
         lcd.print("[WRN]");
-      } 
-      else {
+      } else {
         lcd.print("[SAF]");
       }
-    } 
-    else {
+    } else {
       lcd.print("ERR");
       Serial.println(http.errorToString(httpResponseCode));
     }
 
     http.end();
-  } 
-  else {
+  } else {
     lcd.print("NoWiFi");
   }
 
