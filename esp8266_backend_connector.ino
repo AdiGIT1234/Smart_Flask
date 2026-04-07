@@ -3,7 +3,7 @@
 #include <ESP8266HTTPClient.h>
 #include <ESP8266WiFi.h>
 #include <LiquidCrystal_I2C.h>
-#include <WiFiClient.h>
+#include <WiFiClientSecure.h>
 #include <WiFiManager.h>
 #include <Wire.h>
 
@@ -137,12 +137,13 @@ void loop() {
   // -------- HTTP ML Request --------
   if (WiFi.status() == WL_CONNECTED) {
 
-    WiFiClient client;
+    WiFiClientSecure client;
+    client.setInsecure(); // Skip SSL cert verification (fine for IoT sensor data)
     HTTPClient http;
 
     http.begin(client, serverUrl);
     http.addHeader("Content-Type", "application/json");
-    http.setTimeout(2000);
+    http.setTimeout(8000); // 8s — enough for HTTPS handshake + Render response
 
     String jsonPayload = "{\"mq6_gas\":" + String(mq6_value) +
                          ",\"mq7_gas\":" + String(mq7_value) +
