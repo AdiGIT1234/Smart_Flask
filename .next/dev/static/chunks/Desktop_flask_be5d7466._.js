@@ -1185,6 +1185,7 @@ __turbopack_context__.s([
     "default",
     ()=>ReactionPage
 ]);
+var __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$build$2f$polyfills$2f$process$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = /*#__PURE__*/ __turbopack_context__.i("[project]/Desktop/flask/node_modules/next/dist/build/polyfills/process.js [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/Desktop/flask/node_modules/next/dist/compiled/react/jsx-dev-runtime.js [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/Desktop/flask/node_modules/next/dist/compiled/react/index.js [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/Desktop/flask/node_modules/framer-motion/dist/es/render/components/motion/proxy.mjs [app-client] (ecmascript)");
@@ -1235,6 +1236,8 @@ function ReactionPage() {
     const [totalTime, setTotalTime] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(0);
     const [waitingForUser, setWaitingForUser] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
     const [autoAdvanceCountdown, setAutoAdvanceCountdown] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(0);
+    const [espConnected, setEspConnected] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
+    const [sensorMode, setSensorMode] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])('mq6');
     const [simulatedData, setSimulatedData] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])([]);
     const [saveChoice, setSaveChoice] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(null);
     const [saved, setSaved] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
@@ -1268,49 +1271,41 @@ function ReactionPage() {
             }["ReactionPage.useCallback[startAutoAdvanceTimer]"], 1000);
         }
     }["ReactionPage.useCallback[startAutoAdvanceTimer]"], []);
-    // ── Simulated data generation ──
+    // ── Real-time ESP8266 data via GET /latest ──
     const startDataSimulation = (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useCallback"])({
-        "ReactionPage.useCallback[startDataSimulation]": (rxn)=>{
+        "ReactionPage.useCallback[startDataSimulation]": ()=>{
             executionStartRef.current = Date.now();
-            const totalExpectedTime = rxn.expected_outputs[rxn.expected_outputs.length - 1].time_seconds;
             dataSimulationRef.current = setInterval({
-                "ReactionPage.useCallback[startDataSimulation]": ()=>{
+                "ReactionPage.useCallback[startDataSimulation]": async ()=>{
                     const elapsed = (Date.now() - executionStartRef.current) / 1000;
-                    const fraction = Math.min(elapsed / totalExpectedTime, 1);
-                    // Interpolate expected outputs
-                    const expected = interpolateExpected(rxn.expected_outputs, elapsed);
-                    // Add some noise to simulate real sensor data
-                    const noise_mq6 = (Math.random() - 0.5) * 30;
-                    const noise_mq7 = (Math.random() - 0.5) * 20;
-                    const noise_temp = (Math.random() - 0.5) * 2;
-                    const noise_hum = (Math.random() - 0.5) * 3;
-                    const mq6 = Math.max(0, expected.mq6_ppm + noise_mq6);
-                    const mq7 = Math.max(0, expected.mq7_ppm + noise_mq7);
-                    const temp = Math.max(0, expected.temp_celsius + noise_temp);
-                    const hum = Math.max(0, Math.min(100, expected.humidity + noise_hum));
-                    // Detect anomaly: if deviation is > 40% from expected on any sensor
-                    const mq6Dev = Math.abs(mq6 - expected.mq6_ppm) / (expected.mq6_ppm || 1);
-                    const mq7Dev = Math.abs(mq7 - expected.mq7_ppm) / (expected.mq7_ppm || 1);
-                    const tempDev = Math.abs(temp - expected.temp_celsius) / (expected.temp_celsius || 1);
-                    const anomaly = mq6Dev > 0.4 || mq7Dev > 0.4 || tempDev > 0.4;
-                    setSimulatedData({
-                        "ReactionPage.useCallback[startDataSimulation]": (prev)=>[
-                                ...prev,
-                                {
-                                    time_seconds: Math.round(elapsed),
-                                    mq6_ppm: Math.round(mq6),
-                                    mq7_ppm: Math.round(mq7),
-                                    temp_celsius: Math.round(temp * 10) / 10,
-                                    humidity: Math.round(hum * 10) / 10,
-                                    anomaly
-                                }
-                            ]
-                    }["ReactionPage.useCallback[startDataSimulation]"]);
-                    if (fraction >= 1) {
-                        if (dataSimulationRef.current) clearInterval(dataSimulationRef.current);
+                    try {
+                        const apiUrl = __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$build$2f$polyfills$2f$process$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"].env.NEXT_PUBLIC_API_URL || "http://localhost:5001";
+                        const res = await fetch(`${apiUrl}/latest`);
+                        if (res.status === 404) {
+                            setEspConnected(false);
+                            return; // No ESP data yet — wait silently
+                        }
+                        const result = await res.json();
+                        setEspConnected(true);
+                        if (result.sensor_mode) setSensorMode(result.sensor_mode);
+                        setSimulatedData({
+                            "ReactionPage.useCallback[startDataSimulation]": (prev)=>[
+                                    ...prev,
+                                    {
+                                        time_seconds: Math.round(elapsed),
+                                        mq6_ppm: Math.round(result.sensor_data.mq6_gas),
+                                        mq7_ppm: Math.round(result.sensor_data.mq7_gas),
+                                        temp_celsius: Math.round(result.sensor_data.temperature * 10) / 10,
+                                        humidity: Math.round(result.sensor_data.humidity * 10) / 10,
+                                        anomaly: result.is_anomaly
+                                    }
+                                ]
+                        }["ReactionPage.useCallback[startDataSimulation]"]);
+                    } catch  {
+                        setEspConnected(false);
                     }
                 }
-            }["ReactionPage.useCallback[startDataSimulation]"], 2000); // every 2 seconds
+            }["ReactionPage.useCallback[startDataSimulation]"], 2000);
         }
     }["ReactionPage.useCallback[startDataSimulation]"], []);
     // Cleanup
@@ -1335,7 +1330,7 @@ function ReactionPage() {
                         children: "Reaction Not Found"
                     }, void 0, false, {
                         fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                        lineNumber: 148,
+                        lineNumber: 137,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1343,7 +1338,7 @@ function ReactionPage() {
                         children: "This reaction doesn't exist in our database."
                     }, void 0, false, {
                         fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                        lineNumber: 151,
+                        lineNumber: 140,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
@@ -1352,18 +1347,18 @@ function ReactionPage() {
                         children: "← Back Home"
                     }, void 0, false, {
                         fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                        lineNumber: 154,
+                        lineNumber: 143,
                         columnNumber: 11
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                lineNumber: 147,
+                lineNumber: 136,
                 columnNumber: 9
             }, this)
         }, void 0, false, {
             fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-            lineNumber: 146,
+            lineNumber: 135,
             columnNumber: 7
         }, this);
     }
@@ -1372,7 +1367,7 @@ function ReactionPage() {
         setCurrentStep(0);
         setStopwatchRunning(true);
         setSimulatedData([]);
-        startDataSimulation(reaction);
+        startDataSimulation();
     };
     const handleStepComplete = (lapTime)=>{
         setStepTimings((prev)=>[
@@ -1414,12 +1409,12 @@ function ReactionPage() {
                     className: `absolute top-1/4 right-1/4 w-[500px] h-[500px] bg-linear-to-br ${reaction.thumbnail_color} opacity-[0.03] blur-[150px] rounded-full`
                 }, void 0, false, {
                     fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                    lineNumber: 217,
+                    lineNumber: 206,
                     columnNumber: 9
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                lineNumber: 216,
+                lineNumber: 205,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1432,12 +1427,12 @@ function ReactionPage() {
                             size: 16
                         }, void 0, false, {
                             fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                            lineNumber: 228,
+                            lineNumber: 217,
                             columnNumber: 11
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                        lineNumber: 224,
+                        lineNumber: 213,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1447,7 +1442,7 @@ function ReactionPage() {
                                 children: reaction.name
                             }, void 0, false, {
                                 fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                lineNumber: 231,
+                                lineNumber: 220,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1455,19 +1450,19 @@ function ReactionPage() {
                                 children: reaction.formula
                             }, void 0, false, {
                                 fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                lineNumber: 234,
+                                lineNumber: 223,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                        lineNumber: 230,
+                        lineNumber: 219,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                lineNumber: 223,
+                lineNumber: 212,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1505,19 +1500,19 @@ function ReactionPage() {
                                 size: 14
                             }, void 0, false, {
                                 fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                lineNumber: 270,
+                                lineNumber: 259,
                                 columnNumber: 13
                             }, this),
                             label
                         ]
                     }, key, true, {
                         fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                        lineNumber: 248,
+                        lineNumber: 237,
                         columnNumber: 11
                     }, this))
             }, void 0, false, {
                 fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                lineNumber: 239,
+                lineNumber: 228,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1558,14 +1553,14 @@ function ReactionPage() {
                                                             className: "text-blue-400"
                                                         }, void 0, false, {
                                                             fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                                            lineNumber: 294,
+                                                            lineNumber: 283,
                                                             columnNumber: 23
                                                         }, this),
                                                         "Theory & Background"
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                                    lineNumber: 293,
+                                                    lineNumber: 282,
                                                     columnNumber: 21
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1573,7 +1568,7 @@ function ReactionPage() {
                                                     children: reaction.theory
                                                 }, void 0, false, {
                                                     fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                                    lineNumber: 297,
+                                                    lineNumber: 286,
                                                     columnNumber: 21
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1584,7 +1579,7 @@ function ReactionPage() {
                                                             children: "Expected Sensor Peaks"
                                                         }, void 0, false, {
                                                             fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                                            lineNumber: 302,
+                                                            lineNumber: 291,
                                                             columnNumber: 23
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1597,7 +1592,7 @@ function ReactionPage() {
                                                                             children: "MQ6 (LPG)"
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                                                            lineNumber: 307,
+                                                                            lineNumber: 296,
                                                                             columnNumber: 27
                                                                         }, this),
                                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1609,19 +1604,19 @@ function ReactionPage() {
                                                                                     children: "ppm"
                                                                                 }, void 0, false, {
                                                                                     fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                                                                    lineNumber: 310,
+                                                                                    lineNumber: 299,
                                                                                     columnNumber: 29
                                                                                 }, this)
                                                                             ]
                                                                         }, void 0, true, {
                                                                             fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                                                            lineNumber: 308,
+                                                                            lineNumber: 297,
                                                                             columnNumber: 27
                                                                         }, this)
                                                                     ]
                                                                 }, void 0, true, {
                                                                     fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                                                    lineNumber: 306,
+                                                                    lineNumber: 295,
                                                                     columnNumber: 25
                                                                 }, this),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1631,7 +1626,7 @@ function ReactionPage() {
                                                                             children: "MQ7 (CO)"
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                                                            lineNumber: 314,
+                                                                            lineNumber: 303,
                                                                             columnNumber: 27
                                                                         }, this),
                                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1643,19 +1638,19 @@ function ReactionPage() {
                                                                                     children: "ppm"
                                                                                 }, void 0, false, {
                                                                                     fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                                                                    lineNumber: 317,
+                                                                                    lineNumber: 306,
                                                                                     columnNumber: 29
                                                                                 }, this)
                                                                             ]
                                                                         }, void 0, true, {
                                                                             fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                                                            lineNumber: 315,
+                                                                            lineNumber: 304,
                                                                             columnNumber: 27
                                                                         }, this)
                                                                     ]
                                                                 }, void 0, true, {
                                                                     fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                                                    lineNumber: 313,
+                                                                    lineNumber: 302,
                                                                     columnNumber: 25
                                                                 }, this),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1665,7 +1660,7 @@ function ReactionPage() {
                                                                             children: "Temperature"
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                                                            lineNumber: 321,
+                                                                            lineNumber: 310,
                                                                             columnNumber: 27
                                                                         }, this),
                                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1677,19 +1672,19 @@ function ReactionPage() {
                                                                                     children: "°C"
                                                                                 }, void 0, false, {
                                                                                     fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                                                                    lineNumber: 324,
+                                                                                    lineNumber: 313,
                                                                                     columnNumber: 29
                                                                                 }, this)
                                                                             ]
                                                                         }, void 0, true, {
                                                                             fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                                                            lineNumber: 322,
+                                                                            lineNumber: 311,
                                                                             columnNumber: 27
                                                                         }, this)
                                                                     ]
                                                                 }, void 0, true, {
                                                                     fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                                                    lineNumber: 320,
+                                                                    lineNumber: 309,
                                                                     columnNumber: 25
                                                                 }, this),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1699,7 +1694,7 @@ function ReactionPage() {
                                                                             children: "Humidity"
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                                                            lineNumber: 328,
+                                                                            lineNumber: 317,
                                                                             columnNumber: 27
                                                                         }, this),
                                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1711,42 +1706,42 @@ function ReactionPage() {
                                                                                     children: "%"
                                                                                 }, void 0, false, {
                                                                                     fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                                                                    lineNumber: 331,
+                                                                                    lineNumber: 320,
                                                                                     columnNumber: 29
                                                                                 }, this)
                                                                             ]
                                                                         }, void 0, true, {
                                                                             fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                                                            lineNumber: 329,
+                                                                            lineNumber: 318,
                                                                             columnNumber: 27
                                                                         }, this)
                                                                     ]
                                                                 }, void 0, true, {
                                                                     fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                                                    lineNumber: 327,
+                                                                    lineNumber: 316,
                                                                     columnNumber: 25
                                                                 }, this)
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                                            lineNumber: 305,
+                                                            lineNumber: 294,
                                                             columnNumber: 23
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                                    lineNumber: 301,
+                                                    lineNumber: 290,
                                                     columnNumber: 21
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                            lineNumber: 292,
+                                            lineNumber: 281,
                                             columnNumber: 19
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                        lineNumber: 291,
+                                        lineNumber: 280,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1762,14 +1757,14 @@ function ReactionPage() {
                                                                 className: "text-violet-400"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                                                lineNumber: 343,
+                                                                lineNumber: 332,
                                                                 columnNumber: 23
                                                             }, this),
                                                             "Chemicals Required"
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                                        lineNumber: 342,
+                                                        lineNumber: 331,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("ul", {
@@ -1781,25 +1776,25 @@ function ReactionPage() {
                                                                         className: "w-1.5 h-1.5 rounded-full bg-violet-500 mt-2 shrink-0"
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                                                        lineNumber: 352,
+                                                                        lineNumber: 341,
                                                                         columnNumber: 27
                                                                     }, this),
                                                                     chem
                                                                 ]
                                                             }, i, true, {
                                                                 fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                                                lineNumber: 348,
+                                                                lineNumber: 337,
                                                                 columnNumber: 25
                                                             }, this))
                                                     }, void 0, false, {
                                                         fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                                        lineNumber: 346,
+                                                        lineNumber: 335,
                                                         columnNumber: 21
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                                lineNumber: 341,
+                                                lineNumber: 330,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1813,7 +1808,7 @@ function ReactionPage() {
                                                                 className: "text-amber-400"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                                                lineNumber: 361,
+                                                                lineNumber: 350,
                                                                 columnNumber: 23
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1821,13 +1816,13 @@ function ReactionPage() {
                                                                 children: "Estimated Duration"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                                                lineNumber: 362,
+                                                                lineNumber: 351,
                                                                 columnNumber: 23
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                                        lineNumber: 360,
+                                                        lineNumber: 349,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1839,19 +1834,19 @@ function ReactionPage() {
                                                                 children: "min"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                                                lineNumber: 368,
+                                                                lineNumber: 357,
                                                                 columnNumber: 23
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                                        lineNumber: 366,
+                                                        lineNumber: 355,
                                                         columnNumber: 21
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                                lineNumber: 359,
+                                                lineNumber: 348,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1863,30 +1858,30 @@ function ReactionPage() {
                                                         size: 16
                                                     }, void 0, false, {
                                                         fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                                        lineNumber: 377,
+                                                        lineNumber: 366,
                                                         columnNumber: 21
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                                lineNumber: 372,
+                                                lineNumber: 361,
                                                 columnNumber: 19
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                        lineNumber: 340,
+                                        lineNumber: 329,
                                         columnNumber: 17
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                lineNumber: 289,
+                                lineNumber: 278,
                                 columnNumber: 15
                             }, this)
                         }, "theory", false, {
                             fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                            lineNumber: 281,
+                            lineNumber: 270,
                             columnNumber: 13
                         }, this),
                         phase === "steps" && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["motion"].div, {
@@ -1918,14 +1913,14 @@ function ReactionPage() {
                                                     className: "text-violet-400"
                                                 }, void 0, false, {
                                                     fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                                    lineNumber: 396,
+                                                    lineNumber: 385,
                                                     columnNumber: 19
                                                 }, this),
                                                 "Step-by-Step Procedure"
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                            lineNumber: 395,
+                                            lineNumber: 384,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1937,7 +1932,7 @@ function ReactionPage() {
                                                             className: "absolute left-[19px] top-[42px] w-[2px] h-[calc(100%-10px)] bg-white/10"
                                                         }, void 0, false, {
                                                             fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                                            lineNumber: 405,
+                                                            lineNumber: 394,
                                                             columnNumber: 25
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1945,7 +1940,7 @@ function ReactionPage() {
                                                             children: step.order
                                                         }, void 0, false, {
                                                             fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                                            lineNumber: 409,
+                                                            lineNumber: 398,
                                                             columnNumber: 23
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1956,7 +1951,7 @@ function ReactionPage() {
                                                                     children: step.title
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                                                    lineNumber: 414,
+                                                                    lineNumber: 403,
                                                                     columnNumber: 25
                                                                 }, this),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1964,7 +1959,7 @@ function ReactionPage() {
                                                                     children: step.description
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                                                    lineNumber: 417,
+                                                                    lineNumber: 406,
                                                                     columnNumber: 25
                                                                 }, this),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1976,7 +1971,7 @@ function ReactionPage() {
                                                                     ]
                                                                 }, void 0, true, {
                                                                     fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                                                    lineNumber: 420,
+                                                                    lineNumber: 409,
                                                                     columnNumber: 25
                                                                 }, this),
                                                                 step.warning && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1987,7 +1982,7 @@ function ReactionPage() {
                                                                             className: "text-amber-400 mt-0.5 shrink-0"
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                                                            lineNumber: 425,
+                                                                            lineNumber: 414,
                                                                             columnNumber: 29
                                                                         }, this),
                                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1995,36 +1990,36 @@ function ReactionPage() {
                                                                             children: step.warning
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                                                            lineNumber: 429,
+                                                                            lineNumber: 418,
                                                                             columnNumber: 29
                                                                         }, this)
                                                                     ]
                                                                 }, void 0, true, {
                                                                     fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                                                    lineNumber: 424,
+                                                                    lineNumber: 413,
                                                                     columnNumber: 27
                                                                 }, this)
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                                            lineNumber: 413,
+                                                            lineNumber: 402,
                                                             columnNumber: 23
                                                         }, this)
                                                     ]
                                                 }, i, true, {
                                                     fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                                    lineNumber: 402,
+                                                    lineNumber: 391,
                                                     columnNumber: 21
                                                 }, this))
                                         }, void 0, false, {
                                             fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                            lineNumber: 400,
+                                            lineNumber: 389,
                                             columnNumber: 17
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                    lineNumber: 394,
+                                    lineNumber: 383,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -2035,20 +2030,20 @@ function ReactionPage() {
                                             size: 20
                                         }, void 0, false, {
                                             fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                            lineNumber: 444,
+                                            lineNumber: 433,
                                             columnNumber: 17
                                         }, this),
                                         "Start Experiment"
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                    lineNumber: 440,
+                                    lineNumber: 429,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, "steps", true, {
                             fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                            lineNumber: 386,
+                            lineNumber: 375,
                             columnNumber: 13
                         }, this),
                         phase === "execution" && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["motion"].div, {
@@ -2077,12 +2072,12 @@ function ReactionPage() {
                                             onLap: (time)=>handleStepComplete(time)
                                         }, void 0, false, {
                                             fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                            lineNumber: 462,
+                                            lineNumber: 451,
                                             columnNumber: 19
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                        lineNumber: 461,
+                                        lineNumber: 450,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2112,34 +2107,34 @@ function ReactionPage() {
                                                                     className: "text-red-400 animate-pulse"
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                                                    lineNumber: 481,
+                                                                    lineNumber: 470,
                                                                     columnNumber: 27
                                                                 }, this),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                                     className: "text-sm text-red-300 font-medium",
                                                                     children: [
-                                                                        "Anomaly Detected — MQ6: ",
-                                                                        latestAnomaly?.mq6_ppm,
-                                                                        "ppm, MQ7: ",
-                                                                        latestAnomaly?.mq7_ppm,
+                                                                        "Anomaly Detected — ",
+                                                                        sensorMode === 'mq6' ? 'MQ6' : 'MQ7',
+                                                                        ": ",
+                                                                        sensorMode === 'mq6' ? latestAnomaly?.mq6_ppm : latestAnomaly?.mq7_ppm,
                                                                         "ppm, Temp: ",
                                                                         latestAnomaly?.temp_celsius,
                                                                         "°C"
                                                                     ]
                                                                 }, void 0, true, {
                                                                     fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                                                    lineNumber: 485,
+                                                                    lineNumber: 474,
                                                                     columnNumber: 27
                                                                 }, this)
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                                            lineNumber: 475,
+                                                            lineNumber: 464,
                                                             columnNumber: 25
                                                         }, this)
                                                     }, void 0, false, {
                                                         fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                                        lineNumber: 473,
+                                                        lineNumber: 462,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2153,7 +2148,7 @@ function ReactionPage() {
                                                                         children: currentStep + 1
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                                                        lineNumber: 494,
+                                                                        lineNumber: 483,
                                                                         columnNumber: 25
                                                                     }, this),
                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2168,7 +2163,7 @@ function ReactionPage() {
                                                                                 ]
                                                                             }, void 0, true, {
                                                                                 fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                                                                lineNumber: 498,
+                                                                                lineNumber: 487,
                                                                                 columnNumber: 27
                                                                             }, this),
                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
@@ -2176,19 +2171,19 @@ function ReactionPage() {
                                                                                 children: currentStepData.title
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                                                                lineNumber: 501,
+                                                                                lineNumber: 490,
                                                                                 columnNumber: 27
                                                                             }, this)
                                                                         ]
                                                                     }, void 0, true, {
                                                                         fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                                                        lineNumber: 497,
+                                                                        lineNumber: 486,
                                                                         columnNumber: 25
                                                                     }, this)
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                                                lineNumber: 493,
+                                                                lineNumber: 482,
                                                                 columnNumber: 23
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -2200,13 +2195,13 @@ function ReactionPage() {
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                                                lineNumber: 506,
+                                                                lineNumber: 495,
                                                                 columnNumber: 23
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                                        lineNumber: 492,
+                                                        lineNumber: 481,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -2214,7 +2209,7 @@ function ReactionPage() {
                                                         children: currentStepData.description
                                                     }, void 0, false, {
                                                         fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                                        lineNumber: 511,
+                                                        lineNumber: 500,
                                                         columnNumber: 21
                                                     }, this),
                                                     currentStepData.warning && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2225,7 +2220,7 @@ function ReactionPage() {
                                                                 className: "text-amber-400 mt-0.5 shrink-0"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                                                lineNumber: 517,
+                                                                lineNumber: 506,
                                                                 columnNumber: 25
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -2233,13 +2228,13 @@ function ReactionPage() {
                                                                 children: currentStepData.warning
                                                             }, void 0, false, {
                                                                 fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                                                lineNumber: 521,
+                                                                lineNumber: 510,
                                                                 columnNumber: 25
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                                        lineNumber: 516,
+                                                        lineNumber: 505,
                                                         columnNumber: 23
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$components$2f$AnimatePresence$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["AnimatePresence"], {
@@ -2266,12 +2261,12 @@ function ReactionPage() {
                                                                                 children: autoAdvanceCountdown
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                                                                lineNumber: 539,
+                                                                                lineNumber: 528,
                                                                                 columnNumber: 31
                                                                             }, this)
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                                                            lineNumber: 538,
+                                                                            lineNumber: 527,
                                                                             columnNumber: 29
                                                                         }, this),
                                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -2279,13 +2274,13 @@ function ReactionPage() {
                                                                             children: "Next step loading..."
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                                                            lineNumber: 543,
+                                                                            lineNumber: 532,
                                                                             columnNumber: 29
                                                                         }, this)
                                                                     ]
                                                                 }, void 0, true, {
                                                                     fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                                                    lineNumber: 537,
+                                                                    lineNumber: 526,
                                                                     columnNumber: 27
                                                                 }, this),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -2297,19 +2292,19 @@ function ReactionPage() {
                                                                             size: 14
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                                                            lineNumber: 552,
+                                                                            lineNumber: 541,
                                                                             columnNumber: 29
                                                                         }, this)
                                                                     ]
                                                                 }, void 0, true, {
                                                                     fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                                                    lineNumber: 547,
+                                                                    lineNumber: 536,
                                                                     columnNumber: 27
                                                                 }, this)
                                                             ]
                                                         }, "waiting", true, {
                                                             fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                                            lineNumber: 530,
+                                                            lineNumber: 519,
                                                             columnNumber: 25
                                                         }, this) : !waitingForUser && currentStep < reaction.steps.length - 1 ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["motion"].div, {
                                                             initial: {
@@ -2332,14 +2327,14 @@ function ReactionPage() {
                                                                             children: '"Step ⬇"'
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                                                            lineNumber: 564,
+                                                                            lineNumber: 553,
                                                                             columnNumber: 39
                                                                         }, this),
                                                                         " button on the stopwatch or below when done"
                                                                     ]
                                                                 }, void 0, true, {
                                                                     fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                                                    lineNumber: 563,
+                                                                    lineNumber: 552,
                                                                     columnNumber: 27
                                                                 }, this),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -2348,18 +2343,18 @@ function ReactionPage() {
                                                                     children: "Mark Step Complete ✓"
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                                                    lineNumber: 566,
+                                                                    lineNumber: 555,
                                                                     columnNumber: 27
                                                                 }, this)
                                                             ]
                                                         }, "step-active", true, {
                                                             fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                                            lineNumber: 556,
+                                                            lineNumber: 545,
                                                             columnNumber: 25
                                                         }, this) : null
                                                     }, void 0, false, {
                                                         fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                                        lineNumber: 528,
+                                                        lineNumber: 517,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2368,22 +2363,39 @@ function ReactionPage() {
                                                                 className: `h-1 flex-1 rounded-full transition-all duration-500 ${i < currentStep ? "bg-green-500" : i === currentStep ? "bg-blue-500" : "bg-white/10"}`
                                                             }, i, false, {
                                                                 fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                                                lineNumber: 579,
+                                                                lineNumber: 568,
                                                                 columnNumber: 25
                                                             }, this))
                                                     }, void 0, false, {
                                                         fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                                        lineNumber: 577,
+                                                        lineNumber: 566,
                                                         columnNumber: 21
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                                lineNumber: 471,
+                                                lineNumber: 460,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                className: "grid grid-cols-2 lg:grid-cols-4 gap-4 mt-4",
+                                                className: `mt-4 mb-2 flex items-center gap-2 px-4 py-2 rounded-full text-xs font-semibold w-fit border ${espConnected ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400' : 'bg-white/5 border-white/10 text-white/40'}`,
+                                                children: [
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                        className: `w-1.5 h-1.5 rounded-full ${espConnected ? 'bg-emerald-400 animate-pulse' : 'bg-white/30'}`
+                                                    }, void 0, false, {
+                                                        fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
+                                                        lineNumber: 588,
+                                                        columnNumber: 21
+                                                    }, this),
+                                                    espConnected ? 'ESP8266 Live' : 'Waiting for ESP...'
+                                                ]
+                                            }, void 0, true, {
+                                                fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
+                                                lineNumber: 583,
+                                                columnNumber: 19
+                                            }, this),
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                className: "grid grid-cols-2 lg:grid-cols-4 gap-4",
                                                 children: [
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                         className: "glass-card p-4",
@@ -2395,38 +2407,39 @@ function ReactionPage() {
                                                                         size: 10
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                                                        lineNumber: 597,
+                                                                        lineNumber: 594,
                                                                         columnNumber: 25
                                                                     }, this),
-                                                                    " MQ6 (LPG)"
+                                                                    " ",
+                                                                    sensorMode === 'mq6' ? 'MQ6 (LPG)' : 'MQ7 (CO)'
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                                                lineNumber: 596,
+                                                                lineNumber: 593,
                                                                 columnNumber: 23
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                                 className: "text-3xl font-medium text-cyan-400",
                                                                 children: [
-                                                                    latestData ? latestData.mq6_ppm : "--",
+                                                                    latestData ? sensorMode === 'mq6' ? latestData.mq6_ppm : latestData.mq7_ppm : "--",
                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                                         className: "text-sm text-white/30 ml-1",
                                                                         children: "ppm"
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                                                        lineNumber: 601,
+                                                                        lineNumber: 598,
                                                                         columnNumber: 25
                                                                     }, this)
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                                                lineNumber: 599,
+                                                                lineNumber: 596,
                                                                 columnNumber: 23
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                                        lineNumber: 595,
+                                                        lineNumber: 592,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2439,14 +2452,14 @@ function ReactionPage() {
                                                                         size: 10
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                                                        lineNumber: 606,
+                                                                        lineNumber: 603,
                                                                         columnNumber: 25
                                                                     }, this),
                                                                     " MQ7 (CO)"
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                                                lineNumber: 605,
+                                                                lineNumber: 602,
                                                                 columnNumber: 23
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -2458,19 +2471,19 @@ function ReactionPage() {
                                                                         children: "ppm"
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                                                        lineNumber: 610,
+                                                                        lineNumber: 607,
                                                                         columnNumber: 25
                                                                     }, this)
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                                                lineNumber: 608,
+                                                                lineNumber: 605,
                                                                 columnNumber: 23
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                                        lineNumber: 604,
+                                                        lineNumber: 601,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2483,14 +2496,14 @@ function ReactionPage() {
                                                                         size: 10
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                                                        lineNumber: 615,
+                                                                        lineNumber: 612,
                                                                         columnNumber: 25
                                                                     }, this),
                                                                     " Temp"
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                                                lineNumber: 614,
+                                                                lineNumber: 611,
                                                                 columnNumber: 23
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -2502,19 +2515,19 @@ function ReactionPage() {
                                                                         children: "°C"
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                                                        lineNumber: 619,
+                                                                        lineNumber: 616,
                                                                         columnNumber: 25
                                                                     }, this)
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                                                lineNumber: 617,
+                                                                lineNumber: 614,
                                                                 columnNumber: 23
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                                        lineNumber: 613,
+                                                        lineNumber: 610,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2527,14 +2540,14 @@ function ReactionPage() {
                                                                         size: 10
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                                                        lineNumber: 624,
+                                                                        lineNumber: 621,
                                                                         columnNumber: 25
                                                                     }, this),
                                                                     " Humidity"
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                                                lineNumber: 623,
+                                                                lineNumber: 620,
                                                                 columnNumber: 23
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -2546,25 +2559,25 @@ function ReactionPage() {
                                                                         children: "%"
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                                                        lineNumber: 628,
+                                                                        lineNumber: 625,
                                                                         columnNumber: 25
                                                                     }, this)
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                                                lineNumber: 626,
+                                                                lineNumber: 623,
                                                                 columnNumber: 23
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                                        lineNumber: 622,
+                                                        lineNumber: 619,
                                                         columnNumber: 21
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                                lineNumber: 594,
+                                                lineNumber: 591,
                                                 columnNumber: 19
                                             }, this),
                                             simulatedData.length > 2 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2575,10 +2588,13 @@ function ReactionPage() {
                                                         children: [
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h4", {
                                                                 className: "text-sm font-medium text-cyan-400/60 uppercase tracking-widest mb-4",
-                                                                children: "MQ6 (LPG) — Expected vs Actual"
-                                                            }, void 0, false, {
+                                                                children: [
+                                                                    sensorMode === 'mq6' ? 'MQ6 (LPG)' : 'MQ7 (CO)',
+                                                                    " — Expected vs Actual"
+                                                                ]
+                                                            }, void 0, true, {
                                                                 fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                                                lineNumber: 637,
+                                                                lineNumber: 634,
                                                                 columnNumber: 25
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2586,22 +2602,22 @@ function ReactionPage() {
                                                                 children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(MiniChart, {
                                                                     expected: reaction.expected_outputs,
                                                                     actual: simulatedData,
-                                                                    field: "mq6_ppm",
-                                                                    color: "rgba(34,211,238,0.8)"
+                                                                    field: sensorMode === 'mq6' ? 'mq6_ppm' : 'mq7_ppm',
+                                                                    color: sensorMode === 'mq6' ? "rgba(34,211,238,0.8)" : "rgba(248,113,113,0.8)"
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                                                    lineNumber: 641,
+                                                                    lineNumber: 638,
                                                                     columnNumber: 27
                                                                 }, this)
                                                             }, void 0, false, {
                                                                 fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                                                lineNumber: 640,
+                                                                lineNumber: 637,
                                                                 columnNumber: 25
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                                        lineNumber: 636,
+                                                        lineNumber: 633,
                                                         columnNumber: 23
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2612,7 +2628,7 @@ function ReactionPage() {
                                                                 children: "MQ7 (CO) — Expected vs Actual"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                                                lineNumber: 650,
+                                                                lineNumber: 647,
                                                                 columnNumber: 25
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2624,41 +2640,41 @@ function ReactionPage() {
                                                                     color: "rgba(248,113,113,0.8)"
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                                                    lineNumber: 654,
+                                                                    lineNumber: 651,
                                                                     columnNumber: 27
                                                                 }, this)
                                                             }, void 0, false, {
                                                                 fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                                                lineNumber: 653,
+                                                                lineNumber: 650,
                                                                 columnNumber: 25
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                                        lineNumber: 649,
+                                                        lineNumber: 646,
                                                         columnNumber: 23
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                                lineNumber: 635,
+                                                lineNumber: 632,
                                                 columnNumber: 21
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                        lineNumber: 469,
+                                        lineNumber: 458,
                                         columnNumber: 17
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                lineNumber: 459,
+                                lineNumber: 448,
                                 columnNumber: 15
                             }, this)
                         }, "execution", false, {
                             fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                            lineNumber: 452,
+                            lineNumber: 441,
                             columnNumber: 13
                         }, this),
                         phase === "results" && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["motion"].div, {
@@ -2700,12 +2716,12 @@ function ReactionPage() {
                                                 className: "text-green-400 mx-auto mb-4"
                                             }, void 0, false, {
                                                 fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                                lineNumber: 690,
+                                                lineNumber: 687,
                                                 columnNumber: 19
                                             }, this)
                                         }, void 0, false, {
                                             fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                            lineNumber: 680,
+                                            lineNumber: 677,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
@@ -2713,7 +2729,7 @@ function ReactionPage() {
                                             children: "Experiment Complete"
                                         }, void 0, false, {
                                             fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                            lineNumber: 695,
+                                            lineNumber: 692,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -2727,13 +2743,13 @@ function ReactionPage() {
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                            lineNumber: 698,
+                                            lineNumber: 695,
                                             columnNumber: 17
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                    lineNumber: 679,
+                                    lineNumber: 676,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2747,39 +2763,42 @@ function ReactionPage() {
                                                     className: "text-cyan-400 mx-auto mb-2"
                                                 }, void 0, false, {
                                                     fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                                    lineNumber: 707,
+                                                    lineNumber: 704,
                                                     columnNumber: 19
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                     className: "text-xs text-white/40 uppercase tracking-widest block mb-1",
-                                                    children: "Peak MQ6"
-                                                }, void 0, false, {
+                                                    children: [
+                                                        "Peak ",
+                                                        sensorMode === 'mq6' ? 'MQ6' : 'MQ7'
+                                                    ]
+                                                }, void 0, true, {
                                                     fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                                    lineNumber: 708,
+                                                    lineNumber: 705,
                                                     columnNumber: 19
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                     className: "text-2xl font-medium",
                                                     children: [
-                                                        simulatedData.length > 0 ? Math.max(...simulatedData.map((d)=>d.mq6_ppm)) : "--",
+                                                        simulatedData.length > 0 ? Math.max(...simulatedData.map((d)=>sensorMode === 'mq6' ? d.mq6_ppm : d.mq7_ppm)) : "--",
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                             className: "text-sm text-white/30 ml-1",
                                                             children: "ppm"
                                                         }, void 0, false, {
                                                             fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                                            lineNumber: 711,
+                                                            lineNumber: 708,
                                                             columnNumber: 21
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                                    lineNumber: 709,
+                                                    lineNumber: 706,
                                                     columnNumber: 19
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                            lineNumber: 706,
+                                            lineNumber: 703,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2790,7 +2809,7 @@ function ReactionPage() {
                                                     className: "text-red-400 mx-auto mb-2"
                                                 }, void 0, false, {
                                                     fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                                    lineNumber: 715,
+                                                    lineNumber: 712,
                                                     columnNumber: 19
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -2798,7 +2817,7 @@ function ReactionPage() {
                                                     children: "Peak MQ7"
                                                 }, void 0, false, {
                                                     fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                                    lineNumber: 716,
+                                                    lineNumber: 713,
                                                     columnNumber: 19
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -2810,19 +2829,19 @@ function ReactionPage() {
                                                             children: "ppm"
                                                         }, void 0, false, {
                                                             fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                                            lineNumber: 719,
+                                                            lineNumber: 716,
                                                             columnNumber: 21
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                                    lineNumber: 717,
+                                                    lineNumber: 714,
                                                     columnNumber: 19
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                            lineNumber: 714,
+                                            lineNumber: 711,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2833,7 +2852,7 @@ function ReactionPage() {
                                                     className: "text-amber-400 mx-auto mb-2"
                                                 }, void 0, false, {
                                                     fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                                    lineNumber: 723,
+                                                    lineNumber: 720,
                                                     columnNumber: 19
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -2841,7 +2860,7 @@ function ReactionPage() {
                                                     children: "Peak Temp"
                                                 }, void 0, false, {
                                                     fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                                    lineNumber: 724,
+                                                    lineNumber: 721,
                                                     columnNumber: 19
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -2853,19 +2872,19 @@ function ReactionPage() {
                                                             children: "°C"
                                                         }, void 0, false, {
                                                             fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                                            lineNumber: 727,
+                                                            lineNumber: 724,
                                                             columnNumber: 21
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                                    lineNumber: 725,
+                                                    lineNumber: 722,
                                                     columnNumber: 19
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                            lineNumber: 722,
+                                            lineNumber: 719,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2876,7 +2895,7 @@ function ReactionPage() {
                                                     className: "text-violet-400 mx-auto mb-2"
                                                 }, void 0, false, {
                                                     fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                                    lineNumber: 731,
+                                                    lineNumber: 728,
                                                     columnNumber: 19
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -2884,7 +2903,7 @@ function ReactionPage() {
                                                     children: "Duration"
                                                 }, void 0, false, {
                                                     fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                                    lineNumber: 732,
+                                                    lineNumber: 729,
                                                     columnNumber: 19
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -2896,25 +2915,25 @@ function ReactionPage() {
                                                             children: "sec"
                                                         }, void 0, false, {
                                                             fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                                            lineNumber: 735,
+                                                            lineNumber: 732,
                                                             columnNumber: 21
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                                    lineNumber: 733,
+                                                    lineNumber: 730,
                                                     columnNumber: 19
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                            lineNumber: 730,
+                                            lineNumber: 727,
                                             columnNumber: 17
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                    lineNumber: 705,
+                                    lineNumber: 702,
                                     columnNumber: 15
                                 }, this),
                                 !saved ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2925,7 +2944,7 @@ function ReactionPage() {
                                             children: "Save Your Results?"
                                         }, void 0, false, {
                                             fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                            lineNumber: 743,
+                                            lineNumber: 740,
                                             columnNumber: 19
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -2933,7 +2952,7 @@ function ReactionPage() {
                                             children: user ? "Choose whether to contribute to the global database (visible to everyone & used for ML training) or save privately." : "Sign in to save results privately, or contribute anonymously to the global database."
                                         }, void 0, false, {
                                             fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                            lineNumber: 746,
+                                            lineNumber: 743,
                                             columnNumber: 19
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2948,7 +2967,7 @@ function ReactionPage() {
                                                             className: "text-blue-400"
                                                         }, void 0, false, {
                                                             fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                                            lineNumber: 761,
+                                                            lineNumber: 758,
                                                             columnNumber: 23
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2959,7 +2978,7 @@ function ReactionPage() {
                                                                     children: "Share Globally"
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                                                    lineNumber: 763,
+                                                                    lineNumber: 760,
                                                                     columnNumber: 25
                                                                 }, this),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -2967,19 +2986,19 @@ function ReactionPage() {
                                                                     children: "Contribute to community & ML"
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                                                    lineNumber: 766,
+                                                                    lineNumber: 763,
                                                                     columnNumber: 25
                                                                 }, this)
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                                            lineNumber: 762,
+                                                            lineNumber: 759,
                                                             columnNumber: 23
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                                    lineNumber: 753,
+                                                    lineNumber: 750,
                                                     columnNumber: 21
                                                 }, this),
                                                 user && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -2991,7 +3010,7 @@ function ReactionPage() {
                                                             className: "text-violet-400"
                                                         }, void 0, false, {
                                                             fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                                            lineNumber: 781,
+                                                            lineNumber: 778,
                                                             columnNumber: 25
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3002,7 +3021,7 @@ function ReactionPage() {
                                                                     children: "Save Privately"
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                                                    lineNumber: 783,
+                                                                    lineNumber: 780,
                                                                     columnNumber: 27
                                                                 }, this),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -3010,31 +3029,31 @@ function ReactionPage() {
                                                                     children: "Only you can see this"
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                                                    lineNumber: 786,
+                                                                    lineNumber: 783,
                                                                     columnNumber: 27
                                                                 }, this)
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                                            lineNumber: 782,
+                                                            lineNumber: 779,
                                                             columnNumber: 25
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                                    lineNumber: 773,
+                                                    lineNumber: 770,
                                                     columnNumber: 23
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                            lineNumber: 752,
+                                            lineNumber: 749,
                                             columnNumber: 19
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                    lineNumber: 742,
+                                    lineNumber: 739,
                                     columnNumber: 17
                                 }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["motion"].div, {
                                     initial: {
@@ -3052,7 +3071,7 @@ function ReactionPage() {
                                             className: "text-green-400 mx-auto mb-3"
                                         }, void 0, false, {
                                             fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                            lineNumber: 800,
+                                            lineNumber: 797,
                                             columnNumber: 19
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
@@ -3060,7 +3079,7 @@ function ReactionPage() {
                                             children: "Saved!"
                                         }, void 0, false, {
                                             fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                            lineNumber: 804,
+                                            lineNumber: 801,
                                             columnNumber: 19
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -3068,7 +3087,7 @@ function ReactionPage() {
                                             children: saveChoice === "global" ? "Your results are now part of the global database." : "Your results are stored privately."
                                         }, void 0, false, {
                                             fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                            lineNumber: 805,
+                                            lineNumber: 802,
                                             columnNumber: 19
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
@@ -3079,47 +3098,47 @@ function ReactionPage() {
                                                     size: 16
                                                 }, void 0, false, {
                                                     fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                                    lineNumber: 814,
+                                                    lineNumber: 811,
                                                     columnNumber: 21
                                                 }, this),
                                                 "View Dashboard"
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                            lineNumber: 810,
+                                            lineNumber: 807,
                                             columnNumber: 19
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                                    lineNumber: 795,
+                                    lineNumber: 792,
                                     columnNumber: 17
                                 }, this)
                             ]
                         }, "results", true, {
                             fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                            lineNumber: 671,
+                            lineNumber: 668,
                             columnNumber: 13
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                    lineNumber: 278,
+                    lineNumber: 267,
                     columnNumber: 9
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                lineNumber: 277,
+                lineNumber: 266,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-        lineNumber: 214,
+        lineNumber: 203,
         columnNumber: 5
     }, this);
 }
-_s(ReactionPage, "YmGCdpz8si77K7u4II1vgssHdtQ=", false, function() {
+_s(ReactionPage, "5FvbRKjYjJkgV2y923zWkximMnc=", false, function() {
     return [
         __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useParams"],
         __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useRouter"],
@@ -3127,26 +3146,6 @@ _s(ReactionPage, "YmGCdpz8si77K7u4II1vgssHdtQ=", false, function() {
     ];
 });
 _c = ReactionPage;
-// ── Helper: Interpolate expected outputs ──
-function interpolateExpected(points, timeSeconds) {
-    if (timeSeconds <= points[0].time_seconds) return points[0];
-    if (timeSeconds >= points[points.length - 1].time_seconds) return points[points.length - 1];
-    for(let i = 0; i < points.length - 1; i++){
-        if (timeSeconds >= points[i].time_seconds && timeSeconds <= points[i + 1].time_seconds) {
-            const range = points[i + 1].time_seconds - points[i].time_seconds;
-            const fraction = (timeSeconds - points[i].time_seconds) / range;
-            const lerp = (a, b)=>a + (b - a) * fraction;
-            return {
-                time_seconds: timeSeconds,
-                mq6_ppm: lerp(points[i].mq6_ppm, points[i + 1].mq6_ppm),
-                mq7_ppm: lerp(points[i].mq7_ppm, points[i + 1].mq7_ppm),
-                temp_celsius: lerp(points[i].temp_celsius, points[i + 1].temp_celsius),
-                humidity: lerp(points[i].humidity, points[i + 1].humidity)
-            };
-        }
-    }
-    return points[points.length - 1];
-}
 function MiniChart({ expected, actual, field, color }) {
     const maxTime = expected[expected.length - 1].time_seconds;
     const allVals = [
@@ -3172,7 +3171,7 @@ function MiniChart({ expected, actual, field, color }) {
                 strokeDasharray: "4 4"
             }, void 0, false, {
                 fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                lineNumber: 890,
+                lineNumber: 860,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
@@ -3183,7 +3182,7 @@ function MiniChart({ expected, actual, field, color }) {
                 vectorEffect: "non-scaling-stroke"
             }, void 0, false, {
                 fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                lineNumber: 898,
+                lineNumber: 868,
                 columnNumber: 7
             }, this),
             actual.length > 1 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$flask$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
@@ -3191,13 +3190,13 @@ function MiniChart({ expected, actual, field, color }) {
                 fill: color.replace(/[\d.]+\)$/, "0.1)")
             }, void 0, false, {
                 fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-                lineNumber: 906,
+                lineNumber: 876,
                 columnNumber: 9
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/Desktop/flask/app/reaction/[id]/page.tsx",
-        lineNumber: 889,
+        lineNumber: 859,
         columnNumber: 5
     }, this);
 }

@@ -675,6 +675,10 @@
     right: calc(var(--spacing) * 8);
   }
 
+  .right-\[10\%\] {
+    right: 10%;
+  }
+
   .-bottom-3 {
     bottom: calc(var(--spacing) * -3);
   }
@@ -693,6 +697,14 @@
 
   .bottom-12 {
     bottom: calc(var(--spacing) * 12);
+  }
+
+  .bottom-\[20\%\] {
+    bottom: 20%;
+  }
+
+  .bottom-\[25\%\] {
+    bottom: 25%;
   }
 
   .left-0 {
@@ -715,8 +727,16 @@
     left: calc(var(--spacing) * 2);
   }
 
+  .left-\[10\%\] {
+    left: 10%;
+  }
+
   .left-\[19px\] {
     left: 19px;
+  }
+
+  .left-\[20\%\] {
+    left: 20%;
   }
 
   .left-\[50\%\] {
@@ -947,6 +967,10 @@
 
   .h-40 {
     height: calc(var(--spacing) * 40);
+  }
+
+  .h-48 {
+    height: calc(var(--spacing) * 48);
   }
 
   .h-64 {
@@ -1522,6 +1546,11 @@
   .border-l-4 {
     border-left-style: var(--tw-border-style);
     border-left-width: 4px;
+  }
+
+  .border-dashed {
+    --tw-border-style: dashed;
+    border-style: dashed;
   }
 
   .border-\[\#333\] {
@@ -2716,6 +2745,10 @@
     --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
   }
 
+  .p-0\.5 {
+    padding: calc(var(--spacing) * .5);
+  }
+
   .p-1 {
     padding: calc(var(--spacing) * 1);
   }
@@ -3340,6 +3373,11 @@
     box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
   }
 
+  .shadow-\[0_0_50px_rgba\(59\,130\,246\,0\.3\)\] {
+    --tw-shadow: 0 0 50px var(--tw-shadow-color, #3b82f64d);
+    box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
+  }
+
   .shadow-\[0_4px_12px_rgba\(0\,0\,0\,0\.6\)\,inset_0_1px_0_rgba\(255\,255\,255\,0\.1\)\] {
     --tw-shadow: 0 4px 12px var(--tw-shadow-color, #0009), inset 0 1px 0 var(--tw-shadow-color, #ffffff1a);
     box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
@@ -3377,6 +3415,11 @@
 
   .blur-\[30px\] {
     --tw-blur: blur(30px);
+    filter: var(--tw-blur, ) var(--tw-brightness, ) var(--tw-contrast, ) var(--tw-grayscale, ) var(--tw-hue-rotate, ) var(--tw-invert, ) var(--tw-saturate, ) var(--tw-sepia, ) var(--tw-drop-shadow, );
+  }
+
+  .blur-\[40px\] {
+    --tw-blur: blur(40px);
     filter: var(--tw-blur, ) var(--tw-brightness, ) var(--tw-contrast, ) var(--tw-grayscale, ) var(--tw-hue-rotate, ) var(--tw-invert, ) var(--tw-saturate, ) var(--tw-sepia, ) var(--tw-drop-shadow, );
   }
 
