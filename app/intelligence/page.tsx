@@ -328,7 +328,7 @@ export default function IntelligencePage() {
             Models improve with every experiment. Contribute your data to make predictions more accurate.
           </p>
           <Link
-            href="/"
+            href="/#experiments"
             className="inline-flex items-center gap-2 px-8 py-3 rounded-xl bg-linear-to-r from-rose-600 to-violet-600 hover:from-rose-500 hover:to-violet-500 text-white font-medium transition-all shadow-[0_0_25px_rgba(244,63,94,0.2)]"
           >
             <Beaker size={16} />
