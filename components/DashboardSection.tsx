@@ -22,44 +22,27 @@ type PredictionResult = {
 
 export default function DashboardSection() {
   const [data, setData] = useState<PredictionResult | null>(null);
-  const [isSimulatingLeak, setIsSimulatingLeak] = useState(false);
   const [history, setHistory] = useState<PredictionResult[]>([]);
+  const [espConnected, setEspConnected] = useState(false);
 
-  // Simulation logic: fetch data every 2 seconds
+  // Poll GET /latest every 2 seconds — real data from ESP8266
   useEffect(() => {
     const interval = setInterval(async () => {
-      // 1. Generate realistic synthetic sensor data matching the Safe dataset
-      let mq6 = Math.random() * 90 + 260; // 260-350 ppm
-      let mq7 = Math.random() < 0.9 ? 1 : 0; // mostly 1 (based on dataset)
-      let temp = Math.random() * 1.5 + 28.2; // 28.2-29.7 C
-      let hum = Math.random() * 7 + 56;   // 56-63 %
-      
-      // Inject Danger/Spikes if user clicks "Simulate Leak"
-      if (isSimulatingLeak) {
-        mq6 = Math.random() * 150 + 450; // 450-600 ppm (Danger)
-        mq7 = 0; // predominantly 0 in the Danger range of dataset
-        temp = Math.random() * 3 + 31.0; // 31.0-34.0 C (Danger)
-        hum = Math.random() * 13 + 33; // 33-46 % (Danger)
-      }
-
-      // 2. Post to our new Flask ML API (Environment Variable pointing to Render.com URL if available)
       try {
         const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5001";
-        const res = await fetch(`${apiUrl}/predict`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            mq6_gas: mq6,
-            mq7_gas: mq7,
-            temperature: temp,
-            humidity: hum
-          })
-        });
+        const res = await fetch(`${apiUrl}/latest`);
+
+        if (res.status === 404) {
+          // No ESP data yet — backend is alive but ESP hasn't posted
+          setEspConnected(false);
+          return;
+        }
+
         const result: PredictionResult = await res.json();
-        
+        setEspConnected(true);
         setData(result);
-        
-        // Keep last 20 logs for the dashboard chart and feed
+
+        // Keep last 20 readings for chart and log feed
         setHistory(prev => {
           const updated = [result, ...prev];
           if (updated.length > 20) return updated.slice(0, 20);
@@ -68,11 +51,12 @@ export default function DashboardSection() {
 
       } catch (err) {
         console.error("ML Backend disconnected:", err);
+        setEspConnected(false);
       }
     }, 2000);
 
     return () => clearInterval(interval);
-  }, [isSimulatingLeak]);
+  }, []);
 
 
   return (
@@ -92,15 +76,17 @@ export default function DashboardSection() {
                 Intelligence in Action
               </h3>
               <p className="text-lg text-white/50 max-w-2xl">
-                Live streaming Random Forest Classification mapped directly to our ESP32 ML API. Anomalies are detected instantly.
+                Live streaming Random Forest Classification from the ESP8266 chip directly to this dashboard. Anomalies are detected instantly.
               </p>
             </div>
-            <button 
-               onClick={() => setIsSimulatingLeak(!isSimulatingLeak)}
-               className={`px-6 py-3 rounded-full font-semibold transition-all shadow-lg text-sm shrink-0 mt-4 md:mt-0 ${isSimulatingLeak ? 'bg-red-600 hover:bg-red-500 shadow-red-500/50 text-white' : 'bg-white/10 hover:bg-white/20 text-white'}`}
-            >
-              {isSimulatingLeak ? 'Stop Leak Simulation' : 'Simulate Hardware Leak'}
-            </button>
+            <div className={`flex items-center gap-2 px-5 py-3 rounded-full text-sm font-semibold shrink-0 mt-4 md:mt-0 border ${
+              espConnected
+                ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400'
+                : 'bg-white/5 border-white/10 text-white/40'
+            }`}>
+              <span className={`w-2 h-2 rounded-full ${espConnected ? 'bg-emerald-400 animate-pulse' : 'bg-white/30'}`} />
+              {espConnected ? 'ESP8266 Live' : 'Waiting for ESP...'}
+            </div>
           </div>
 
           {/* Banner */}
@@ -124,8 +110,8 @@ export default function DashboardSection() {
 
           {/* Left Column - Live Cards */}
           <div className="flex flex-col gap-6">
-            <Card title="MQ6 Gas (LPG)" value={data?.sensor_data?.mq6_gas?.toFixed(1) ?? "--"} unit="ppm" accent={isSimulatingLeak ? "glow-red" : "glow-blue"} change="--" />
-            <Card title="Core Temp" value={data?.sensor_data?.temperature?.toFixed(1) ?? "--"} unit="°C" accent={isSimulatingLeak ? "glow-red" : "glow-amber"} change="--" />
+            <Card title="MQ6 Gas (LPG)" value={data?.sensor_data?.mq6_gas?.toFixed(1) ?? "--"} unit="ppm" accent={data?.status_label === 'Danger' ? "glow-red" : "glow-blue"} change="--" />
+            <Card title="Core Temp" value={data?.sensor_data?.temperature?.toFixed(1) ?? "--"} unit="°C" accent={data?.status_label === 'Danger' ? "glow-red" : "glow-amber"} change="--" />
             
             {/* ML Output */}
             <div className={`glass-card p-6 flex flex-col gap-4 relative overflow-hidden group`}>

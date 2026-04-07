@@ -4,10 +4,14 @@ import joblib
 import numpy as np
 import pandas as pd
 import os
+from datetime import datetime
 
 app = Flask(__name__)
 # Enable CORS so Next.js frontend can call it
 CORS(app)
+
+# In-memory store for the latest ESP8266 reading
+latest_reading = None
 
 model_path = os.path.join(os.path.dirname(__file__), 'anomaly_model.pkl')
 
@@ -20,6 +24,7 @@ except Exception as e:
 
 @app.route('/predict', methods=['POST'])
 def predict():
+    global latest_reading
     if model is None:
         return jsonify({"error": "Model not loaded"}), 500
 
@@ -51,7 +56,7 @@ def predict():
 
         map_status = {0: "Safe", 1: "Warning", 2: "Danger"}
 
-        return jsonify({
+        result = {
             "is_anomaly": is_anomaly,
             "anomaly_score": score,
             "status_label": map_status[prediction],
@@ -60,10 +65,23 @@ def predict():
                 "mq7_gas": mq7,
                 "temperature": temp,
                 "humidity": hum
-            }
-        })
+            },
+            "timestamp": datetime.now().isoformat()
+        }
+
+        # Save as latest reading for dashboard to poll
+        latest_reading = result
+
+        return jsonify(result)
     except Exception as e:
         return jsonify({"error": str(e)}), 400
+
+@app.route('/latest', methods=['GET'])
+def get_latest():
+    """Returns the most recent reading pushed by the ESP8266."""
+    if latest_reading is None:
+        return jsonify({"error": "No data received from ESP yet"}), 404
+    return jsonify(latest_reading)
 
 @app.route('/history', methods=['GET'])
 def get_history():
