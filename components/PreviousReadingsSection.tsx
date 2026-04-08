@@ -14,35 +14,62 @@ type Reading = {
   duration: string;
 };
 
+import { supabase } from "@/lib/supabase";
+
 export default function PreviousReadingsSection() {
   const [readings, setReadings] = useState<Reading[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5001";
-    fetch(`${apiUrl}/history`)
-      .then(res => res.json())
-      .then(data => {
-        if (data.history) {
-          // Map to correct types and mix in mock timestamps/durations
-          const formatted = data.history.map((h: { id: string, gasSpike: string, maxTemp: string, status: string }, i: number) => {
-            // Because the dataset CSV lacks timestamps, we generate sequential recent times anchored to *right now* 
-            const readingDate = new Date(Date.now() - (i * 45 * 60000)); // Subtract 45 mins per row iteratively
-            
+    async function loadData() {
+      try {
+        const { data, error } = await supabase
+          .from("experiment_results")
+          .select("*")
+          .order("created_at", { ascending: false });
+
+        if (error) {
+          console.error("Supabase Error:", error);
+          return;
+        }
+
+        if (data && data.length > 0) {
+          const formatted = data.map((d: {
+            id: string;
+            created_at: string;
+            data: { anomaly?: boolean; mq6_ppm?: number; mq7_ppm?: number; temp_celsius?: number }[];
+            total_duration_seconds: number;
+          }) => {
+            const hasAnomaly = d.data.some((dp) => dp.anomaly);
+            const maxGas = Math.max(
+              ...d.data.map((dp) => dp.mq6_ppm || 0),
+              ...d.data.map((dp) => dp.mq7_ppm || 0)
+            );
+            const maxTemp = Math.max(...d.data.map((dp) => dp.temp_celsius || 0));
+
             return {
-              id: h.id,
-              date: readingDate.toLocaleString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute:'2-digit' }),
-              gasSpike: h.gasSpike,
-              maxTemp: h.maxTemp,
-              status: h.status,
-              duration: `${45 + (i % 15)}m ${12 + (i % 48)}s` // Sequential static duration bounds, not purely random
+              id: d.id ? d.id.substring(0, 8) : "SYN-UNK",
+              date: new Date(d.created_at).toLocaleString("en-US", {
+                month: "short",
+                day: "numeric",
+                hour: "2-digit",
+                minute: "2-digit",
+              }),
+              gasSpike: `${Math.round(maxGas)} ppm`,
+              maxTemp: `${maxTemp.toFixed(1)} °C`,
+              status: hasAnomaly ? "Warning" : "Safe",
+              duration: `${Math.floor(d.total_duration_seconds / 60)}m ${d.total_duration_seconds % 60}s`,
             };
           });
           setReadings(formatted);
         }
-      })
-      .catch(err => console.error("Could not load history:", err))
-      .finally(() => setLoading(false));
+      } catch (err) {
+        console.error("Could not load history from Supabase:", err);
+      } finally {
+        setLoading(false);
+      }
+    }
+    loadData();
   }, []);
   return (
     <section className="bg-[#050505] text-white py-24 px-6 md:px-12 lg:px-24 border-t border-white/5 relative z-10">

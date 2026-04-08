@@ -40,7 +40,7 @@ export default function ReactionPage() {
   const [phase, setPhase] = useState<Phase>("theory");
   const [currentStep, setCurrentStep] = useState(0);
   const [stopwatchRunning, setStopwatchRunning] = useState(false);
-  const [, setStepTimings] = useState<number[]>([]);
+  const [stepTimings, setStepTimings] = useState<number[]>([]);
   const [totalTime, setTotalTime] = useState(0);
   const [waitingForUser, setWaitingForUser] = useState(false);
   const [autoAdvanceCountdown, setAutoAdvanceCountdown] = useState(0);
@@ -181,9 +181,25 @@ export default function ReactionPage() {
     setCurrentStep((prev) => prev + 1);
   };
 
-  const handleSave = (mode: "global" | "private") => {
+  const handleSave = async (mode: "global" | "private") => {
     setSaveChoice(mode);
-    // In production, save to Supabase here
+    try {
+      const { supabase } = await import("@/lib/supabase");
+      const { error } = await supabase.from("experiment_results").insert({
+        user_id: user?.email || null,
+        reaction_id: reaction.id,
+        data: simulatedData,
+        is_public: mode === "global",
+        total_duration_seconds: Math.round(totalTime / 1000),
+        step_timings: stepTimings,
+        created_at: new Date().toISOString()
+      });
+      if (error) {
+        console.error("Error saving to Supabase:", error);
+      }
+    } catch (e) {
+      console.error("Supabase import or save failed:", e);
+    }
     setTimeout(() => setSaved(true), 800);
   };
 
