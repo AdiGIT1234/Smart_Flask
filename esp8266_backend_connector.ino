@@ -40,6 +40,9 @@ WiFiManagerParameter custom_server("server", "Server URL", serverUrl, 100);
 
 void setup() {
   Serial.begin(9600);
+  // Add a small delay for serial to stabilize, then print a welcome message
+  delay(1000);
+  Serial.println("\n\n--- Booting Smart Flask ESP ---");
 
   lcd.init();
   lcd.backlight();
@@ -49,10 +52,12 @@ void setup() {
 
   // -------- Reset WiFi if button pressed --------
   if (digitalRead(RESET_PIN) == LOW) {
+    Serial.println("Reset button held! Clearing WiFiManager settings...");
     wm.resetSettings();
     ESP.restart();
   }
 
+  Serial.println("Setting up WiFiManager (Captive Portal)...");
   lcd.setCursor(0, 0);
   lcd.print("WiFi Setup...");
 
@@ -63,6 +68,7 @@ void setup() {
   bool res = wm.autoConnect("ESP_Config");
 
   if (!res) {
+    Serial.println("Failed to connect to WiFi! Restarting...");
     lcd.clear();
     lcd.print("Failed!");
     delay(3000);
@@ -72,7 +78,8 @@ void setup() {
   // Save custom parameter
   strcpy(serverUrl, custom_server.getValue());
 
-  Serial.println("Connected!");
+  Serial.println("WiFi Connected!");
+  Serial.print("IP: ");
   Serial.println(WiFi.localIP());
   Serial.print("Server URL: ");
   Serial.println(serverUrl);
@@ -92,6 +99,7 @@ void setup() {
   lcd.print("Warming up...");
   delay(5000);
   lcd.clear();
+  Serial.println("Setup Complete. Starting Loop!");
 }
 
 void loop() {
@@ -106,7 +114,10 @@ void loop() {
   float hum = dht.readHumidity();
 
   if (isnan(temp) || isnan(hum)) {
-    Serial.println("DHT error!");
+    Serial.println("DHT error! Check sensor wiring.");
+    lcd.setCursor(0, 0);
+    lcd.print("DHT Sensor Err! ");
+    delay(2000); // CRITICAL FIX: Add delay here so it doesn't spam rapidly
     return;
   }
 
