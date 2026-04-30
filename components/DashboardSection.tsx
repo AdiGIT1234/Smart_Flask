@@ -4,6 +4,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { AlertTriangle } from "lucide-react";
+import { supabase } from "@/lib/supabase";
 
 type SensorData = {
   mq6_gas: number;
@@ -27,14 +28,29 @@ export default function DashboardSection() {
   const [espConnected, setEspConnected] = useState(false);
   const [sensorMode, setSensorMode] = useState<'mq6' | 'mq7'>('mq6');
   const [togglingMode, setTogglingMode] = useState(false);
+  const [globalCount, setGlobalCount] = useState<string | null>(null);
 
-  // Fetch current sensor mode on mount
+  // Fetch current sensor mode on mount + live experiment count from Supabase
   useEffect(() => {
     const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5001";
     fetch(`${apiUrl}/sensor-mode`)
       .then(r => r.json())
       .then(d => setSensorMode(d.mode === 'mq7' ? 'mq7' : 'mq6'))
       .catch(() => {});
+
+    // Fetch total public experiment count from Supabase
+    (async () => {
+      try {
+        const { count } = await supabase
+          .from("experiment_results")
+          .select("id", { count: "exact", head: true });
+        if (count !== null) {
+          setGlobalCount(count >= 1000 ? `${(count / 1000).toFixed(1)}k` : String(count));
+        }
+      } catch {
+        // silently ignore — shows "--" if offline
+      }
+    })();
   }, []);
 
   // Poll GET /latest every 2 seconds — real data from ESP8266
@@ -372,9 +388,9 @@ export default function DashboardSection() {
                 </div>
                 <div className="text-right">
                    <div className="text-3xl font-light text-white/90">
-                     12.4<span className="text-lg text-white/40 ml-1">k</span>
+                     {globalCount ?? "--"}
                    </div>
-                   <div className="text-xs text-green-400 mt-1">Reactions Analyzed Today</div>
+                   <div className="text-xs text-green-400 mt-1">Total Experiments Run</div>
                 </div>
              </div>
           </div>
