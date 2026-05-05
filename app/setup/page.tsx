@@ -50,7 +50,7 @@ export default function SetupPage() {
           transition={{ duration: 0.5 }}
           className="mb-16"
         >
-          <span className="text-cyan-400 font-medium tracking-widest uppercase text-sm mb-3 block flex items-center gap-2">
+          <span className="text-cyan-400 font-medium tracking-widest uppercase text-sm mb-3 flex items-center gap-2">
             <Terminal size={14} /> Documentation
           </span>
           <h1 className="text-5xl md:text-6xl font-medium tracking-tighter mb-6 leading-[1.1]">

@@ -5,6 +5,14 @@ import numpy as np
 import pandas as pd
 import os
 from datetime import datetime
+from dotenv import load_dotenv
+from groq import Groq
+
+# Load environment variables from Next.js .env.local file
+env_path = os.path.join(os.path.dirname(__file__), '../.env.local')
+load_dotenv(env_path)
+
+groq_client = Groq(api_key=os.environ.get("GROQ_API_KEY", "dummy_key_if_none"))
 
 app = Flask(__name__)
 # Enable CORS so Next.js frontend can call it
@@ -102,6 +110,35 @@ def set_sensor_mode():
         return jsonify({"error": "Invalid mode. Use 'mq6' or 'mq7'"}), 400
     sensor_mode = mode
     return jsonify({"mode": sensor_mode, "updated": True})
+
+@app.route('/chat', methods=['POST', 'OPTIONS'])
+def chat():
+    if request.method == 'OPTIONS':
+        return jsonify({}), 200
+        
+    if not os.environ.get("GROQ_API_KEY") or os.environ.get("GROQ_API_KEY") == "YOUR_GROQ_API_KEY_HERE":
+        return jsonify({"error": "GROQ_API_KEY is not configured correctly in .env.local."}), 500
+
+    data = request.json
+    messages = data.get("messages", [])
+
+    system_content = "You are a highly intelligent and helpful AI assistant for a Virtual Chemistry Lab and Hardware Simulation platform. Your job is to help users understand chemical reactions, hardware sensors (like ESP8266 and ESP32), ML predictions, and lab safety protocols. Provide concise, clear, and professional answers."
+    
+    if latest_reading:
+        system_content += f"\n\nHere is the latest live sensor reading from the hardware:\nSensor Mode: {latest_reading['sensor_mode']}\nMQ6 Gas: {latest_reading['sensor_data']['mq6_gas']} ppm\nMQ7 Gas: {latest_reading['sensor_data']['mq7_gas']} ppm\nTemperature: {latest_reading['sensor_data']['temperature']} °C\nHumidity: {latest_reading['sensor_data']['humidity']} %\nCurrent System Status: {latest_reading['status_label']} (Anomaly Score: {latest_reading['anomaly_score']:.2f})\n\nUse this live context to customize your answers if the user asks about their current experiment or sensor values."
+        
+    try:
+        chat_completion = groq_client.chat.completions.create(
+            messages=[{"role": "system", "content": system_content}] + messages,
+            model="llama3-8b-8192",
+            temperature=0.7,
+            max_tokens=1024,
+            top_p=1,
+        )
+        reply = chat_completion.choices[0].message.content
+        return jsonify({"reply": reply})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 @app.route('/history', methods=['GET'])
 def get_history():

@@ -209,7 +209,7 @@ export default function DashboardSection() {
           >
             <div className="flex items-center gap-6">
               {/* Pulsing dot — bigger */}
-              <div className="relative flex-shrink-0">
+              <div className="relative shrink-0">
                 <div className={`w-8 h-8 rounded-full ${
                   isDanger ? 'bg-red-500' : isWarning ? 'bg-amber-500' : 'bg-emerald-500'
                 }`} />
@@ -241,7 +241,7 @@ export default function DashboardSection() {
               </div>
             </div>
 
-            <div className="text-right flex-shrink-0">
+            <div className="text-right shrink-0">
               <p className="text-xs tracking-widest text-white/30 uppercase mb-1">ML Confidence</p>
               <p className={`font-mono text-3xl font-bold ${
                 isDanger ? 'text-red-400' : isWarning ? 'text-amber-400' : 'text-emerald-400'
@@ -478,7 +478,7 @@ export default function DashboardSection() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
-            className="fixed inset-0 z-[9999] flex items-center justify-center p-6"
+            className="fixed inset-0 z-9999 flex items-center justify-center p-6"
           >
             {/* Blurred dark backdrop */}
             <div

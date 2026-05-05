@@ -214,7 +214,7 @@ export default function CommunityPage() {
                     r.id === selectedReactionId ? "bg-violet-500/10" : ""
                   }`}
                 >
-                  <div className={`w-2 h-2 rounded-full bg-gradient-to-r ${r.thumbnail_color}`} />
+                  <div className={`w-2 h-2 rounded-full bg-linear-to-r ${r.thumbnail_color}`} />
                   <div>
                     <p className="text-sm font-medium text-white/90">{r.name}</p>
                     <p className="text-xs text-white/40">{r.category} · {r.difficulty}</p>
