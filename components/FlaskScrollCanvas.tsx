@@ -1,78 +1,60 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { motion, useScroll, useSpring, useTransform } from "framer-motion";
 
 const TOTAL_FRAMES = 240;
+const INITIAL_FRAMES = 30; // Show sequence after this many frames are ready
 
 export default function FlaskScrollCanvas() {
-  const [images, setImages] = useState<HTMLImageElement[]>([]);
+  const imagesRef = useRef<HTMLImageElement[]>(new Array(TOTAL_FRAMES));
   const [loadedFrames, setLoadedFrames] = useState(0);
   const [isLoaded, setIsLoaded] = useState(false);
 
-  // Preload frames
   useEffect(() => {
     let loadedCount = 0;
-    const loadedImages: HTMLImageElement[] = new Array(TOTAL_FRAMES);
+    let initialShown = false;
 
-    const preloadNextFrame = (index: number) => {
+    const loadFrame = (index: number) => {
       if (index >= TOTAL_FRAMES) return;
-
       const img = new Image();
-      // Format number to 3 digits e.g., 001, 045, 240
       const formattedIndex = String(index + 1).padStart(3, "0");
       img.src = `/sequence/ezgif-frame-${formattedIndex}.jpg`;
 
-      img.onload = () => {
-        loadedImages[index] = img;
+      const onDone = () => {
         loadedCount++;
         setLoadedFrames(loadedCount);
-
-        if (loadedCount === TOTAL_FRAMES) {
-          setImages(loadedImages);
-          setTimeout(() => setIsLoaded(true), 500); // Small delay for polish
-        }
-
-        // Preload next 5 chunks concurrently for speed
-        if (index + 5 < TOTAL_FRAMES) {
-          preloadNextFrame(index + 5);
-        }
-      };
-      
-      img.onerror = () => {
-        // Fallback or retry logic if needed, but for now continue
-        loadedCount++;
-        setLoadedFrames(loadedCount);
-        if (loadedCount === TOTAL_FRAMES) {
-          setImages(loadedImages);
+        if (!initialShown && loadedCount >= INITIAL_FRAMES) {
+          initialShown = true;
           setIsLoaded(true);
         }
-      }
+      };
+
+      img.onload = () => {
+        imagesRef.current[index] = img;
+        onDone();
+      };
+      img.onerror = onDone;
     };
 
-    // Kickoff initial batch
-    for (let i = 0; i < 5; i++) {
-      preloadNextFrame(i);
+    // Fire all 240 requests in parallel — browser will throttle to ~6 concurrent
+    for (let i = 0; i < TOTAL_FRAMES; i++) {
+      loadFrame(i);
     }
-
-    return () => {
-      // Cleanup
-      setImages([]);
-    };
   }, []);
 
   if (!isLoaded) {
-    const progress = (loadedFrames / TOTAL_FRAMES) * 100;
+    const progress = (loadedFrames / INITIAL_FRAMES) * 100;
     return (
       <div className="fixed inset-0 bg-[#050505] flex flex-col items-center justify-center z-50">
         <div className="flex flex-col items-center gap-6 w-full max-w-md px-8">
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             className="w-16 h-16 border-t-2 border-r-2 border-blue-500 rounded-full animate-spin"
           />
           <div className="w-full h-px bg-white/10 relative overflow-hidden">
-            <div 
+            <div
               className="absolute top-0 left-0 h-full loader-bar transition-all duration-300 ease-out"
               style={{ width: `${progress}%` }}
             />
@@ -86,12 +68,12 @@ export default function FlaskScrollCanvas() {
     );
   }
 
-  return <ScrollSequence images={images} />;
+  return <ScrollSequence imagesRef={imagesRef} />;
 }
 
 // Extracted into a separate component so that `useScroll` and `useTransform`
 // only execute when the component is fully mounted and ready.
-function ScrollSequence({ images }: { images: HTMLImageElement[] }) {
+function ScrollSequence({ imagesRef }: { imagesRef: React.RefObject<HTMLImageElement[]> }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -110,7 +92,7 @@ function ScrollSequence({ images }: { images: HTMLImageElement[] }) {
 
   // Frame rendering
   useEffect(() => {
-    if (!images.length || !canvasRef.current) return;
+    if (!canvasRef.current) return;
 
     const canvas = canvasRef.current;
     const ctx = canvas.getContext("2d");
@@ -119,10 +101,9 @@ function ScrollSequence({ images }: { images: HTMLImageElement[] }) {
     // Render function
     const renderFrame = (progress: number) => {
       let frameIndex = Math.floor(progress * (TOTAL_FRAMES - 1));
-      // Clamp to ensure we don't go out of bounds
       frameIndex = Math.max(0, Math.min(frameIndex, TOTAL_FRAMES - 1));
-      
-      const img = images[frameIndex];
+
+      const img = imagesRef.current[frameIndex];
       if (!img || !img.complete || img.naturalWidth === 0) return;
 
       const parent = canvas.parentElement;
@@ -181,7 +162,7 @@ function ScrollSequence({ images }: { images: HTMLImageElement[] }) {
       window.removeEventListener("resize", updateCanvasSize);
       unsubscribe();
     };
-  }, [images, smoothProgress]);
+  }, [imagesRef, smoothProgress]);
 
   // Text Animations
   // Beat A: 0-20%
