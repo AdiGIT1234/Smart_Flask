@@ -167,6 +167,10 @@ export default function GlobalNav() {
                    <div className="w-1.5 h-1.5 rounded-full bg-rose-500 opacity-0 group-hover:opacity-100 transition-all" />
                    Global Intelligence
                 </Link>
+                <Link href="/setup" onClick={() => setSidebarOpen(false)} className="hover:text-white hover:translate-x-2 transition-all group flex items-center gap-4">
+                   <div className="w-1.5 h-1.5 rounded-full bg-cyan-500 opacity-0 group-hover:opacity-100 transition-all" />
+                   Hardware Setup Guide
+                </Link>
               </nav>
             </motion.aside>
           </div>

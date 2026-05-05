@@ -343,10 +343,19 @@ export default function CommunityPage() {
               </div>
 
               <div className="relative h-56 w-full rounded-lg bg-white/2 border border-white/5 overflow-hidden">
+                {/* Y-axis labels */}
+                <div className="absolute left-2 top-0 bottom-0 py-2 flex flex-col justify-between text-[10px] text-white/30 font-mono pointer-events-none z-10">
+                  <span>{Math.round(maxV)} {sensor.unit}</span>
+                  <span>{Math.round(minV + (maxV - minV) * 0.75)}</span>
+                  <span>{Math.round(minV + (maxV - minV) * 0.5)}</span>
+                  <span>{Math.round(minV + (maxV - minV) * 0.25)}</span>
+                  <span>{Math.round(minV)}</span>
+                </div>
+
                 <svg
                   viewBox="0 0 100 100"
                   preserveAspectRatio="none"
-                  className="absolute inset-0 w-full h-full"
+                  className="absolute inset-0 w-full h-full pl-12" // Added left padding for the Y-axis labels
                 >
                   {/* Grid lines */}
                   {[25, 50, 75].map((y) => (
@@ -427,7 +436,7 @@ export default function CommunityPage() {
               </div>
 
               {/* X-axis labels */}
-              <div className="flex justify-between mt-2 text-[10px] text-white/20 font-mono px-1">
+              <div className="flex justify-between mt-2 text-[10px] text-white/20 font-mono px-1 pl-12">
                 {[0, 0.25, 0.5, 0.75, 1].map((frac) => (
                   <span key={frac}>{Math.round(frac * maxT)}s</span>
                 ))}
