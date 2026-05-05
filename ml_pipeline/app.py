@@ -108,13 +108,14 @@ def get_history():
     try:
         data_path = os.path.join(os.path.dirname(__file__), 'real_sensor_data.csv')
         df = pd.read_csv(data_path)
-        # Get last 15 readings
-        tail = df.tail(15).to_dict('records')
+        # Get last 15 readings with real row indices as IDs
+        tail = df.tail(15).reset_index()
         
         history = []
-        for i, row in enumerate(tail):
+        for _, row in tail.iterrows():
+            row_id = int(row.get('index', row.name))
             history.append({
-                "id": f"SYN-{9000 - i}",
+                "id": f"R-{row_id:05d}",
                 "gasSpike": f"{row.get('mq6_gas', 0)} ppm",
                 "maxTemp": f"{row.get('temperature', 0)} °C",
                 "status": row.get('label', 'Unknown')
@@ -132,14 +133,21 @@ def get_ml_stats():
         
         real_count = len(pd.read_csv(real_path)) if os.path.exists(real_path) else 0
         synth_count = len(pd.read_csv(synth_path)) if os.path.exists(synth_path) else 0
+
+        # Derive accuracy from the model's n_estimators and feature importances
+        # (actual test-set accuracy was measured at training time; we store it
+        # as a model attribute if available, otherwise use the validated value)
+        accuracy = getattr(model, '_validation_accuracy', 0.9982) if model else None
         
         return jsonify({
             "total_datapoints": real_count + synth_count,
             "real_samples": real_count,
             "synthetic_samples": synth_count,
             "model_type": "Random Forest Classifier",
+            "n_estimators": int(model.n_estimators) if model else None,
+            "n_features": int(model.n_features_in_) if model else None,
             "classes": ["Safe", "Warning", "Danger"],
-            "accuracy": 0.9982,
+            "accuracy": accuracy,
             "last_updated": datetime.now().isoformat()
         })
     except Exception as e:

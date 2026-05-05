@@ -161,7 +161,7 @@ export default function GlobalNav() {
                 </Link>
                 <Link href="/community" onClick={() => setSidebarOpen(false)} className="hover:text-white hover:translate-x-2 transition-all group flex items-center gap-4">
                    <div className="w-1.5 h-1.5 rounded-full bg-green-500 opacity-0 group-hover:opacity-100 transition-all" />
-                   Community Analysis
+                   Reaction Results
                 </Link>
                 <Link href="/intelligence" onClick={() => setSidebarOpen(false)} className="hover:text-white hover:translate-x-2 transition-all group flex items-center gap-4">
                    <div className="w-1.5 h-1.5 rounded-full bg-rose-500 opacity-0 group-hover:opacity-100 transition-all" />
