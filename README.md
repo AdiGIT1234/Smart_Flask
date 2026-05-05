@@ -17,6 +17,7 @@
 ## ✨ Features
 * 🌡️ **Real-Time ESP32 Input Dashboard**: Watch synthesized live arrays dynamically updating.
 * 🧠 **Machine Learning Intrusion / Anomaly Detection**: Connects with a Python backend to run Isolation Forest predictions over local hardware readings.
+* 🤖 **Context-Aware AI Chatbot**: A Virtual Lab Assistant powered by Groq & Llama 3, built into the Flask backend to ingest live sensor streams and provide customized safety and synthesis guidance.
 * 🧪 **Custom Sandbox Experiments**: Define custom chemical parameters and monitor ad-hoc reactions in real-time.
 * 🌐 **Global Intelligence Map**: Crowdsourced analysis models based on historical user reaction parameters.
 * 📱 **Beautiful UI/UX**: Built entirely on Next.js 16+, Framer Motion for flawless physics-based layouts, and TailwindCSS for styling.
@@ -46,7 +47,13 @@ Install the strictly required node modules for the web dashboard:
 npm install
 ```
 
-### 3. Backend Setup (Flask & ML Pipeline)
+### 3. Environment Configuration
+Create a `.env.local` file in the root directory to store your API keys. The Flask backend uses `python-dotenv` to securely read this file for the AI Assistant:
+```env
+GROQ_API_KEY=your_groq_api_key_here
+```
+
+### 4. Backend Setup (Flask & ML Pipeline)
 Navigate to the ML pipeline directory, create a virtual environment, and install the Python dependencies:
 ```cmd
 cd ml_pipeline
@@ -56,7 +63,7 @@ pip install -r requirements.txt
 cd ..
 ```
 
-### 4. Run the Platform 
+### 5. Run the Platform 
 
 Now, launch both the frontend and backend servers.
 
