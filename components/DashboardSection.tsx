@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { AlertTriangle } from "lucide-react";
+import { AlertTriangle, ShieldAlert, ShieldCheck, X, Siren } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 
 type SensorData = {
@@ -29,6 +29,11 @@ export default function DashboardSection() {
   const [sensorMode, setSensorMode] = useState<'mq6' | 'mq7'>('mq6');
   const [togglingMode, setTogglingMode] = useState(false);
   const [globalCount, setGlobalCount] = useState<string | null>(null);
+
+  // Full-screen alert state
+  const [alertOpen, setAlertOpen] = useState(false);
+  const [alertData, setAlertData] = useState<PredictionResult | null>(null);
+  const prevStatusRef = useRef<string | null>(null);
 
   // Fetch current sensor mode on mount + live experiment count from Supabase
   useEffect(() => {
@@ -72,6 +77,24 @@ export default function DashboardSection() {
         // Sync sensor mode in case it was toggled from another tab/device
         if (result.sensor_mode) setSensorMode(result.sensor_mode as 'mq6' | 'mq7');
 
+        // ── Full-screen alert logic ──
+        // Fire (or re-fire) if status escalates to Warning/Danger
+        const prev = prevStatusRef.current;
+        const curr = result.status_label;
+        const isAlarm = curr === 'Warning' || curr === 'Danger';
+        const escalated =
+          isAlarm &&
+          (prev !== curr || (prev === 'Warning' && curr === 'Danger'));
+        if (escalated) {
+          setAlertData(result);
+          setAlertOpen(true);
+        }
+        // Auto-clear overlay when readings return to Safe
+        if (curr === 'Safe') {
+          setAlertOpen(false);
+        }
+        prevStatusRef.current = curr;
+
         // Keep last 20 readings for chart and log feed
         setHistory(prev => {
           const updated = [result, ...prev];
@@ -107,6 +130,9 @@ export default function DashboardSection() {
     }
   };
 
+
+  const isDanger  = data?.status_label === 'Danger';
+  const isWarning = data?.status_label === 'Warning';
 
   return (
     <section className="min-h-screen bg-[#050505] text-white pt-24 pb-48 px-6 md:px-12 lg:px-24">
@@ -162,24 +188,68 @@ export default function DashboardSection() {
             </div>
           </div>
 
-          {/* Banner */}
-          <div className={`lg:col-span-3 p-6 rounded-2xl border transition-all duration-500 flex items-center justify-between ${data?.status_label === 'Danger' ? 'bg-red-900/20 border-red-500/50 shadow-[0_0_40px_rgba(239,68,68,0.2)]' : data?.status_label === 'Warning' ? 'bg-amber-900/20 border-amber-500/50 shadow-[0_0_40px_rgba(245,158,11,0.2)]' : 'bg-emerald-900/20 border-emerald-500/50 shadow-[0_0_40px_rgba(16,185,129,0.1)]'}`}>
-             <div className="flex items-center gap-6">
-                <div className="relative">
-                   <div className={`w-5 h-5 rounded-full ${data?.status_label === 'Danger' ? 'bg-red-500 animate-pulse' : data?.status_label === 'Warning' ? 'bg-amber-500 animate-pulse' : 'bg-emerald-500'}`}></div>
-                   <div className={`absolute inset-0 rounded-full animate-ping opacity-75 ${data?.status_label === 'Danger' ? 'bg-red-500' : data?.status_label === 'Warning' ? 'bg-amber-500' : 'bg-emerald-500'}`}></div>
+          {/* ── Status Banner (larger, pulsing border on alarm) ── */}
+          <motion.div
+            animate={{
+              boxShadow: isDanger
+                ? ['0 0 30px rgba(239,68,68,0.3)', '0 0 70px rgba(239,68,68,0.6)', '0 0 30px rgba(239,68,68,0.3)']
+                : isWarning
+                ? ['0 0 20px rgba(245,158,11,0.2)', '0 0 50px rgba(245,158,11,0.5)', '0 0 20px rgba(245,158,11,0.2)']
+                : '0 0 20px rgba(16,185,129,0.1)',
+            }}
+            transition={{ duration: 1.4, repeat: (isDanger || isWarning) ? Infinity : 0, ease: 'easeInOut' }}
+            className={`lg:col-span-3 p-8 rounded-2xl border-2 transition-all duration-500 flex items-center justify-between cursor-pointer ${
+              isDanger
+                ? 'bg-red-950/40 border-red-500/60'
+                : isWarning
+                ? 'bg-amber-950/40 border-amber-500/60'
+                : 'bg-emerald-950/20 border-emerald-500/30'
+            }`}
+            onClick={() => { if (isDanger || isWarning) { setAlertData(data); setAlertOpen(true); } }}
+          >
+            <div className="flex items-center gap-6">
+              {/* Pulsing dot — bigger */}
+              <div className="relative flex-shrink-0">
+                <div className={`w-8 h-8 rounded-full ${
+                  isDanger ? 'bg-red-500' : isWarning ? 'bg-amber-500' : 'bg-emerald-500'
+                }`} />
+                {(isDanger || isWarning) && (
+                  <div className={`absolute inset-0 rounded-full animate-ping opacity-60 ${
+                    isDanger ? 'bg-red-500' : 'bg-amber-500'
+                  }`} />
+                )}
+              </div>
+
+              <div>
+                <div className="flex items-center gap-3 mb-1">
+                  {isDanger ? (
+                    <ShieldAlert size={22} className="text-red-400" />
+                  ) : isWarning ? (
+                    <AlertTriangle size={22} className="text-amber-400" />
+                  ) : (
+                    <ShieldCheck size={22} className="text-emerald-400" />
+                  )}
+                  <h2 className={`text-3xl font-black uppercase tracking-widest ${
+                    isDanger ? 'text-red-400' : isWarning ? 'text-amber-400' : 'text-emerald-400'
+                  }`}>
+                    STATUS: {data?.status_label || 'SYSTEM NORMAL'}
+                  </h2>
                 </div>
-                <div>
-                   <h2 className={`text-xl font-bold uppercase ${data?.status_label === 'Danger' ? 'text-red-400' : data?.status_label === 'Warning' ? 'text-amber-400' : 'text-emerald-400'}`}>
-                      STATUS: {data?.status_label || 'SYSTEM NORMAL'}
-                   </h2>
-                </div>
-             </div>
-             <div className="text-right">
-                <p className="text-xs tracking-widest text-gray-500 uppercase">ML Confidence</p>
-                <p className="font-mono text-lg">{data?.anomaly_score !== undefined ? (data.anomaly_score * 100).toFixed(1) + '%' : '100%'}</p>
-             </div>
-          </div>
+                {(isDanger || isWarning) && (
+                  <p className="text-sm text-white/40 ml-9">Click to view full alert details</p>
+                )}
+              </div>
+            </div>
+
+            <div className="text-right flex-shrink-0">
+              <p className="text-xs tracking-widest text-white/30 uppercase mb-1">ML Confidence</p>
+              <p className={`font-mono text-3xl font-bold ${
+                isDanger ? 'text-red-400' : isWarning ? 'text-amber-400' : 'text-emerald-400'
+              }`}>
+                {data?.anomaly_score !== undefined ? (data.anomaly_score * 100).toFixed(1) + '%' : '100%'}
+              </p>
+            </div>
+          </motion.div>
 
           {/* Left Column - Live Cards */}
           <div className="flex flex-col gap-6">
@@ -396,6 +466,170 @@ export default function DashboardSection() {
           </div>
         </motion.div>
       </div>
+
+      {/* ══════════════════════════════════════════
+           FULL-SCREEN ALERT OVERLAY
+          ══════════════════════════════════════════ */}
+      <AnimatePresence>
+        {alertOpen && alertData && (
+          <motion.div
+            key="alert-overlay"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            className="fixed inset-0 z-[9999] flex items-center justify-center p-6"
+          >
+            {/* Blurred dark backdrop */}
+            <div
+              className={`absolute inset-0 backdrop-blur-sm ${
+                alertData.status_label === 'Danger'
+                  ? 'bg-red-950/80'
+                  : 'bg-amber-950/70'
+              }`}
+              onClick={() => setAlertOpen(false)}
+            />
+
+            {/* Animated screen-edge glow */}
+            <motion.div
+              animate={{ opacity: [0.4, 0.9, 0.4] }}
+              transition={{ duration: 1.2, repeat: Infinity, ease: 'easeInOut' }}
+              className={`absolute inset-0 pointer-events-none border-[6px] rounded-none ${
+                alertData.status_label === 'Danger' ? 'border-red-500' : 'border-amber-400'
+              }`}
+            />
+
+            {/* Alert Card */}
+            <motion.div
+              initial={{ scale: 0.85, y: 40, opacity: 0 }}
+              animate={{ scale: 1, y: 0, opacity: 1 }}
+              exit={{ scale: 0.85, y: 40, opacity: 0 }}
+              transition={{ type: 'spring', damping: 20, stiffness: 250 }}
+              className={`relative z-10 w-full max-w-lg rounded-3xl border-2 p-8 shadow-2xl overflow-hidden ${
+                alertData.status_label === 'Danger'
+                  ? 'bg-[#0d0000] border-red-500/70'
+                  : 'bg-[#0d0800] border-amber-500/60'
+              }`}
+            >
+              {/* Inner glow */}
+              <div className={`absolute inset-0 pointer-events-none ${
+                alertData.status_label === 'Danger'
+                  ? 'bg-red-600/10'
+                  : 'bg-amber-600/10'
+              }`} />
+
+              {/* Dismiss */}
+              <button
+                onClick={() => setAlertOpen(false)}
+                className="absolute top-5 right-5 text-white/30 hover:text-white/70 transition-colors z-20"
+              >
+                <X size={22} />
+              </button>
+
+              {/* Icon + Title */}
+              <div className="flex items-center gap-4 mb-6 relative z-10">
+                <motion.div
+                  animate={{ scale: [1, 1.15, 1] }}
+                  transition={{ duration: 0.8, repeat: Infinity, ease: 'easeInOut' }}
+                  className={`w-16 h-16 rounded-2xl flex items-center justify-center ${
+                    alertData.status_label === 'Danger'
+                      ? 'bg-red-500/20 border-2 border-red-500/50'
+                      : 'bg-amber-500/20 border-2 border-amber-500/50'
+                  }`}
+                >
+                  {alertData.status_label === 'Danger' ? (
+                    <Siren size={32} className="text-red-400" />
+                  ) : (
+                    <AlertTriangle size={32} className="text-amber-400" />
+                  )}
+                </motion.div>
+                <div>
+                  <p className={`text-xs font-semibold tracking-widest uppercase mb-1 ${
+                    alertData.status_label === 'Danger' ? 'text-red-400/70' : 'text-amber-400/70'
+                  }`}>
+                    ML Classification Alert
+                  </p>
+                  <h2 className={`text-4xl font-black uppercase tracking-wide ${
+                    alertData.status_label === 'Danger' ? 'text-red-400' : 'text-amber-300'
+                  }`}>
+                    {alertData.status_label}
+                  </h2>
+                </div>
+              </div>
+
+              {/* Sensor readings grid */}
+              <div className="grid grid-cols-2 gap-3 mb-6 relative z-10">
+                {[
+                  { label: 'MQ6 Gas (LPG)', value: alertData.sensor_data.mq6_gas?.toFixed(1), unit: 'ppm', threshold: 500 },
+                  { label: 'MQ7 Gas (CO)',  value: alertData.sensor_data.mq7_gas?.toFixed(1),  unit: 'ppm', threshold: 100 },
+                  { label: 'Temperature',   value: alertData.sensor_data.temperature?.toFixed(1), unit: '°C',  threshold: 50 },
+                  { label: 'Humidity',      value: alertData.sensor_data.humidity?.toFixed(1),   unit: '%',   threshold: 85 },
+                ].map((s) => {
+                  const numeric = parseFloat(s.value ?? '0');
+                  const triggered = numeric >= s.threshold;
+                  return (
+                    <div
+                      key={s.label}
+                      className={`p-4 rounded-xl border ${
+                        triggered
+                          ? alertData.status_label === 'Danger'
+                            ? 'bg-red-500/15 border-red-500/30'
+                            : 'bg-amber-500/15 border-amber-500/30'
+                          : 'bg-white/3 border-white/8'
+                      }`}
+                    >
+                      <p className="text-[10px] text-white/40 uppercase tracking-widest mb-1">{s.label}</p>
+                      <p className={`text-2xl font-bold font-mono ${
+                        triggered
+                          ? alertData.status_label === 'Danger' ? 'text-red-300' : 'text-amber-300'
+                          : 'text-white/70'
+                      }`}>
+                        {s.value ?? '--'}
+                        <span className="text-sm font-normal ml-1 text-white/30">{s.unit}</span>
+                      </p>
+                      {triggered && (
+                        <p className="text-[10px] text-red-400/70 mt-0.5">Above threshold ({s.threshold}{s.unit})</p>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+
+              {/* Confidence bar */}
+              <div className="mb-6 relative z-10">
+                <div className="flex justify-between text-xs text-white/40 mb-2">
+                  <span>ML Anomaly Confidence</span>
+                  <span className="font-mono font-semibold text-white/70">
+                    {(alertData.anomaly_score * 100).toFixed(1)}%
+                  </span>
+                </div>
+                <div className="h-2 rounded-full bg-white/10 overflow-hidden">
+                  <motion.div
+                    initial={{ width: 0 }}
+                    animate={{ width: `${(alertData.anomaly_score * 100).toFixed(0)}%` }}
+                    transition={{ duration: 0.8, ease: 'easeOut' }}
+                    className={`h-full rounded-full ${
+                      alertData.status_label === 'Danger' ? 'bg-red-500' : 'bg-amber-500'
+                    }`}
+                  />
+                </div>
+              </div>
+
+              {/* Acknowledge button */}
+              <button
+                onClick={() => setAlertOpen(false)}
+                className={`relative z-10 w-full py-4 rounded-xl font-bold text-sm uppercase tracking-widest transition-all ${
+                  alertData.status_label === 'Danger'
+                    ? 'bg-red-600 hover:bg-red-500 text-white shadow-[0_0_25px_rgba(239,68,68,0.4)]'
+                    : 'bg-amber-600 hover:bg-amber-500 text-black shadow-[0_0_25px_rgba(245,158,11,0.3)]'
+                }`}
+              >
+                Acknowledge &amp; Continue Monitoring
+              </button>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </section>
   );
 }
