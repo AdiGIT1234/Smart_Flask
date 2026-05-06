@@ -44,22 +44,26 @@ def predict():
         return jsonify({"error": "No JSON payload provided"}), 400
         
     try:
-        # Expecting JSON like: { "mq6_gas": 300, "mq7_gas": 35, "temperature": 25, "humidity": 45 }
+        # Expecting JSON like: { "mq6_gas": 300, "mq7_gas": 35, "temperature": 25, "humidity": 45, "active_mode": "mq6" }
         mq6 = float(data.get('mq6_gas', 0))
         mq7 = float(data.get('mq7_gas', 0))
         temp = float(data.get('temperature', 0))
         hum = float(data.get('humidity', 0))
 
+        # Use the mode the ESP was actually running when it collected this data.
+        # Falls back to the server's current mode for older firmware that doesn't send active_mode.
+        data_mode = data.get('active_mode', sensor_mode)
+
         # Model expects: ['mq6_gas', 'mq7_gas', 'temperature', 'humidity']
         features = np.array([[mq6, mq7, temp, hum]])
-        
+
         # 0 = Safe, 1 = Warning, 2 = Danger
         prediction = int(model.predict(features)[0])
         probabilities = model.predict_proba(features)[0]
-        
+
         # If it is not 'Safe', trigger anomaly flag.
         is_anomaly = True if prediction > 0 else False
-        
+
         # Assign an anomaly score (higher meaning more dangerous).
         # We can define score as: probability of (Warning + Danger classes)
         # Class arrays might be [p_0, p_1, p_2]. So sum of index 1 and 2
@@ -71,7 +75,10 @@ def predict():
             "is_anomaly": is_anomaly,
             "anomaly_score": score,
             "status_label": map_status[prediction],
-            "sensor_mode": sensor_mode,   # Tells ESP which sensor is on A0
+            # sensor_mode = server's desired mode — ESP reads this to switch for the NEXT cycle.
+            # data_mode   = mode the ESP was using when it collected THIS reading (for correct dashboard display).
+            "sensor_mode": sensor_mode,
+            "data_mode": data_mode,
             "sensor_data": {
                 "mq6_gas": mq6,
                 "mq7_gas": mq7,

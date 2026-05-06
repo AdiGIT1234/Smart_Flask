@@ -169,7 +169,8 @@ void loop() {
     String jsonPayload = "{\"mq6_gas\":" + String(mq6_send) +
                          ",\"mq7_gas\":" + String(mq7_send) +
                          ",\"temperature\":" + String(temp) +
-                         ",\"humidity\":" + String(hum) + "}";
+                         ",\"humidity\":" + String(hum) +
+                         ",\"active_mode\":\"" + activeMode + "\"}";
 
     Serial.print("Mode: "); Serial.print(activeMode);
     Serial.print(" | Posting payload: "); Serial.println(jsonPayload);

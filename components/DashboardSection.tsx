@@ -74,8 +74,10 @@ export default function DashboardSection() {
         const result: PredictionResult = await res.json();
         setEspConnected(true);
         setData(result);
-        // Sync sensor mode in case it was toggled from another tab/device
-        if (result.sensor_mode) setSensorMode(result.sensor_mode as 'mq6' | 'mq7');
+        // Sync the display mode from data_mode (the mode the ESP actually used to collect this
+        // reading). Falls back to sensor_mode for older firmware without data_mode.
+        const displayMode = (result as PredictionResult & { data_mode?: string }).data_mode ?? result.sensor_mode;
+        if (displayMode) setSensorMode(displayMode as 'mq6' | 'mq7');
 
         // ── Full-screen alert logic ──
         // Fire (or re-fire) if status escalates to Warning/Danger
