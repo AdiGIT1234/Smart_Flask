@@ -185,7 +185,7 @@ export default function AccountPage() {
             View Dashboard
           </Link>
           <button
-            onClick={logout}
+            onClick={() => logout()}
             className="flex items-center gap-2 px-6 py-3 rounded-xl bg-red-500/10 border border-red-500/20 hover:bg-red-500/20 transition-colors text-sm font-medium text-red-400"
           >
             <LogOut size={16} />

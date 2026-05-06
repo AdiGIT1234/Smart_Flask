@@ -8,13 +8,15 @@ import { usePathname } from "next/navigation";
 import Link from "next/link";
 
 export default function GlobalNav() {
-  const { user, logout, login } = useAuth();
+  const { user, logout, login, signup } = useAuth();
   const pathname = usePathname();
   const isHomePage = pathname === '/';
   const [showNav, setShowNav] = useState(!isHomePage);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [authModalOpen, setAuthModalOpen] = useState(false);
   const [isLoginView, setIsLoginView] = useState(true);
+  const [authError, setAuthError] = useState<string | null>(null);
+  const [authLoading, setAuthLoading] = useState(false);
   const [mounted, setMounted] = useState(false);
   useEffect(() => {
     const timer = setTimeout(() => setMounted(true), 0);
@@ -42,15 +44,28 @@ export default function GlobalNav() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [isHomePage]);
 
-  const handleAuthSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleAuthSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setAuthError(null);
+    setAuthLoading(true);
     const formData = new FormData(e.currentTarget);
     const email = formData.get("email") as string;
-    const name = (formData.get("name") as string) || "Dr. Scientist";
-    
-    // Simulate API logic
-    login(name, email);
-    setAuthModalOpen(false);
+    const password = formData.get("password") as string;
+
+    let result: { error: string | null };
+    if (isLoginView) {
+      result = await login(email, password);
+    } else {
+      const name = (formData.get("name") as string) || "Researcher";
+      result = await signup(name, email, password);
+    }
+
+    setAuthLoading(false);
+    if (result.error) {
+      setAuthError(result.error);
+    } else {
+      setAuthModalOpen(false);
+    }
   };
 
   return (
@@ -103,7 +118,7 @@ export default function GlobalNav() {
                 </div>
               ) : (
                 <button
-                  onClick={() => { setAuthModalOpen(true); setIsLoginView(false); }}
+                  onClick={() => { setAuthModalOpen(true); setIsLoginView(false); setAuthError(null); }}
                   className="px-6 py-2.5 bg-white text-black font-semibold tracking-tight rounded-full hover:bg-blue-50 hover:text-blue-600 transition-all shadow-[0_0_20px_rgba(255,255,255,0.15)]"
                 >
                   Login / Signup
@@ -253,15 +268,25 @@ export default function GlobalNav() {
                   />
                 </div>
 
-                <button type="submit" className="w-full bg-blue-600 hover:bg-blue-500 text-white font-medium rounded-lg px-4 py-3 mt-4 transition-colors glow-blue">
-                  {isLoginView ? "Sign In" : "Create Account"}
+                {authError && (
+                  <p className="text-xs text-red-400 bg-red-500/10 border border-red-500/20 rounded-lg px-3 py-2">
+                    {authError}
+                  </p>
+                )}
+
+                <button
+                  type="submit"
+                  disabled={authLoading}
+                  className="w-full bg-blue-600 hover:bg-blue-500 disabled:opacity-50 disabled:cursor-not-allowed text-white font-medium rounded-lg px-4 py-3 mt-4 transition-colors glow-blue"
+                >
+                  {authLoading ? "Please wait..." : isLoginView ? "Sign In" : "Create Account"}
                 </button>
                 
                 <div className="mt-4 text-center text-sm text-white/40">
                   {isLoginView ? "Don't have an account? " : "Already have an account? "}
-                  <button 
-                    type="button" 
-                    onClick={() => setIsLoginView(!isLoginView)}
+                  <button
+                    type="button"
+                    onClick={() => { setIsLoginView(!isLoginView); setAuthError(null); }}
                     className="text-white hover:text-blue-400 font-medium transition-colors"
                   >
                     {isLoginView ? "Sign Up" : "Sign In"}
