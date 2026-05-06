@@ -66,15 +66,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   const signup = async (name: string, email: string, password: string) => {
-    const { data, error } = await supabase.auth.signUp({ email, password });
+    const { data, error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: { data: { full_name: name } },
+    });
     if (error) return { error: error.message };
+    // Profile row is created automatically by the on_auth_user_created trigger.
+    // Set local state immediately so the UI doesn't wait for onAuthStateChange.
     if (data.user) {
-      const { error: profileError } = await supabase.from("profiles").upsert({
-        id: data.user.id,
-        username: name,
-        email,
-      });
-      if (profileError) return { error: profileError.message };
       setUser({ id: data.user.id, name, email });
     }
     return { error: null };
