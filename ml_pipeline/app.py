@@ -1,5 +1,6 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
+from flasgger import Swagger
 import joblib
 import numpy as np
 import pandas as pd
@@ -15,8 +16,157 @@ load_dotenv(env_path)
 groq_client = Groq(api_key=os.environ.get("GROQ_API_KEY", "dummy_key_if_none"))
 
 app = Flask(__name__)
-# Enable CORS so Next.js frontend can call it
 CORS(app)
+
+swagger_template = {
+    "swagger": "2.0",
+    "info": {
+        "title": "Gas Sensor ML Pipeline API",
+        "description": "API for gas sensor anomaly detection, live readings, and AI chat assistant.",
+        "version": "1.0.0",
+        "contact": {"email": "aditya26047@gmail.com"}
+    },
+    "basePath": "/",
+    "schemes": ["http"],
+    "tags": [
+        {"name": "Sensor", "description": "Live sensor data and mode control"},
+        {"name": "ML", "description": "Anomaly prediction and model stats"},
+        {"name": "Chat", "description": "AI chat assistant"},
+        {"name": "System", "description": "Health and diagnostics"}
+    ],
+    "paths": {
+        "/health": {
+            "get": {
+                "tags": ["System"],
+                "summary": "Health check",
+                "responses": {
+                    "200": {"description": "Service is healthy"}
+                }
+            }
+        },
+        "/predict": {
+            "post": {
+                "tags": ["ML"],
+                "summary": "Run anomaly prediction on sensor data",
+                "consumes": ["application/json"],
+                "produces": ["application/json"],
+                "parameters": [{
+                    "in": "body",
+                    "name": "body",
+                    "required": True,
+                    "schema": {
+                        "type": "object",
+                        "required": ["mq6_gas", "mq7_gas", "temperature", "humidity"],
+                        "properties": {
+                            "mq6_gas":     {"type": "number", "example": 300},
+                            "mq7_gas":     {"type": "number", "example": 35},
+                            "temperature": {"type": "number", "example": 25},
+                            "humidity":    {"type": "number", "example": 45},
+                            "active_mode": {"type": "string", "enum": ["mq6", "mq7"], "example": "mq6"}
+                        }
+                    }
+                }],
+                "responses": {
+                    "200": {"description": "Prediction result with status label and anomaly score"},
+                    "400": {"description": "Invalid input"},
+                    "500": {"description": "Model not loaded"}
+                }
+            }
+        },
+        "/latest": {
+            "get": {
+                "tags": ["Sensor"],
+                "summary": "Get the most recent ESP8266 sensor reading",
+                "responses": {
+                    "200": {"description": "Latest sensor reading"},
+                    "404": {"description": "No data received from ESP yet"}
+                }
+            }
+        },
+        "/sensor-mode": {
+            "get": {
+                "tags": ["Sensor"],
+                "summary": "Get the currently active sensor mode (mq6 or mq7)",
+                "responses": {
+                    "200": {"description": "Current mode"}
+                }
+            },
+            "post": {
+                "tags": ["Sensor"],
+                "summary": "Switch the active sensor mode",
+                "consumes": ["application/json"],
+                "parameters": [{
+                    "in": "body",
+                    "name": "body",
+                    "required": True,
+                    "schema": {
+                        "type": "object",
+                        "properties": {
+                            "mode": {"type": "string", "enum": ["mq6", "mq7"], "example": "mq7"}
+                        }
+                    }
+                }],
+                "responses": {
+                    "200": {"description": "Mode updated"},
+                    "400": {"description": "Invalid mode"}
+                }
+            }
+        },
+        "/history": {
+            "get": {
+                "tags": ["Sensor"],
+                "summary": "Get the last 15 sensor readings from CSV history",
+                "responses": {
+                    "200": {"description": "List of recent readings"},
+                    "500": {"description": "Error reading history file"}
+                }
+            }
+        },
+        "/ml-stats": {
+            "get": {
+                "tags": ["ML"],
+                "summary": "Get ML model statistics and dataset info",
+                "responses": {
+                    "200": {"description": "Model stats including accuracy, sample counts, and feature info"}
+                }
+            }
+        },
+        "/chat": {
+            "post": {
+                "tags": ["Chat"],
+                "summary": "Send a message to the AI assistant (context-aware with live sensor data)",
+                "consumes": ["application/json"],
+                "parameters": [{
+                    "in": "body",
+                    "name": "body",
+                    "required": True,
+                    "schema": {
+                        "type": "object",
+                        "properties": {
+                            "messages": {
+                                "type": "array",
+                                "items": {
+                                    "type": "object",
+                                    "properties": {
+                                        "role":    {"type": "string", "enum": ["user", "assistant"]},
+                                        "content": {"type": "string"}
+                                    }
+                                },
+                                "example": [{"role": "user", "content": "What is the current gas level?"}]
+                            }
+                        }
+                    }
+                }],
+                "responses": {
+                    "200": {"description": "AI reply"},
+                    "500": {"description": "GROQ_API_KEY not configured or upstream error"}
+                }
+            }
+        }
+    }
+}
+
+Swagger(app, template=swagger_template)
 
 # In-memory store for the latest ESP8266 reading
 latest_reading = None
